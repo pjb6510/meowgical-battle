@@ -1,5 +1,5 @@
-import App from "./app/app";
+import App from "./scripts/App";
 
-const $container = document.querySelector(".container");
+const app = new App();
 
-$container.appendChild(App.view);
+app.run();
