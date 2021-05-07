@@ -23,6 +23,7 @@
     "rimraf": "^3.0.2"
   },
   "dependencies": {
+    "@pixi/filter-drop-shadow": "^4.1.0",
     "pixi.js": "^6.0.2"
   }
 }
