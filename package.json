@@ -1,0 +1,26 @@
+{
+  "name": "meowgical-battle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run clean && parcel src/index.html",
+    "build": "npm run clean && parcel build src/index.html --public-url ./",
+    "clean": "rimraf ./dist ./.cache"
+  },
+  "author": "been",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^7.25.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "pixi.js": "^6.0.2"
+  }
+}
