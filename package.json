@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@pixi/filter-drop-shadow": "^4.1.0",
+    "pixi-text-input": "^1.0.6",
     "pixi.js": "^6.0.2"
   }
 }
