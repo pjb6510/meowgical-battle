@@ -4,7 +4,7 @@ import Menu from "./Menu";
 import HostWindow from "./HostWindow";
 
 export default class Main {
-  constructor(playerId) {
+  constructor(playerId, isConnected) {
     this.playerId = playerId;
     this.container = new PIXI.Container();
     this.menu = null;
@@ -42,8 +42,17 @@ export default class Main {
   }
 
   createHostWindow() {
+    const handleBackButtonClick = () => {
+      this.removeHostWindow();
+      this.createMenu();
+    };
+
     if (!this.hostWindow) {
-      this.hostWindow = new HostWindow();
+      this.hostWindow = new HostWindow(
+        this.playerId,
+        false,
+        handleBackButtonClick
+      );
     }
 
     this.container.addChild(this.hostWindow.container);
@@ -51,6 +60,10 @@ export default class Main {
 
   removeMenu() {
     this.container.removeChild(this.menu.container);
+  }
+
+  removeHostWindow() {
+    this.container.removeChild(this.hostWindow.container);
   }
 
   handleCreateGameClick(e) {
