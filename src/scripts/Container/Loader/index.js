@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import loaderConfig from "./loaderConfig";
-import { canvasSize } from "../../constants";
+import { canvasSize } from "../../config";
 import globals from "../../globals";
 import createBox from "../../pixiUtils/createBox";
 
@@ -38,7 +38,9 @@ export default class Loader {
   }
 
   showLoadingProgress() {
-    const loadingWrapper = createBox({
+    const loadingProgress = new PIXI.Container();
+
+    const loadingBox = createBox({
       width: 500,
       height: 350,
       x: canvasSize.width / 2,
@@ -72,8 +74,12 @@ export default class Loader {
 
     this.loadingPercentageText = loadingPercentage;
 
-    this.container.addChild(loadingWrapper);
-    this.container.addChild(loadingText);
-    this.container.addChild(loadingPercentage);
+    loadingProgress.addChild(
+      loadingBox,
+      loadingText,
+      loadingPercentage
+    );
+
+    this.container.addChild(loadingProgress);
   }
 }
