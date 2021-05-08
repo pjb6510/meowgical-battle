@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import { DropShadowFilter } from "@pixi/filter-drop-shadow";
 
-const createBox = (boxParams) => {
+const createBox = (boxOption) => {
   const {
     width,
     height,
@@ -12,7 +12,7 @@ const createBox = (boxParams) => {
     borderColor = 0x000000,
     borderAlpha = 1,
     borderAlignment = 1,
-  } = boxParams;
+  } = boxOption;
 
   const box = new PIXI.Graphics();
 
