@@ -7,6 +7,7 @@ import createBox from "../../pixiUtils/createBox";
 export default class Loader {
   constructor(loader) {
     this.container = new PIXI.Container();
+    this.loadingPercentageText = null;
     this.showLoadingProgress();
 
     this.loader = loader;
