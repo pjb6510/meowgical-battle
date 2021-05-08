@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import createBox from "../../pixiUtils/createBox";
+import createButton from "../../pixiUtils/createButton";
 import { canvasSize } from "../../config";
 
 export default class Menu {
@@ -17,7 +17,7 @@ export default class Menu {
       const buttonInfo = this.buttonInfos[i];
       const currentButtonY = this.offsetY + (150 * i);
 
-      const button = createBox({
+      const buttonBoxOption = {
         width: 350,
         height: 100,
         x: canvasSize.width / 2 + this.offsetX,
@@ -25,28 +25,22 @@ export default class Menu {
         color: 0xffffff,
         borderWidth: 10,
         borderColor: 0x82c9f5,
-      });
+      };
 
-      button.interactive = true;
-      button.buttonMode = true;
-      button.on("pointerdown", buttonInfo.event);
+      const buttonTextOption = {
+        fontFamily: "sans-serif",
+        fontSize: 60,
+        align: "center",
+      };
 
-      const buttonText = new PIXI.Text(
+      const button = createButton(
+        buttonBoxOption,
         buttonInfo.text,
-        {
-          fontFamily: "sans-serif",
-          fontSize: 60,
-          align: "center",
-        }
+        buttonTextOption,
+        buttonInfo.event
       );
-      buttonText.anchor.set(0.5, 0.5);
-      buttonText.x = canvasSize.width / 2 + this.offsetX;
-      buttonText.y = canvasSize.height + currentButtonY;
 
-      this.container.addChild(
-        button,
-        buttonText
-      );
+      this.container.addChild(button);
     }
   }
 }
