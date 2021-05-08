@@ -15,7 +15,7 @@ export default class Menu {
   createMenu() {
     for (let i = 0; i < this.buttonInfos.length; i += 1) {
       const buttonInfo = this.buttonInfos[i];
-      const currentButtonY = this.offsetY + (130 * i);
+      const currentButtonY = this.offsetY + (150 * i);
 
       const button = createBox({
         width: 350,
@@ -23,7 +23,10 @@ export default class Menu {
         x: canvasSize.width / 2 + this.offsetX,
         y: canvasSize.height + currentButtonY,
         color: 0xffffff,
+        borderWidth: 10,
+        borderColor: 0x82c9f5,
       });
+
       button.interactive = true;
       button.buttonMode = true;
       button.on("pointerdown", buttonInfo.event);
