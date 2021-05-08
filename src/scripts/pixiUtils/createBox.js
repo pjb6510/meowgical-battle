@@ -11,6 +11,7 @@ const createBox = ({ width, height, x, y, color }) => {
     height,
     20
   );
+  box.endFill();
 
   box.pivot.set(
     width / 2,
