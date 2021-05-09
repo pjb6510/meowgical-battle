@@ -42,12 +42,12 @@ export default class GuestWindow {
   createWrapper() {
     this.wrapper = createBox({
       width: 700,
-      height: 500,
+      height: 600,
       x: canvasSize.width / 2,
       y: canvasSize.height / 2,
       color: 0xffffff,
       borderWidth: 10,
-      borderColor: 0xcb90e8,
+      borderColor: 0x82c9f5,
     });
 
     this.container.addChild(this.wrapper);
@@ -105,7 +105,7 @@ export default class GuestWindow {
         height: 100,
         x: canvasSize.width / 2,
         y: canvasSize.height - 120,
-        color: 0xcb90e8,
+        color: 0x3a8ec7,
       },
       "연결",
       {

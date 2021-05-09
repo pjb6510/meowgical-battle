@@ -35,7 +35,7 @@ export default class Main {
         },
         {
           text: "게임 참가",
-          borderColor: 0xcb90e8,
+          borderColor: 0x82c9f5,
           event: this.handleJoinGameClick.bind(this),
         }
       );
