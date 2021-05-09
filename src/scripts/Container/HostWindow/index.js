@@ -5,14 +5,16 @@ import PlayerBox from "./PlayerBox";
 import OpponentBox from "./OpponentBox";
 
 export default class HostWindow {
-  constructor(playerId, isConnected, onBackButtonClick) {
+  constructor(playerId, onBackButtonClick) {
     this.playerId = playerId;
-    this.isConnected = isConnected;
     this.onBackButtonClick = onBackButtonClick;
+    this.isConnected = false;
 
     this.container = new PIXI.Container();
     this.playerBox = null;
     this.opponentBox = null;
+    this.backButton = null;
+    this.gameStartButton = null;
     this.createHostWindow();
   }
 
@@ -20,13 +22,13 @@ export default class HostWindow {
     this.playerBox = new PlayerBox();
     this.opponentBox = new OpponentBox(false, this.playerId);
 
-    const backButton = createButton(
+    this.backButton = createButton(
       {
         width: 200,
         height: 100,
         x: 200,
         y: canvasSize.height - 300,
-        color: 0x35a8f0,
+        color: 0x32b3a2,
       },
       "돌아가기",
       {
@@ -38,12 +40,12 @@ export default class HostWindow {
       this.onBackButtonClick
     );
 
-    const gameStartButton = createButton(
+    this.gameStartButton = createButton(
       {
         width: 200,
         height: 100,
         x: canvasSize.width / 2,
-        y: canvasSize.height - 100,
+        y: canvasSize.height - 120,
         color: 0x6e6e6e,
       },
       "게임시작",
@@ -56,15 +58,17 @@ export default class HostWindow {
       () => {}
     );
 
-    this.gameStartButton = gameStartButton.children[0];
-    this.gameStartButton.interactive = false;
-    this.gameStartButton.buttonMode = false;
+    if (!this.isConnected) {
+      const buttonBox = this.gameStartButton.children[0];
+      buttonBox.interactive = false;
+      buttonBox.buttonMode = false;
+    }
 
     this.container.addChild(
       this.playerBox.container,
       this.opponentBox.container,
-      backButton,
-      gameStartButton
+      this.backButton,
+      this.gameStartButton
     );
   }
 }
