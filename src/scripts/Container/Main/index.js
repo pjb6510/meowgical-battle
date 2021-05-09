@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import globals from "../../globals";
 import Menu from "./Menu";
-import HostWindow from "./HostWindow";
+import HostWindow from "../HostWindow";
 
 export default class Main {
   constructor(playerId, isConnected) {

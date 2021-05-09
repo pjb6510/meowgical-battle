@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import { canvasSize } from "../config";
-import Loader from "../Container/Loader";
-import Main from "../Container/Main";
+import Loader from "../container/Loader";
+import Main from "../container/Main";
 import generateRandomString from "../utils/generateRandomString";
 
 export default class App {
