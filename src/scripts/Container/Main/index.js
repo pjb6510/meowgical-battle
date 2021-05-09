@@ -2,9 +2,10 @@ import * as PIXI from "pixi.js";
 import globals from "../../globals";
 import Menu from "./Menu";
 import HostWindow from "../HostWindow";
+import GuestWindow from "../GuestWindow";
 
 export default class Main {
-  constructor(playerId, isConnected) {
+  constructor(playerId) {
     this.playerId = playerId;
     this.container = new PIXI.Container();
     this.menu = null;
@@ -52,12 +53,26 @@ export default class Main {
     if (!this.hostWindow) {
       this.hostWindow = new HostWindow(
         this.playerId,
-        false,
         handleBackButtonClick
       );
     }
 
     this.container.addChild(this.hostWindow.container);
+  }
+
+  createGuestWindow() {
+    const handleBackButtonClick = () => {
+      this.removeGuestWindow();
+      this.createMenu();
+    };
+
+    if (!this.guestWindow) {
+      this.guestWindow = new GuestWindow(
+        handleBackButtonClick
+      );
+    }
+
+    this.container.addChild(this.guestWindow.container);
   }
 
   removeMenu() {
@@ -68,6 +83,10 @@ export default class Main {
     this.container.removeChild(this.hostWindow.container);
   }
 
+  removeGuestWindow() {
+    this.container.removeChild(this.guestWindow.container);
+  }
+
   handleCreateGameClick(e) {
     this.removeMenu();
     this.createHostWindow();
@@ -75,5 +94,6 @@ export default class Main {
 
   handleJoinGameClick(e) {
     this.removeMenu();
+    this.createGuestWindow();
   }
 }
