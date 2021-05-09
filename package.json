@@ -25,6 +25,8 @@
   "dependencies": {
     "@pixi/filter-drop-shadow": "^4.1.0",
     "pixi-text-input": "^1.0.6",
-    "pixi.js": "^6.0.2"
+    "pixi.js": "^6.0.2",
+    "redux": "^4.1.0",
+    "redux-logger": "^3.0.6"
   }
 }
