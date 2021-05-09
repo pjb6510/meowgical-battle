@@ -29,10 +29,12 @@ export default class Main {
         },
         {
           text: "게임 개설",
+          borderColor: 0x82c9f5,
           event: this.handleCreateGameClick.bind(this),
         },
         {
           text: "게임 참가",
+          borderColor: 0xcb90e8,
           event: this.handleJoinGameClick.bind(this),
         }
       );

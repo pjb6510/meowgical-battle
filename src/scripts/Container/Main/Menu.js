@@ -24,7 +24,7 @@ export default class Menu {
         y: canvasSize.height + currentButtonY,
         color: 0xffffff,
         borderWidth: 10,
-        borderColor: 0x82c9f5,
+        borderColor: buttonInfo.borderColor,
       };
 
       const buttonTextOption = {
