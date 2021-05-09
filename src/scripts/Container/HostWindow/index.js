@@ -1,8 +1,8 @@
 import * as PIXI from "pixi.js";
 import { canvasSize } from "../../config";
-import createBox from "../../pixiUtils/createBox";
 import createButton from "../../pixiUtils/createButton";
-import globals from "../../globals";
+import PlayerBox from "./PlayerBox";
+import OpponentBox from "./OpponentBox";
 
 export default class HostWindow {
   constructor(playerId, isConnected, onBackButtonClick) {
@@ -11,93 +11,14 @@ export default class HostWindow {
     this.onBackButtonClick = onBackButtonClick;
 
     this.container = new PIXI.Container();
+    this.playerBox = null;
+    this.opponentBox = null;
     this.createHostWindow();
   }
 
   createHostWindow() {
-    const playerBox = createBox({
-      width: 500,
-      height: 600,
-      x: canvasSize.width / 2 - 300,
-      y: canvasSize.height / 2,
-      color: 0xffffff,
-      borderWidth: 10,
-      borderColor: 0x82c9f5,
-    });
-
-    const playerText = new PIXI.Text(
-      "Player1",
-      {
-        fontFamily: "sans-serif",
-        fontSize: 50,
-        align: "center",
-      }
-    );
-    playerText.anchor.set(0.5, 0.5);
-    playerText.x = canvasSize.width / 2 - 300;
-    playerText.y = canvasSize.height / 2 - 200;
-
-    const playerCharacter = new PIXI.Sprite(globals.resource.leftPlayer.texture);
-    playerCharacter.anchor.set(0.5, 0.5);
-    playerCharacter.x = canvasSize.width / 2 - 300;
-    playerCharacter.y = canvasSize.height / 2 + 50;
-    playerCharacter.scale.set(0.5);
-
-    const invitationCodeBox = createBox({
-      width: 500,
-      height: 600,
-      x: canvasSize.width / 2 + 300,
-      y: canvasSize.height / 2,
-      color: 0xffffff,
-      borderWidth: 10,
-      borderColor: 0xcb90e8,
-    });
-
-    const invitationCodeTitle = new PIXI.Text(
-      "초대 코드",
-      {
-        fontFamily: "sans-serif",
-        fontSize: 50,
-        align: "center",
-      }
-    );
-    invitationCodeTitle.anchor.set(0.5, 0.5);
-    invitationCodeTitle.x = canvasSize.width / 2 + 300;
-    invitationCodeTitle.y = canvasSize.height / 2 - 200;
-
-    const invitationCodeText = new PIXI.Text(
-      this.playerId,
-      {
-        fontFamily: "sans-serif",
-        fontSize: 50,
-        align: "center",
-      }
-    );
-    invitationCodeText.anchor.set(0.5, 0.5);
-    invitationCodeText.x = canvasSize.width / 2 + 300;
-    invitationCodeText.y = canvasSize.height / 2;
-
-    const handleCopyButtonClick = () => {
-      navigator.clipboard.writeText(this.playerId);
-    };
-
-    const copyButton = createButton(
-      {
-        width: 150,
-        height: 100,
-        x: canvasSize.width / 2 + 300,
-        y: canvasSize.height / 2 + 200,
-        color: 0xcb90e8,
-      },
-      "복사",
-      {
-        fontFamily: "sans-serif",
-        fontSize: 40,
-        align: "center",
-        fill: 0xffffff,
-      },
-      handleCopyButtonClick
-    );
+    this.playerBox = new PlayerBox();
+    this.opponentBox = new OpponentBox(false, this.playerId);
 
     const backButton = createButton(
       {
@@ -140,13 +61,8 @@ export default class HostWindow {
     this.gameStartButton.buttonMode = false;
 
     this.container.addChild(
-      playerBox,
-      playerText,
-      playerCharacter,
-      invitationCodeBox,
-      invitationCodeTitle,
-      invitationCodeText,
-      copyButton,
+      this.playerBox.container,
+      this.opponentBox.container,
       backButton,
       gameStartButton
     );
