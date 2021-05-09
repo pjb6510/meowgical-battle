@@ -2,13 +2,18 @@ import * as PIXI from "pixi.js";
 import createBox from "../../pixiUtils/createBox";
 import { canvasSize } from "../../config";
 import createButton from "../../pixiUtils/createButton";
-import globals from "../../globals";
+import { getState } from "../../redux/store";
 
 export default class PlayerBox {
-  constructor(isConnected, playerId) {
+  constructor(isConnected) {
     this.isConnected = isConnected;
-    this.playerId = playerId;
-    this.titleText = this.isConnected ? "상대" : "초대코드";
+    this.titleTextContent = this.isConnected ? "상대" : "초대코드";
+    this.rightPlayerTexture = getState()
+      .resources
+      .rightPlayer
+      .texture;
+    this.playerId = getState()
+      .playerId;
 
     this.container = new PIXI.Container();
     this.wrapper = null;
@@ -36,7 +41,7 @@ export default class PlayerBox {
 
   createTitle() {
     this.title = new PIXI.Text(
-      this.titleText,
+      this.titleTextContent,
       {
         fontFamily: "sans-serif",
         fontSize: 50,
@@ -52,7 +57,7 @@ export default class PlayerBox {
 
   createContents() {
     if (this.isConnected) {
-      this.character = new PIXI.Sprite(globals.resource.rightPlayer.texture);
+      this.character = new PIXI.Sprite(this.rightPlayerTexture);
       this.character.anchor.set(0.5, 0.5);
       this.character.x = canvasSize.width / 2 + 300;
       this.character.y = canvasSize.height / 2 + 50;

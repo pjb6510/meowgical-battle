@@ -3,10 +3,14 @@ import { canvasSize } from "../config";
 import Loader from "../container/Loader";
 import Main from "../container/Main";
 import generateRandomString from "../utils/generateRandomString";
+import { dispatch } from "../redux/store";
+import { setPlayerId } from "../redux/actions";
 
 export default class App {
   constructor() {
-    this.playerId = generateRandomString();
+    dispatch(
+      setPlayerId(generateRandomString())
+    );
 
     this.app = null;
     this.mainScene = null;
@@ -39,7 +43,7 @@ export default class App {
   }
 
   createMain() {
-    this.mainScene = new Main(this.playerId);
+    this.mainScene = new Main();
     this.app.stage.addChild(this.mainScene.container);
   }
 }

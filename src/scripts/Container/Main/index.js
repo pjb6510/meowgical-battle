@@ -1,23 +1,26 @@
 import * as PIXI from "pixi.js";
-import globals from "../../globals";
 import Menu from "./Menu";
 import HostWindow from "../HostWindow";
 import GuestWindow from "../GuestWindow";
+import { getState } from "../../redux/store";
 
 export default class Main {
-  constructor(playerId) {
-    this.playerId = playerId;
+  constructor() {
     this.container = new PIXI.Container();
     this.menu = null;
     this.hostWindow = null;
     this.guestWindow = null;
+    this.mainBackgroundTexture = getState()
+      .resources
+      .mainBackground
+      .texture;
 
     this.createBackground();
     this.createMenu();
   }
 
   createBackground() {
-    const background = new PIXI.Sprite(globals.resource.mainBackground.texture);
+    const background = new PIXI.Sprite(this.mainBackgroundTexture);
     this.container.addChild(background);
   }
 
@@ -52,7 +55,6 @@ export default class Main {
 
     if (!this.hostWindow) {
       this.hostWindow = new HostWindow(
-        this.playerId,
         handleBackButtonClick
       );
     }

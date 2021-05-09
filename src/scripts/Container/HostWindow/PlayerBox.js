@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import createBox from "../../pixiUtils/createBox";
 import { canvasSize } from "../../config";
-import globals from "../../globals";
+import { getState } from "../../redux/store";
 
 export default class PlayerBox {
   constructor() {
@@ -9,6 +9,10 @@ export default class PlayerBox {
     this.wrapper = null;
     this.title = null;
     this.character = null;
+    this.leftPlayerTexture = getState()
+      .resources
+      .leftPlayer
+      .texture;
 
     this.createPlayerBox();
   }
@@ -44,7 +48,7 @@ export default class PlayerBox {
   }
 
   createCharacter() {
-    this.character = new PIXI.Sprite(globals.resource.leftPlayer.texture);
+    this.character = new PIXI.Sprite(this.leftPlayerTexture);
     this.character.anchor.set(0.5, 0.5);
     this.character.x = canvasSize.width / 2 - 300;
     this.character.y = canvasSize.height / 2 + 50;

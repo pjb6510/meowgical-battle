@@ -1,8 +1,9 @@
 import * as PIXI from "pixi.js";
 import loaderConfig from "../../../assets/loaderConfig";
 import { canvasSize } from "../../config";
-import globals from "../../globals";
 import createBox from "../../pixiUtils/createBox";
+import { dispatch } from "../../redux/store";
+import { setResources } from "../../redux/actions";
 
 export default class Loader {
   constructor(loader) {
@@ -31,7 +32,7 @@ export default class Loader {
       });
 
       this.loader.load((loader, resources) => {
-        globals.resource = resources;
+        dispatch(setResources(resources));
         resolve();
       });
     });

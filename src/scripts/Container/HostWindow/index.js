@@ -5,8 +5,7 @@ import PlayerBox from "./PlayerBox";
 import OpponentBox from "./OpponentBox";
 
 export default class HostWindow {
-  constructor(playerId, onBackButtonClick) {
-    this.playerId = playerId;
+  constructor(onBackButtonClick) {
     this.onBackButtonClick = onBackButtonClick;
     this.isConnected = false;
 
@@ -20,7 +19,7 @@ export default class HostWindow {
 
   createHostWindow() {
     this.playerBox = new PlayerBox();
-    this.opponentBox = new OpponentBox(false, this.playerId);
+    this.opponentBox = new OpponentBox(false);
 
     this.backButton = createButton(
       {
