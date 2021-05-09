@@ -20,11 +20,14 @@ module.exports = {
         functions: "never",
       },
     ],
-    "space-before-function-paren": ["error", {
-      anonymous: "always",
-      named: "never",
-      asyncArrow: "always",
-    }],
+    "space-before-function-paren": [
+      "error",
+      {
+        anonymous: "always",
+        named: "never",
+        asyncArrow: "always",
+      },
+    ],
     "no-var": "error",
   },
 };
