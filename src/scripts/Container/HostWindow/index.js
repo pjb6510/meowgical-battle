@@ -7,8 +7,8 @@ import { getState } from "../../redux";
 import socket from "../../socket";
 
 export default class HostWindow {
-  constructor(onBackButtonClick) {
-    this.onBackButtonClick = onBackButtonClick;
+  constructor(handleBackButtonClick) {
+    this.handleBackButtonClick = handleBackButtonClick;
     this.isConnected = false;
     this.rightPlayerTexture = getState()
       .resources
@@ -45,7 +45,7 @@ export default class HostWindow {
         align: "center",
         fill: 0xffffff,
       },
-      this.onBackButtonClick
+      this.handleBackButtonClick
     );
 
     this.gameStartButton = createButton(
