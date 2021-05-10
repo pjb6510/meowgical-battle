@@ -1,15 +1,16 @@
 import * as PIXI from "pixi.js";
 import Menu from "./Menu";
 import HostWindow from "../HostWindow";
+import GuestWindow from "../GuestWindow";
 import InputInvitationCode from "../InputInvitationCode";
 import { getState } from "../../redux";
-import socket from "../../socket";
 
 export default class Main {
   constructor() {
     this.container = new PIXI.Container();
     this.menu = null;
     this.hostWindow = null;
+    this.guestWindow = null;
     this.inputInvitationCode = null;
     this.mainBackgroundTexture = getState()
       .resources
@@ -50,42 +51,56 @@ export default class Main {
   }
 
   createHostWindow() {
-    this.hostWindow = new HostWindow(
-      this.handleHostBackButtonClick.bind(this)
-    );
-
+    this.hostWindow = new HostWindow(this);
     this.container.addChild(this.hostWindow.container);
   }
 
-  handleHostBackButtonClick() {
-    socket.removeGame(this.playerId);
+  removeHostWindow() {
     this.container.removeChild(this.hostWindow.container);
     this.hostWindow = null;
-    this.createMenu();
   }
 
   createInputInvitationCode() {
-    this.inputInvitationCode = new InputInvitationCode(
-      this.handleGuestBackButtonClick.bind(this)
-    );
-
+    this.inputInvitationCode = new InputInvitationCode(this);
     this.container.addChild(this.inputInvitationCode.container);
   }
 
-  handleGuestBackButtonClick() {
-    socket.unsubscribeJoinGameResult();
+  removeInputInvitationCode() {
     this.container.removeChild(this.inputInvitationCode.container);
     this.inputInvitationCode = null;
+  }
+
+  createGuestWindow(invitationCode) {
+    this.guestWindow = new GuestWindow(this, invitationCode);
+    this.container.addChild(this.guestWindow.container);
+  }
+
+  removeGuestWindow() {
+    this.container.removeChild(this.guestWindow.container);
+    this.guestWindow = null;
+  }
+
+  handleGuestWindowBackButtonClick() {
+    this.removeGuestWindow();
     this.createMenu();
-  };
+  }
+
+  showInvitationCode() {
+    this.removeGuestWindow();
+    this.createInputInvitationCode();
+  }
+
+  removeMenu() {
+    this.container.removeChild(this.menu.container);
+  }
 
   handleCreateGameClick(e) {
-    this.container.removeChild(this.menu.container);
+    this.removeMenu();
     this.createHostWindow();
   }
 
   handleJoinGameClick(e) {
-    this.container.removeChild(this.menu.container);
+    this.removeMenu();
     this.createInputInvitationCode();
   }
 }
