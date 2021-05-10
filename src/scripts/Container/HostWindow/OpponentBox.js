@@ -12,8 +12,7 @@ export default class PlayerBox {
       .resources
       .rightPlayer
       .texture;
-    this.playerId = getState()
-      .playerId;
+    this.playerId = getState().playerId;
 
     this.container = new PIXI.Container();
     this.wrapper = null;
