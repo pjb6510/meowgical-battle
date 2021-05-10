@@ -16,19 +16,23 @@ const joinGame = (playerId, invitationCode) => {
   socket.emit("joinGame", { playerId, invitationCode });
 };
 
-const subscribeJoinGameResult = (handleListenJoinGameResult) => {
-  socket.on("notifyJoinResult", handleListenJoinGameResult);
+const leaveGame = (playerId, invitationCode) => {
+  socket.emit("leaveGame", { playerId, invitationCode });
 };
 
-const unsubscribeJoinGameResult = () => {
+const subscribeJoinResult = (handleListenJoinResult) => {
+  socket.on("notifyJoinResult", handleListenJoinResult);
+};
+
+const unsubscribeJoinResult = () => {
   socket.off("notifyJoinResult");
 };
 
-const subscribeGameEntrance = (handleListenGameEntrance) => {
+const subscribeEntrance = (handleListenGameEntrance) => {
   socket.on("notifyEntrance", handleListenGameEntrance);
 };
 
-const unsubscribeGameEntrance = () => {
+const unsubscribeEntrance = () => {
   socket.off("notifyEntrance");
 };
 
@@ -36,8 +40,9 @@ export default {
   createGame,
   removeGame,
   joinGame,
-  subscribeJoinGameResult,
-  unsubscribeJoinGameResult,
-  subscribeGameEntrance,
-  unsubscribeGameEntrance,
+  leaveGame,
+  subscribeJoinResult,
+  unsubscribeJoinResult,
+  subscribeEntrance,
+  unsubscribeEntrance,
 };
