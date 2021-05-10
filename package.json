@@ -27,6 +27,7 @@
     "pixi-text-input": "^1.0.6",
     "pixi.js": "^6.0.2",
     "redux": "^4.1.0",
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "socket.io-client": "^4.0.2"
   }
 }
