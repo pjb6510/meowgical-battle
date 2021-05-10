@@ -1,14 +1,14 @@
 import * as PIXI from "pixi.js";
 import { canvasSize } from "../../config";
 import createButton from "../../pixiUtils/createButton";
-import PlayerBox from "./PlayerBox";
+import PlayerBox from "../shared/PlayerBox";
 import InvitationCodeBox from "./InvitationCodeBox";
 import { getState } from "../../redux";
 import socket from "../../socket";
 
 export default class HostWindow {
-  constructor(handleBackButtonClick) {
-    this.handleBackButtonClick = handleBackButtonClick;
+  constructor(parent) {
+    this.parent = parent;
     this.isConnected = false;
     this.rightPlayerTexture = getState()
       .resources
@@ -17,8 +17,8 @@ export default class HostWindow {
     this.playerId = getState().playerId;
 
     socket.createGame(this.playerId);
-    socket.subscribeGameEntrance(
-      this.handleListenGameEntrance.bind(this)
+    socket.subscribeEntrance(
+      this.handleListenEntrance.bind(this)
     );
 
     this.container = new PIXI.Container();
@@ -60,7 +60,7 @@ export default class HostWindow {
         align: "center",
         fill: 0xffffff,
       },
-      this.handleBackButtonClick
+      this.handleBackButtonClick.bind(this)
     );
 
     this.container.addChild(this.backButton);
@@ -111,7 +111,14 @@ export default class HostWindow {
     this.createGameStartButton();
   }
 
-  handleListenGameEntrance(data) {
+  handleBackButtonClick() {
+    socket.unsubscribeEntrance();
+    socket.removeGame(this.playerId);
+    this.parent.removeHostWindow();
+    this.parent.createMenu();
+  }
+
+  handleListenEntrance(data) {
     const { isEntrance } = data;
 
     this.isConnected = isEntrance;

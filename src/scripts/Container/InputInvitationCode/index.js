@@ -3,16 +3,15 @@ import PixiTextInput from "pixi-text-input";
 import createBox from "../../pixiUtils/createBox";
 import createButton from "../../pixiUtils/createButton";
 import { canvasSize } from "../../config";
-import socket from "../../socket";
 import { getState } from "../../redux";
+import socket from "../../socket";
 
 export default class InputInvitationCode {
-  constructor(handleBackButtonClick, handleConnect) {
-    this.handleBackButtonClick = handleBackButtonClick;
-    this.handleConnect = handleConnect;
+  constructor(parent) {
+    this.parent = parent;
 
-    socket.subscribeJoinGameResult(
-      this.handleListenJoinGameResult.bind(this)
+    socket.subscribeJoinResult(
+      this.handleListenJoinResult.bind(this)
     );
 
     this.container = new PIXI.Container();
@@ -26,6 +25,7 @@ export default class InputInvitationCode {
     this.textInput = null;
     this.connectButton = null;
     this.message = null;
+    this.invitationCode = "";
     this.createInputInvitationCode();
   }
 
@@ -45,7 +45,7 @@ export default class InputInvitationCode {
         align: "center",
         fill: 0xffffff,
       },
-      this.handleBackButtonClick
+      this.handleBackButtonClick.bind(this)
     );
 
     this.container.addChild(this.backButton);
@@ -162,18 +162,29 @@ export default class InputInvitationCode {
   }
 
   handleConnectButtonClick() {
-    const inputtedCode = this.textInput.text;
+    this.invitationCode = this.textInput.text;
 
-    if (!this.invitationCodeFormat.test(inputtedCode)) {
+    if (!this.invitationCodeFormat.test(this.invitationCode)) {
       this.setMessage("초대코드는 영어와 숫자로 이루어진 \n7글자 코드입니다.");
       return;
     }
 
-    this.setMessage("연결 중");
-    socket.joinGame(this.playerId, inputtedCode);
+    socket.joinGame(this.playerId, this.invitationCode);
   }
 
-  handleListenJoinGameResult(data) {
+  handleBackButtonClick() {
+    socket.unsubscribeJoinResult();
+    this.parent.removeInputInvitationCode();
+    this.parent.createMenu();
+  }
+
+  showGuestWindow() {
+    socket.unsubscribeJoinResult();
+    this.parent.removeInputInvitationCode();
+    this.parent.createGuestWindow(this.invitationCode);
+  }
+
+  handleListenJoinResult(data) {
     const { result, message } = data;
 
     if (!result) {
@@ -182,6 +193,6 @@ export default class InputInvitationCode {
     }
 
     this.setMessage("연결");
-    this.handleConnect();
+    this.showGuestWindow();
   }
 }
