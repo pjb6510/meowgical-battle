@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import Menu from "./Menu";
 import HostWindow from "../HostWindow";
-import GuestWindow from "../GuestWindow";
+import InputInvitationCode from "../InputInvitationCode";
 import { getState } from "../../redux";
 import socket from "../../socket";
 
@@ -10,7 +10,7 @@ export default class Main {
     this.container = new PIXI.Container();
     this.menu = null;
     this.hostWindow = null;
-    this.guestWindow = null;
+    this.inputInvitationCode = null;
     this.mainBackgroundTexture = getState()
       .resources
       .mainBackground
@@ -64,18 +64,18 @@ export default class Main {
     this.createMenu();
   }
 
-  createGuestWindow() {
-    this.guestWindow = new GuestWindow(
+  createInputInvitationCode() {
+    this.inputInvitationCode = new InputInvitationCode(
       this.handleGuestBackButtonClick.bind(this)
     );
 
-    this.container.addChild(this.guestWindow.container);
+    this.container.addChild(this.inputInvitationCode.container);
   }
 
   handleGuestBackButtonClick() {
     socket.unsubscribeJoinGameResult();
-    this.container.removeChild(this.guestWindow.container);
-    this.guestWindow = null;
+    this.container.removeChild(this.inputInvitationCode.container);
+    this.inputInvitationCode = null;
     this.createMenu();
   };
 
@@ -86,6 +86,6 @@ export default class Main {
 
   handleJoinGameClick(e) {
     this.container.removeChild(this.menu.container);
-    this.createGuestWindow();
+    this.createInputInvitationCode();
   }
 }
