@@ -3,6 +3,7 @@ import Menu from "./Menu";
 import HostWindow from "../HostWindow";
 import GuestWindow from "../GuestWindow";
 import { getState } from "../../redux";
+import socket from "../../socket";
 
 export default class Main {
   constructor() {
@@ -14,6 +15,7 @@ export default class Main {
       .resources
       .mainBackground
       .texture;
+    this.playerId = getState().playerId;
 
     this.createBackground();
     this.createMenu();
@@ -49,15 +51,14 @@ export default class Main {
 
   createHostWindow() {
     const handleBackButtonClick = () => {
+      socket.removeGame(this.playerId);
       this.removeHostWindow();
       this.createMenu();
     };
 
-    if (!this.hostWindow) {
-      this.hostWindow = new HostWindow(
-        handleBackButtonClick
-      );
-    }
+    this.hostWindow = new HostWindow(
+      handleBackButtonClick
+    );
 
     this.container.addChild(this.hostWindow.container);
   }
@@ -83,6 +84,7 @@ export default class Main {
 
   removeHostWindow() {
     this.container.removeChild(this.hostWindow.container);
+    this.hostWindow = null;
   }
 
   removeGuestWindow() {

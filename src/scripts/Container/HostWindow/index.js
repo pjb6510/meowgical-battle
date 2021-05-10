@@ -3,11 +3,20 @@ import { canvasSize } from "../../config";
 import createButton from "../../pixiUtils/createButton";
 import PlayerBox from "./PlayerBox";
 import OpponentBox from "./OpponentBox";
+import { getState } from "../../redux";
+import socket from "../../socket";
 
 export default class HostWindow {
   constructor(onBackButtonClick) {
     this.onBackButtonClick = onBackButtonClick;
     this.isConnected = false;
+    this.rightPlayerTexture = getState()
+      .resources
+      .rightPlayer
+      .texture;
+    this.playerId = getState().playerId;
+
+    socket.createGame(this.playerId);
 
     this.container = new PIXI.Container();
     this.playerBox = null;
