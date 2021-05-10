@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import { canvasSize } from "../../config";
 import createButton from "../../pixiUtils/createButton";
 import PlayerBox from "./PlayerBox";
-import OpponentBox from "./OpponentBox";
+import InvitationCodeBox from "./InvitationCodeBox";
 import { getState } from "../../redux";
 import socket from "../../socket";
 
@@ -17,6 +17,9 @@ export default class HostWindow {
     this.playerId = getState().playerId;
 
     socket.createGame(this.playerId);
+    socket.subscribeGameEntrance(
+      this.handleListenGameEntrance.bind(this)
+    );
 
     this.container = new PIXI.Container();
     this.playerBox = null;
@@ -26,10 +29,22 @@ export default class HostWindow {
     this.createHostWindow();
   }
 
-  createHostWindow() {
-    this.playerBox = new PlayerBox();
-    this.opponentBox = new OpponentBox(false);
+  createPlayerBox() {
+    this.playerBox = new PlayerBox(true, "나");
+    this.container.addChild(this.playerBox.container);
+  }
 
+  createOpponentBox() {
+    if (this.isConnected) {
+      this.opponentBox = new PlayerBox(false, "상대");
+    } else {
+      this.opponentBox = new InvitationCodeBox(this.playerId);
+    }
+
+    this.container.addChild(this.opponentBox.container);
+  }
+
+  createBackButton() {
     this.backButton = createButton(
       {
         width: 200,
@@ -48,13 +63,17 @@ export default class HostWindow {
       this.handleBackButtonClick
     );
 
+    this.container.addChild(this.backButton);
+  }
+
+  createGameStartButton() {
     this.gameStartButton = createButton(
       {
         width: 200,
         height: 100,
         x: canvasSize.width / 2,
         y: canvasSize.height - 120,
-        color: 0x6e6e6e,
+        color: this.isConnected ? 0x3a8ec7 : 0x6e6e6e,
       },
       "게임시작",
       {
@@ -72,11 +91,31 @@ export default class HostWindow {
       buttonBox.buttonMode = false;
     }
 
-    this.container.addChild(
-      this.playerBox.container,
-      this.opponentBox.container,
-      this.backButton,
-      this.gameStartButton
-    );
+    this.container.addChild(this.gameStartButton);
+  }
+
+  createHostWindow() {
+    this.createPlayerBox();
+    this.createOpponentBox();
+    this.createBackButton();
+    this.createGameStartButton();
+  }
+
+  rerenderOpponentBox() {
+    this.container.removeChild(this.opponentBox.container);
+    this.createOpponentBox();
+  }
+
+  rerenderGameStartButton() {
+    this.container.removeChild(this.gameStartButton);
+    this.createGameStartButton();
+  }
+
+  handleListenGameEntrance(data) {
+    const { isEntrance } = data;
+
+    this.isConnected = isEntrance;
+    this.rerenderOpponentBox();
+    this.rerenderGameStartButton();
   }
 }

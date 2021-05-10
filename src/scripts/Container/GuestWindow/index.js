@@ -3,17 +3,28 @@ import PixiTextInput from "pixi-text-input";
 import createBox from "../../pixiUtils/createBox";
 import createButton from "../../pixiUtils/createButton";
 import { canvasSize } from "../../config";
+import socket from "../../socket";
+import { getState } from "../../redux";
 
 export default class GuestWindow {
-  constructor(onBackButtonClick) {
-    this.onBackButtonClick = onBackButtonClick;
+  constructor(handleBackButtonClick) {
+    this.handleBackButtonClick = handleBackButtonClick;
+
+    socket.subscribeJoinGameResult(
+      this.handleListenJoinGameResult.bind(this)
+    );
+
     this.container = new PIXI.Container();
+    this.playerId = getState().playerId;
+    this.invitationCodeInputFormat = /\w{0,7}/;
+    this.invitationCodeFormat = /\w{7}/;
 
     this.backButton = null;
     this.wrapper = null;
     this.title = null;
     this.textInput = null;
-    this.submitButton = null;
+    this.connectButton = null;
+    this.message = null;
     this.createGuestWindow();
   }
 
@@ -33,7 +44,7 @@ export default class GuestWindow {
         align: "center",
         fill: 0xffffff,
       },
-      this.onBackButtonClick
+      this.handleBackButtonClick
     );
 
     this.container.addChild(this.backButton);
@@ -64,7 +75,7 @@ export default class GuestWindow {
     );
     this.title.anchor.set(0.5, 0.5);
     this.title.x = canvasSize.width / 2;
-    this.title.y = canvasSize.height / 2 - 80;
+    this.title.y = canvasSize.height / 2 - 200;
 
     this.container.addChild(this.title);
   }
@@ -92,14 +103,14 @@ export default class GuestWindow {
       this.textInput.height / 2
     );
     this.textInput.x = canvasSize.width / 2;
-    this.textInput.y = canvasSize.height / 2 + 80;
-    this.textInput.restrict = /\w{0,7}/;
+    this.textInput.y = canvasSize.height / 2;
+    this.textInput.restrict = this.invitationCodeInputFormat;
 
     this.container.addChild(this.textInput);
   }
 
-  createSubmitButton() {
-    this.submitButton = createButton(
+  createConnectButton() {
+    this.connectButton = createButton(
       {
         width: 200,
         height: 100,
@@ -114,10 +125,26 @@ export default class GuestWindow {
         align: "center",
         fill: 0xffffff,
       },
-      () => {}
+      this.handleConnectButtonClick.bind(this)
     );
 
-    this.container.addChild(this.submitButton);
+    this.container.addChild(this.connectButton);
+  }
+
+  createMessage() {
+    this.message = new PIXI.Text(
+      "코드를 입력해주세요.",
+      {
+        fontFamily: "sans-serif",
+        fontSize: 30,
+        fill: "red",
+      }
+    );
+    this.message.anchor.set(0.5, 0.5);
+    this.message.x = canvasSize.width / 2;
+    this.message.y = canvasSize.height / 2 + 150;
+
+    this.container.addChild(this.message);
   }
 
   createGuestWindow() {
@@ -125,6 +152,34 @@ export default class GuestWindow {
     this.createWrapper();
     this.createTitle();
     this.createTextInput();
-    this.createSubmitButton();
+    this.createMessage();
+    this.createConnectButton();
+  }
+
+  setMessage(message) {
+    this.message.text = message;
+  }
+
+  handleConnectButtonClick() {
+    const inputtedCode = this.textInput.text;
+
+    if (!this.invitationCodeFormat.test(inputtedCode)) {
+      this.setMessage("초대코드는 영어와 숫자로 이루어진 \n7글자 코드입니다.");
+      return;
+    }
+
+    this.setMessage("연결 중");
+    socket.joinGame(this.playerId, inputtedCode);
+  }
+
+  handleListenJoinGameResult(data) {
+    const { result, message } = data;
+
+    if (!result) {
+      this.setMessage(message);
+      return;
+    }
+
+    this.setMessage("연결");
   }
 }

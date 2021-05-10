@@ -50,54 +50,42 @@ export default class Main {
   }
 
   createHostWindow() {
-    const handleBackButtonClick = () => {
-      socket.removeGame(this.playerId);
-      this.removeHostWindow();
-      this.createMenu();
-    };
-
     this.hostWindow = new HostWindow(
-      handleBackButtonClick
+      this.handleHostBackButtonClick.bind(this)
     );
 
     this.container.addChild(this.hostWindow.container);
   }
 
-  createGuestWindow() {
-    const handleBackButtonClick = () => {
-      this.removeGuestWindow();
-      this.createMenu();
-    };
+  handleHostBackButtonClick() {
+    socket.removeGame(this.playerId);
+    this.container.removeChild(this.hostWindow.container);
+    this.hostWindow = null;
+    this.createMenu();
+  }
 
-    if (!this.guestWindow) {
-      this.guestWindow = new GuestWindow(
-        handleBackButtonClick
-      );
-    }
+  createGuestWindow() {
+    this.guestWindow = new GuestWindow(
+      this.handleGuestBackButtonClick.bind(this)
+    );
 
     this.container.addChild(this.guestWindow.container);
   }
 
-  removeMenu() {
-    this.container.removeChild(this.menu.container);
-  }
-
-  removeHostWindow() {
-    this.container.removeChild(this.hostWindow.container);
-    this.hostWindow = null;
-  }
-
-  removeGuestWindow() {
+  handleGuestBackButtonClick() {
+    socket.unsubscribeJoinGameResult();
     this.container.removeChild(this.guestWindow.container);
-  }
+    this.guestWindow = null;
+    this.createMenu();
+  };
 
   handleCreateGameClick(e) {
-    this.removeMenu();
+    this.container.removeChild(this.menu.container);
     this.createHostWindow();
   }
 
   handleJoinGameClick(e) {
-    this.removeMenu();
+    this.container.removeChild(this.menu.container);
     this.createGuestWindow();
   }
 }
