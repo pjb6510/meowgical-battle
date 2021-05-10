@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import Menu from "./Menu";
 import HostWindow from "../HostWindow";
 import GuestWindow from "../GuestWindow";
-import { getState } from "../../redux/store";
+import { getState } from "../../redux";
 
 export default class Main {
   constructor() {

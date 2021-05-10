@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import createBox from "../../pixiUtils/createBox";
 import { canvasSize } from "../../config";
 import createButton from "../../pixiUtils/createButton";
-import { getState } from "../../redux/store";
+import { getState } from "../../redux";
 
 export default class PlayerBox {
   constructor(isConnected) {

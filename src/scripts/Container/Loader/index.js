@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import loaderConfig from "../../../assets/loaderConfig";
 import { canvasSize } from "../../config";
 import createBox from "../../pixiUtils/createBox";
-import { dispatch } from "../../redux/store";
+import { dispatch } from "../../redux";
 import { setResources } from "../../redux/actions";
 
 export default class Loader {

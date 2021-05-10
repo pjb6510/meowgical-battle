@@ -3,7 +3,7 @@ import { canvasSize } from "../config";
 import Loader from "../container/Loader";
 import Main from "../container/Main";
 import generateRandomString from "../utils/generateRandomString";
-import { dispatch } from "../redux/store";
+import { dispatch } from "../redux";
 import { setPlayerId } from "../redux/actions";
 
 export default class App {
