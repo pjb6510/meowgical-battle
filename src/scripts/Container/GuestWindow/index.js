@@ -1,9 +1,12 @@
 import * as PIXI from "pixi.js";
 import PlayerBox from "../shared/PlayerBox";
+import Battle from "../Battle";
 import createButton from "../../pixiUtils/createButton";
 import { canvasSize } from "../../config";
-import { getState } from "../../redux";
+import { getState, dispatch } from "../../redux";
+import { setScene } from "../../redux/actions";
 import socket from "../../socket";
+import { broadcastedActions } from "../constants";
 
 export default class GuestWindow {
   constructor(parent, invitationCode) {
@@ -71,8 +74,12 @@ export default class GuestWindow {
   handleRoomStateListen(data) {
     const { action, payload } = data;
 
-    if (action === "entrance" && !payload) {
+    console.log(action, payload);
+
+    if (action === broadcastedActions.ENTER && !payload) {
       this.handleBackButtonClick();
+    } else if (action === broadcastedActions.START_GAME) {
+      dispatch(setScene(new Battle()));
     }
   }
 }

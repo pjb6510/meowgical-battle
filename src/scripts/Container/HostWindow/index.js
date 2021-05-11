@@ -1,12 +1,13 @@
 import * as PIXI from "pixi.js";
-import { canvasSize } from "../../config";
-import createButton from "../../pixiUtils/createButton";
 import PlayerBox from "../shared/PlayerBox";
 import InvitationCodeBox from "./InvitationCodeBox";
 import Battle from "../Battle";
+import createButton from "../../pixiUtils/createButton";
+import { canvasSize } from "../../config";
 import { getState, dispatch } from "../../redux";
 import { setScene } from "../../redux/actions";
 import socket from "../../socket";
+import { broadcastedActions } from "../constants";
 
 export default class HostWindow {
   constructor(parent) {
@@ -127,7 +128,7 @@ export default class HostWindow {
   handleRoomStateListen(data) {
     const { action, payload } = data;
 
-    if (action === "entrance") {
+    if (action === broadcastedActions.ENTER) {
       this.isConnected = payload;
       this.rerenderOpponentBox();
       this.rerenderGameStartButton();
@@ -135,6 +136,10 @@ export default class HostWindow {
   }
 
   handleGameStartButtonClick() {
+    socket.broadcastAction({
+      action: broadcastedActions.START_GAME,
+      from: this.playerId,
+    });
     dispatch(setScene(new Battle()));
   }
 }
