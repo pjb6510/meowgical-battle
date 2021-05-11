@@ -1,19 +1,29 @@
 import * as PIXI from "pixi.js";
 import { canvasSize } from "../config";
 import Loader from "../container/Loader";
-import Main from "../container/Main";
+import Main from "../container/MainMenu";
 import generateRandomString from "../utils/generateRandomString";
-import { dispatch } from "../redux";
-import { setPlayerId } from "../redux/actions";
+import { dispatch, getState, subscribe } from "../redux";
+import { setPlayerId, setScene } from "../redux/actions";
 
 export default class App {
   constructor() {
+    this.currentScene = null;
+
+    this.app = null;
+    this.loader = null;
+
     dispatch(
       setPlayerId(generateRandomString())
     );
 
-    this.app = null;
-    this.mainScene = null;
+    subscribe(() => {
+      const newScene = getState().scene;
+
+      if (newScene && this.currentScene !== newScene) {
+        this.updateScene(newScene);
+      }
+    });
   }
 
   async run() {
@@ -34,7 +44,9 @@ export default class App {
 
       await this.loading();
 
-      this.createMain();
+      dispatch(
+        setScene(new Main())
+      );
     } catch (err) {
       console.error(err);
     }
@@ -47,8 +59,12 @@ export default class App {
     this.app.stage.removeChild(this.loader.container);
   }
 
-  createMain() {
-    this.mainScene = new Main();
-    this.app.stage.addChild(this.mainScene.container);
+  updateScene(newScene) {
+    if (this.currentScene) {
+      this.app.stage.removeChild(this.currentScene.container);
+    }
+
+    this.currentScene = newScene;
+    this.app.stage.addChild(this.currentScene.container);
   }
 }
