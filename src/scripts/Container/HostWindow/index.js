@@ -3,7 +3,9 @@ import { canvasSize } from "../../config";
 import createButton from "../../pixiUtils/createButton";
 import PlayerBox from "../shared/PlayerBox";
 import InvitationCodeBox from "./InvitationCodeBox";
-import { getState } from "../../redux";
+import Battle from "../Battle";
+import { getState, dispatch } from "../../redux";
+import { setScene } from "../../redux/actions";
 import socket from "../../socket";
 
 export default class HostWindow {
@@ -82,7 +84,7 @@ export default class HostWindow {
         align: "center",
         fill: 0xffffff,
       },
-      () => {}
+      this.handleGameStartButtonClick
     );
 
     if (!this.isConnected) {
@@ -128,5 +130,9 @@ export default class HostWindow {
     this.isConnected = isEntrance;
     this.rerenderOpponentBox();
     this.rerenderGameStartButton();
+  }
+
+  handleGameStartButtonClick() {
+    dispatch(setScene(new Battle()));
   }
 }
