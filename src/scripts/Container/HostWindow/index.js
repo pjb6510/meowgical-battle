@@ -111,9 +111,13 @@ export default class HostWindow {
     this.createGameStartButton();
   }
 
-  handleBackButtonClick() {
+  containerWillUnmount() {
     socket.unsubscribeEntrance();
     socket.removeGame(this.playerId);
+  }
+
+  handleBackButtonClick() {
+    this.containerWillUnmount();
     this.parent.removeHostWindow();
     this.parent.createMenu();
   }

@@ -22,7 +22,7 @@ export default class InputInvitationCode {
     this.backButton = null;
     this.wrapper = null;
     this.title = null;
-    this.textInput = null;
+    this.InputText = null;
     this.connectButton = null;
     this.message = null;
     this.invitationCode = "";
@@ -82,7 +82,7 @@ export default class InputInvitationCode {
   }
 
   createTextInput() {
-    this.textInput = new PixiTextInput({
+    this.InputText = new PixiTextInput({
       input: {
         fontSize: "36px",
         padding: "12px",
@@ -99,15 +99,15 @@ export default class InputInvitationCode {
         },
       },
     });
-    this.textInput.pivot.set(
-      this.textInput.width / 2,
-      this.textInput.height / 2
+    this.InputText.pivot.set(
+      this.InputText.width / 2,
+      this.InputText.height / 2
     );
-    this.textInput.x = canvasSize.width / 2;
-    this.textInput.y = canvasSize.height / 2;
-    this.textInput.restrict = this.invitationCodeInputFormat;
+    this.InputText.x = canvasSize.width / 2;
+    this.InputText.y = canvasSize.height / 2;
+    this.InputText.restrict = this.invitationCodeInputFormat;
 
-    this.container.addChild(this.textInput);
+    this.container.addChild(this.InputText);
   }
 
   createConnectButton() {
@@ -162,7 +162,7 @@ export default class InputInvitationCode {
   }
 
   handleConnectButtonClick() {
-    this.invitationCode = this.textInput.text;
+    this.invitationCode = this.InputText.text;
 
     if (!this.invitationCodeFormat.test(this.invitationCode)) {
       this.setMessage("초대코드는 영어와 숫자로 이루어진 \n7글자 코드입니다.");
@@ -172,14 +172,19 @@ export default class InputInvitationCode {
     socket.joinGame(this.playerId, this.invitationCode);
   }
 
-  handleBackButtonClick() {
+  containerWillUnmount() {
     socket.unsubscribeJoinResult();
+    this.InputText.htmlInput.remove();
+  }
+
+  handleBackButtonClick() {
+    this.containerWillUnmount();
     this.parent.removeInputInvitationCode();
     this.parent.createMenu();
   }
 
   showGuestWindow() {
-    socket.unsubscribeJoinResult();
+    this.containerWillUnmount();
     this.parent.removeInputInvitationCode();
     this.parent.createGuestWindow(this.invitationCode);
   }

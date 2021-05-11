@@ -57,9 +57,13 @@ export default class GuestWindow {
     this.createBackButton();
   }
 
-  handleBackButtonClick() {
+  containerWillUnmount() {
     socket.leaveGame(this.playerId, this.invitationCode);
     socket.unsubscribeEntrance();
+  }
+
+  handleBackButtonClick() {
+    this.containerWillUnmount();
     this.parent.removeGuestWindow();
     this.parent.createMenu();
   }
