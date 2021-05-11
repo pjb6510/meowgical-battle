@@ -5,7 +5,7 @@ import GuestWindow from "../GuestWindow";
 import InputInvitationCode from "../InputInvitationCode";
 import { getState } from "../../redux";
 
-export default class Main {
+export default class MainMenu {
   constructor() {
     this.container = new PIXI.Container();
     this.menu = null;
