@@ -20,7 +20,7 @@ export default class HostWindow {
 
     socket.createGame(this.playerId);
     socket.subscribeRoomState(
-      this.handleListenEntrance.bind(this)
+      this.handleRoomStateListen.bind(this)
     );
 
     this.container = new PIXI.Container();
@@ -124,7 +124,7 @@ export default class HostWindow {
     this.parent.createMenu();
   }
 
-  handleListenEntrance(data) {
+  handleRoomStateListen(data) {
     const { isEntrance } = data;
 
     this.isConnected = isEntrance;

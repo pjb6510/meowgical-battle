@@ -20,16 +20,16 @@ const leaveGame = (playerId, invitationCode) => {
   socket.emit("leaveGame", { playerId, invitationCode });
 };
 
-const subscribeJoinResult = (handleListenJoinResult) => {
-  socket.on("notifyJoinResult", handleListenJoinResult);
+const subscribeJoinResult = (handleJoinResultListen) => {
+  socket.on("notifyJoinResult", handleJoinResultListen);
 };
 
 const unsubscribeJoinResult = () => {
   socket.off("notifyJoinResult");
 };
 
-const subscribeRoomState = (handleListenGameEntrance) => {
-  socket.on("notifyRoomState", handleListenGameEntrance);
+const subscribeRoomState = (handleRoomStateListen) => {
+  socket.on("notifyRoomState", handleRoomStateListen);
 };
 
 const unsubscribeRoomState = () => {

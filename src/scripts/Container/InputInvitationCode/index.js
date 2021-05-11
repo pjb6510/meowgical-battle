@@ -11,7 +11,7 @@ export default class InputInvitationCode {
     this.parent = parent;
 
     socket.subscribeJoinResult(
-      this.handleListenJoinResult.bind(this)
+      this.handleJoinResultListen.bind(this)
     );
 
     this.container = new PIXI.Container();
@@ -189,7 +189,7 @@ export default class InputInvitationCode {
     this.parent.createGuestWindow(this.invitationCode);
   }
 
-  handleListenJoinResult(data) {
+  handleJoinResultListen(data) {
     const { result, message } = data;
 
     if (!result) {

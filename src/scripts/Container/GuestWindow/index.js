@@ -13,7 +13,7 @@ export default class GuestWindow {
     this.playerId = getState().playerId;
 
     socket.subscribeRoomState(
-      this.handleListenEntrance.bind(this)
+      this.handleRoomStateListen.bind(this)
     );
 
     this.createGuestWindow();
@@ -68,7 +68,7 @@ export default class GuestWindow {
     this.parent.createMenu();
   }
 
-  handleListenEntrance(data) {
+  handleRoomStateListen(data) {
     const { isEntrance } = data;
 
     if (!isEntrance) {
