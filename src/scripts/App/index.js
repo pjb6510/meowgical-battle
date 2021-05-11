@@ -25,6 +25,11 @@ export default class App {
       });
 
       const $container = document.querySelector(".container");
+
+      this.app.view.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+      });
+
       $container.appendChild(this.app.view);
 
       await this.loading();
