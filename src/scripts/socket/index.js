@@ -20,6 +20,10 @@ const leaveGame = (playerId, invitationCode) => {
   socket.emit("leaveGame", { playerId, invitationCode });
 };
 
+const broadcastAction = (action) => {
+  socket.emit("broadcastAction", action);
+};
+
 const subscribeJoinResult = (handleJoinResultListen) => {
   socket.on("notifyJoinResult", handleJoinResultListen);
 };
@@ -41,6 +45,7 @@ export default {
   removeGame,
   joinGame,
   leaveGame,
+  broadcastAction,
   subscribeJoinResult,
   unsubscribeJoinResult,
   subscribeRoomState,
