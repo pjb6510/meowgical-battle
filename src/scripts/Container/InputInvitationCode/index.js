@@ -197,7 +197,6 @@ export default class InputInvitationCode {
       return;
     }
 
-    this.setMessage("연결");
     this.showGuestWindow();
   }
 }
