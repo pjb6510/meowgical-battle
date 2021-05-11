@@ -69,9 +69,9 @@ export default class GuestWindow {
   }
 
   handleRoomStateListen(data) {
-    const { isEntrance } = data;
+    const { action, payload } = data;
 
-    if (!isEntrance) {
+    if (action === "entrance" && !payload) {
       this.handleBackButtonClick();
     }
   }

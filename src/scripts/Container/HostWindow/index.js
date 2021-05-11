@@ -125,11 +125,13 @@ export default class HostWindow {
   }
 
   handleRoomStateListen(data) {
-    const { isEntrance } = data;
+    const { action, payload } = data;
 
-    this.isConnected = isEntrance;
-    this.rerenderOpponentBox();
-    this.rerenderGameStartButton();
+    if (action === "entrance") {
+      this.isConnected = payload;
+      this.rerenderOpponentBox();
+      this.rerenderGameStartButton();
+    }
   }
 
   handleGameStartButtonClick() {
