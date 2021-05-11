@@ -7,6 +7,7 @@ import { getState, dispatch } from "../../redux";
 import { setScene } from "../../redux/actions";
 import socket from "../../socket";
 import { broadcastedActions } from "../constants";
+import Peer from "simple-peer";
 
 export default class GuestWindow {
   constructor(parent, invitationCode) {
@@ -18,6 +19,8 @@ export default class GuestWindow {
     socket.subscribeRoomState(
       this.handleRoomStateListen.bind(this)
     );
+
+    this.peer = null;
 
     this.createGuestWindow();
   }
@@ -74,12 +77,48 @@ export default class GuestWindow {
   handleRoomStateListen(data) {
     const { action, payload } = data;
 
-    console.log(action, payload);
-
-    if (action === broadcastedActions.ENTER && !payload) {
-      this.handleBackButtonClick();
-    } else if (action === broadcastedActions.START_GAME) {
-      dispatch(setScene(new Battle()));
+    switch (action) {
+      case broadcastedActions.ENTER:
+        if (!payload) {
+          this.handleBackButtonClick();
+        }
+        break;
+      case broadcastedActions.START_GAME:
+        dispatch(setScene(new Battle()));
+        break;
+      case broadcastedActions.SEND_PEER:
+        this.receiveAndSendPeer(payload);
+        break;
+      default:
+        break;
     }
+  }
+
+  receiveAndSendPeer(receivedSignal) {
+    this.peer = new Peer({
+      initiator: false,
+      trickle: false,
+      objectMode: true,
+    });
+
+    this.peer.signal(receivedSignal);
+
+    this.peer.on("error", (err) => {
+      console.error(err);
+    });
+
+    this.peer.on("connect", () => {
+    });
+
+    this.peer.on("signal", (guestSignal) => {
+      socket.broadcastAction({
+        action: broadcastedActions.SEND_PEER,
+        payload: guestSignal,
+        from: this.playerId,
+      });
+    });
+
+    this.peer.on("data", (data) => {
+    });
   }
 }

@@ -8,6 +8,7 @@ import { getState, dispatch } from "../../redux";
 import { setScene } from "../../redux/actions";
 import socket from "../../socket";
 import { broadcastedActions } from "../constants";
+import Peer from "simple-peer";
 
 export default class HostWindow {
   constructor(parent) {
@@ -23,6 +24,8 @@ export default class HostWindow {
     socket.subscribeRoomState(
       this.handleRoomStateListen.bind(this)
     );
+
+    this.peer = null;
 
     this.container = new PIXI.Container();
     this.playerBox = null;
@@ -85,7 +88,7 @@ export default class HostWindow {
         align: "center",
         fill: 0xffffff,
       },
-      this.handleGameStartButtonClick
+      this.handleGameStartButtonClick.bind(this)
     );
 
     if (!this.isConnected) {
@@ -128,18 +131,60 @@ export default class HostWindow {
   handleRoomStateListen(data) {
     const { action, payload } = data;
 
-    if (action === broadcastedActions.ENTER) {
-      this.isConnected = payload;
-      this.rerenderOpponentBox();
-      this.rerenderGameStartButton();
+    switch (action) {
+      case broadcastedActions.ENTER:
+        this.isConnected = payload;
+        this.rerenderOpponentBox();
+        this.rerenderGameStartButton();
+        break;
+      case broadcastedActions.SEND_PEER:
+        this.receivePeerSignal(payload);
+        break;
+      default:
+        break;
     }
   }
 
   handleGameStartButtonClick() {
+    this.sendPeerSignal();
+  }
+
+  sendPeerSignal() {
+    this.peer = new Peer({
+      initiator: true,
+      trickle: false,
+      objectMode: true,
+    });
+
+    this.peer.on("signal", (hostSignal) => {
+      socket.broadcastAction({
+        action: broadcastedActions.SEND_PEER,
+        payload: hostSignal,
+        from: this.playerId,
+      });
+    });
+
+    this.peer.on("error", (err) => {
+      console.error(err);
+    });
+
+    this.peer.on("connect", () => {
+    });
+
+    this.peer.on("data", (data) => {
+    });
+  }
+
+  receivePeerSignal(receivedSignal) {
+    this.peer.signal(receivedSignal);
+  }
+
+  startGame() {
     socket.broadcastAction({
       action: broadcastedActions.START_GAME,
       from: this.playerId,
     });
+
     dispatch(setScene(new Battle()));
   }
 }
