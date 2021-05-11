@@ -12,7 +12,7 @@ export default class Main {
     this.hostWindow = null;
     this.guestWindow = null;
     this.inputInvitationCode = null;
-    this.mainBackgroundTexture = getState()
+    this.backgroundTexture = getState()
       .resources
       .mainBackground
       .texture;
@@ -23,7 +23,7 @@ export default class Main {
   }
 
   createBackground() {
-    const background = new PIXI.Sprite(this.mainBackgroundTexture);
+    const background = new PIXI.Sprite(this.backgroundTexture);
     this.container.addChild(background);
   }
 
