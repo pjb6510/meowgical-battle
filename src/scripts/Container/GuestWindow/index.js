@@ -12,7 +12,7 @@ export default class GuestWindow {
     this.container = new PIXI.Container();
     this.playerId = getState().playerId;
 
-    socket.subscribeEntrance(
+    socket.subscribeRoomState(
       this.handleListenEntrance.bind(this)
     );
 
@@ -59,7 +59,7 @@ export default class GuestWindow {
 
   containerWillUnmount() {
     socket.leaveGame(this.playerId, this.invitationCode);
-    socket.unsubscribeEntrance();
+    socket.unsubscribeRoomState();
   }
 
   handleBackButtonClick() {

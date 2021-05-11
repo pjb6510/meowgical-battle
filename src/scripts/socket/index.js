@@ -28,12 +28,12 @@ const unsubscribeJoinResult = () => {
   socket.off("notifyJoinResult");
 };
 
-const subscribeEntrance = (handleListenGameEntrance) => {
-  socket.on("notifyEntrance", handleListenGameEntrance);
+const subscribeRoomState = (handleListenGameEntrance) => {
+  socket.on("notifyRoomState", handleListenGameEntrance);
 };
 
-const unsubscribeEntrance = () => {
-  socket.off("notifyEntrance");
+const unsubscribeRoomState = () => {
+  socket.off("notifyRoomState");
 };
 
 export default {
@@ -43,6 +43,6 @@ export default {
   leaveGame,
   subscribeJoinResult,
   unsubscribeJoinResult,
-  subscribeEntrance,
-  unsubscribeEntrance,
+  subscribeRoomState,
+  unsubscribeRoomState,
 };

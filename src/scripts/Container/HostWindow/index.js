@@ -19,7 +19,7 @@ export default class HostWindow {
     this.playerId = getState().playerId;
 
     socket.createGame(this.playerId);
-    socket.subscribeEntrance(
+    socket.subscribeRoomState(
       this.handleListenEntrance.bind(this)
     );
 
@@ -114,7 +114,7 @@ export default class HostWindow {
   }
 
   containerWillUnmount() {
-    socket.unsubscribeEntrance();
+    socket.unsubscribeRoomState();
     socket.removeGame(this.playerId);
   }
 
