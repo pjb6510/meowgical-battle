@@ -10,29 +10,27 @@ import { broadcastedActions } from "../constants";
 import Peer from "simple-peer";
 
 export default class GuestWindow {
-  constructor(unmount, invitationCode) {
-    this.unmount = unmount;
-    this.invitationCode = invitationCode;
-    this.container = new PIXI.Container();
+  constructor(unmountCallback) {
+    this.unmountCallback = unmountCallback;
     this.playerId = getState().playerId;
 
-    socket.subscribeRoomState(
-      this.handleRoomStateListen.bind(this)
-    );
+    this.container = new PIXI.Container();
+    this.playerBox = null;
+    this.opponentBox = null;
+    this.backButton = null;
+    this.createPlayerBox();
+    this.createOpponetBox();
+    this.createBackButton();
 
     this.peer = null;
-
-    this.createGuestWindow();
   }
 
   createPlayerBox() {
     this.playerBox = new PlayerBox(false, "나");
-    this.container.addChild(this.playerBox.container);
   }
 
   createOpponetBox() {
     this.opponentBox = new PlayerBox(true, "상대");
-    this.container.addChild(this.opponentBox.container);
   }
 
   createBackButton() {
@@ -53,24 +51,34 @@ export default class GuestWindow {
       },
       this.handleBackButtonClick.bind(this)
     );
+  }
 
+  render() {
+    this.container.addChild(this.playerBox.container);
+    this.container.addChild(this.opponentBox.container);
     this.container.addChild(this.backButton);
+    this.containerDidMount();
   }
 
-  createGuestWindow() {
-    this.createPlayerBox();
-    this.createOpponetBox();
-    this.createBackButton();
+  remove() {
+    this.containerWillUnmount();
+    this.container.removeChildren();
+    this.unmountCallback(this);
   }
 
-  containerWillUnmount() {
-    socket.leaveGame(this.playerId, this.invitationCode);
-    socket.unsubscribeRoomState();
+  containerDidMount() {
+    socket.subscribeRoomState(
+      this.handleRoomStateListen.bind(this)
+    );
   }
 
   handleBackButtonClick() {
-    this.containerWillUnmount();
-    this.unmount(this);
+    this.remove();
+  }
+
+  containerWillUnmount() {
+    socket.leaveGame(this.playerId, this.roomCode);
+    socket.unsubscribeRoomState();
   }
 
   handleRoomStateListen(data) {
@@ -116,10 +124,6 @@ export default class GuestWindow {
         payload: guestSignal,
         from: this.playerId,
       });
-    });
-
-    this.peer.on("data", (data) => {
-      console.log(data);
     });
   }
 }

@@ -11,20 +11,14 @@ import { broadcastedActions } from "../constants";
 import Peer from "simple-peer";
 
 export default class HostWindow {
-  constructor(unmount) {
-    this.unmount = unmount;
+  constructor(unmountCallback) {
+    this.unmountCallback = unmountCallback;
     this.isConnected = false;
     this.rightPlayerTexture = getState()
       .resources
       .rightPlayer
       .texture;
     this.playerId = getState().playerId;
-
-    socket.createGame(this.playerId);
-    socket.subscribeRoomState(
-      this.handleRoomStateListen.bind(this)
-    );
-
     this.peer = null;
 
     this.container = new PIXI.Container();
@@ -32,12 +26,14 @@ export default class HostWindow {
     this.opponentBox = null;
     this.backButton = null;
     this.gameStartButton = null;
-    this.createHostWindow();
+    this.createPlayerBox();
+    this.createOpponentBox();
+    this.createBackButton();
+    this.createGameStartButton();
   }
 
   createPlayerBox() {
     this.playerBox = new PlayerBox(true, "나");
-    this.container.addChild(this.playerBox.container);
   }
 
   createOpponentBox() {
@@ -46,8 +42,6 @@ export default class HostWindow {
     } else {
       this.opponentBox = new InvitationCodeBox(this.playerId);
     }
-
-    this.container.addChild(this.opponentBox.container);
   }
 
   createBackButton() {
@@ -68,8 +62,6 @@ export default class HostWindow {
       },
       this.handleBackButtonClick.bind(this)
     );
-
-    this.container.addChild(this.backButton);
   }
 
   createGameStartButton() {
@@ -96,30 +88,44 @@ export default class HostWindow {
       buttonBox.interactive = false;
       buttonBox.buttonMode = false;
     }
-
-    this.container.addChild(this.gameStartButton);
   }
 
-  createHostWindow() {
-    this.createPlayerBox();
-    this.createOpponentBox();
-    this.createBackButton();
-    this.createGameStartButton();
+  render() {
+    this.container.addChild(this.playerBox.container);
+    this.container.addChild(this.opponentBox.container);
+    this.container.addChild(this.backButton);
+    this.container.addChild(this.gameStartButton);
+
+    this.containerDidMount();
+  }
+
+  remove() {
+    this.containerWillUnmount();
+    this.container.removeChildren();
+    this.unmountCallback(this);
+  }
+
+  containerDidMount() {
+    socket.createGame(this.playerId);
+    socket.subscribeRoomState(
+      this.handleRoomStateListen.bind(this)
+    );
   }
 
   rerenderOpponentBox() {
     this.container.removeChild(this.opponentBox.container);
     this.createOpponentBox();
+    this.container.addChild(this.opponentBox.container);
   }
 
   rerenderGameStartButton() {
     this.container.removeChild(this.gameStartButton);
     this.createGameStartButton();
+    this.container.addChild(this.gameStartButton);
   }
 
   handleBackButtonClick() {
-    this.containerWillUnmount();
-    this.unmount(this);
+    this.remove();
   }
 
   containerWillUnmount() {
@@ -169,11 +175,6 @@ export default class HostWindow {
 
     this.peer.on("connect", () => {
       console.log("connect complete");
-      this.peer.send("hello!!");
-    });
-
-    this.peer.on("data", (data) => {
-      console.log(data);
     });
   }
 

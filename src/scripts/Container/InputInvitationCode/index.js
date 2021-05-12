@@ -7,26 +7,28 @@ import { getState } from "../../redux";
 import socket from "../../socket";
 
 export default class InputInvitationCode {
-  constructor(unmount) {
-    this.unmount = unmount;
+  constructor(unmountCallback, connectCallback) {
+    this.unmountCallback = unmountCallback;
+    this.connectCallback = connectCallback;
 
-    socket.subscribeJoinResult(
-      this.handleJoinResultListen.bind(this)
-    );
-
-    this.container = new PIXI.Container();
     this.playerId = getState().playerId;
     this.invitationCodeInputFormat = /\w{0,7}/;
     this.invitationCodeFormat = /\w{7}/;
+    this.inputedCode = "";
 
+    this.container = new PIXI.Container();
     this.backButton = null;
     this.wrapper = null;
     this.title = null;
     this.InputText = null;
     this.connectButton = null;
     this.message = null;
-    this.invitationCode = "";
-    this.createInputInvitationCode();
+    this.createBackButton();
+    this.createWrapper();
+    this.createTitle();
+    this.createInputText();
+    this.createMessage();
+    this.createConnectButton();
   }
 
   createBackButton() {
@@ -47,8 +49,6 @@ export default class InputInvitationCode {
       },
       this.handleBackButtonClick.bind(this)
     );
-
-    this.container.addChild(this.backButton);
   }
 
   createWrapper() {
@@ -61,8 +61,6 @@ export default class InputInvitationCode {
       borderWidth: 10,
       borderColor: 0x82c9f5,
     });
-
-    this.container.addChild(this.wrapper);
   }
 
   createTitle() {
@@ -77,11 +75,9 @@ export default class InputInvitationCode {
     this.title.anchor.set(0.5, 0.5);
     this.title.x = canvasSize.width / 2;
     this.title.y = canvasSize.height / 2 - 200;
-
-    this.container.addChild(this.title);
   }
 
-  createTextInput() {
+  createInputText() {
     this.InputText = new PixiTextInput({
       input: {
         fontSize: "36px",
@@ -106,8 +102,6 @@ export default class InputInvitationCode {
     this.InputText.x = canvasSize.width / 2;
     this.InputText.y = canvasSize.height / 2;
     this.InputText.restrict = this.invitationCodeInputFormat;
-
-    this.container.addChild(this.InputText);
   }
 
   createConnectButton() {
@@ -128,8 +122,6 @@ export default class InputInvitationCode {
       },
       this.handleConnectButtonClick.bind(this)
     );
-
-    this.container.addChild(this.connectButton);
   }
 
   createMessage() {
@@ -144,17 +136,37 @@ export default class InputInvitationCode {
     this.message.anchor.set(0.5, 0.5);
     this.message.x = canvasSize.width / 2;
     this.message.y = canvasSize.height / 2 + 150;
-
-    this.container.addChild(this.message);
   }
 
-  createInputInvitationCode() {
-    this.createBackButton();
-    this.createWrapper();
-    this.createTitle();
-    this.createTextInput();
-    this.createMessage();
-    this.createConnectButton();
+  render() {
+    this.container.addChild(this.backButton);
+    this.container.addChild(this.wrapper);
+    this.container.addChild(this.title);
+    this.container.addChild(this.InputText);
+    this.container.addChild(this.connectButton);
+    this.container.addChild(this.message);
+
+    this.containerDidMount();
+  }
+
+  remove() {
+    this.containerWillUnmount();
+    this.container.removeChildren();
+    this.unmountCallback(this);
+  }
+
+  containerDidMount() {
+    socket.subscribeJoinResult(
+      this.handleJoinResultListen.bind(this)
+    );
+  }
+
+  containerWillUnmount() {
+    socket.unsubscribeJoinResult();
+  }
+
+  handleBackButtonClick() {
+    this.remove();
   }
 
   setMessage(message) {
@@ -162,30 +174,14 @@ export default class InputInvitationCode {
   }
 
   handleConnectButtonClick() {
-    this.invitationCode = this.InputText.text;
+    this.inputedCode = this.InputText.text;
 
-    if (!this.invitationCodeFormat.test(this.invitationCode)) {
+    if (!this.invitationCodeFormat.test(this.inputedCode)) {
       this.setMessage("초대코드는 영어와 숫자로 이루어진 \n7글자 코드입니다.");
       return;
     }
 
-    socket.joinGame(this.playerId, this.invitationCode);
-  }
-
-  containerWillUnmount() {
-    socket.unsubscribeJoinResult();
-    this.InputText.htmlInput.remove();
-  }
-
-  handleBackButtonClick() {
-    this.containerWillUnmount();
-    this.unmount(this);
-  }
-
-  showGuestWindow() {
-    this.containerWillUnmount();
-    this.parent.removeInputInvitationCode();
-    this.parent.createGuestWindow(this.invitationCode);
+    socket.joinGame(this.playerId, this.inputedCode);
   }
 
   handleJoinResultListen(data) {
@@ -196,6 +192,7 @@ export default class InputInvitationCode {
       return;
     }
 
-    this.showGuestWindow();
+    this.remove();
+    this.connectCallback(this.inputedCode);
   }
 }

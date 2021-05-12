@@ -53,50 +53,58 @@ export default class MainMenu {
   }
 
   createHostWindow() {
-    this.hostWindow = new HostWindow(
-      this.goBackToMenu.bind(this)
-    );
+    if (!this.hostWindow) {
+      this.hostWindow = new HostWindow(
+        this.goToMenu.bind(this)
+      );
+    }
 
+    this.hostWindow.render();
     this.container.addChild(this.hostWindow.container);
   }
 
-  createInputInvitationCode() {
-    this.inputInvitationCode = new InputInvitationCode(
-      this.goBackToMenu.bind(this)
-    );
-
-    this.container.addChild(this.inputInvitationCode.container);
-  }
-
-  createGuestWindow(invitationCode) {
+  createGuestWindow(roomCode) {
     this.guestWindow = new GuestWindow(
-      this.goBackToMenu.bind(this),
-      invitationCode
+      this.goToMenu.bind(this),
+      roomCode
     );
 
+    this.guestWindow.render();
     this.container.addChild(this.guestWindow.container);
   }
 
-  goBackToMenu(scene) {
+  createInputInvitationCode() {
+    if (!this.inputInvitationCode) {
+      this.inputInvitationCode = new InputInvitationCode(
+        this.goToMenu.bind(this),
+        this.goToGuestWindow.bind(this)
+      );
+    }
+
+    this.inputInvitationCode.render();
+    this.container.addChild(this.inputInvitationCode.container);
+  }
+
+  goToMenu(scene) {
     this.container.removeChild(scene.container);
     this.createMenu();
   }
 
-  showInvitationCode() {
-    this.removeGuestWindow();
-    this.createInputInvitationCode();
+  goToGuestWindow(roomCode) {
+    this.removeMenu();
+    this.createGuestWindow(roomCode);
   }
 
   removeMenu() {
     this.container.removeChild(this.menu.container);
   }
 
-  handleCreateGameClick(e) {
+  handleCreateGameClick() {
     this.removeMenu();
     this.createHostWindow();
   }
 
-  handleJoinGameClick(e) {
+  handleJoinGameClick() {
     this.removeMenu();
     this.createInputInvitationCode();
   }
