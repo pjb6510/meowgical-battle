@@ -10,8 +10,9 @@ import { broadcastedActions } from "../constants";
 import Peer from "simple-peer";
 
 export default class GuestWindow {
-  constructor(unmountCallback) {
+  constructor(unmountCallback, roomCode) {
     this.unmountCallback = unmountCallback;
+    this.roomCode = roomCode;
     this.playerId = getState().playerId;
 
     this.container = new PIXI.Container();
@@ -23,6 +24,8 @@ export default class GuestWindow {
     this.createBackButton();
 
     this.peer = null;
+
+    this.render();
   }
 
   createPlayerBox() {

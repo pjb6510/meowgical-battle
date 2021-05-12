@@ -53,13 +53,10 @@ export default class MainMenu {
   }
 
   createHostWindow() {
-    if (!this.hostWindow) {
-      this.hostWindow = new HostWindow(
-        this.goToMenu.bind(this)
-      );
-    }
+    this.hostWindow = new HostWindow(
+      this.goToMenu.bind(this)
+    );
 
-    this.hostWindow.render();
     this.container.addChild(this.hostWindow.container);
   }
 
@@ -69,19 +66,15 @@ export default class MainMenu {
       roomCode
     );
 
-    this.guestWindow.render();
     this.container.addChild(this.guestWindow.container);
   }
 
   createInputInvitationCode() {
-    if (!this.inputInvitationCode) {
-      this.inputInvitationCode = new InputInvitationCode(
-        this.goToMenu.bind(this),
-        this.goToGuestWindow.bind(this)
-      );
-    }
+    this.inputInvitationCode = new InputInvitationCode(
+      this.goToMenu.bind(this),
+      this.goToGuestWindow.bind(this)
+    );
 
-    this.inputInvitationCode.render();
     this.container.addChild(this.inputInvitationCode.container);
   }
 

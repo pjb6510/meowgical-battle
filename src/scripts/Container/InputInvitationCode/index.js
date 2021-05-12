@@ -29,6 +29,8 @@ export default class InputInvitationCode {
     this.createInputText();
     this.createMessage();
     this.createConnectButton();
+
+    this.render();
   }
 
   createBackButton() {

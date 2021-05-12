@@ -30,6 +30,8 @@ export default class HostWindow {
     this.createOpponentBox();
     this.createBackButton();
     this.createGameStartButton();
+
+    this.render();
   }
 
   createPlayerBox() {
