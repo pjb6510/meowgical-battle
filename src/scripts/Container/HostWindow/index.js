@@ -176,7 +176,7 @@ export default class HostWindow {
     });
 
     this.peer.on("connect", () => {
-      console.log("connect complete");
+      this.startGame();
     });
   }
 
@@ -190,6 +190,7 @@ export default class HostWindow {
       from: this.playerId,
     });
 
+    this.containerWillUnmount();
     dispatch(setScene(new Battle()));
   }
 }

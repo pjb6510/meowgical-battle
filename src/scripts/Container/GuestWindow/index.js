@@ -94,7 +94,7 @@ export default class GuestWindow {
         }
         break;
       case broadcastedActions.START_GAME:
-        dispatch(setScene(new Battle()));
+        this.startGame();
         break;
       case broadcastedActions.SEND_PEER:
         this.receiveAndSendPeer(payload);
@@ -111,8 +111,6 @@ export default class GuestWindow {
       objectMode: true,
     });
 
-    this.peer.signal(receivedSignal);
-
     this.peer.on("error", (err) => {
       console.error(err);
     });
@@ -121,6 +119,8 @@ export default class GuestWindow {
       console.log("connect complete");
     });
 
+    this.peer.signal(receivedSignal);
+
     this.peer.on("signal", (guestSignal) => {
       socket.broadcastAction({
         action: broadcastedActions.SEND_PEER,
@@ -128,5 +128,10 @@ export default class GuestWindow {
         from: this.playerId,
       });
     });
+  }
+
+  startGame() {
+    this.containerWillUnmount();
+    dispatch(setScene(new Battle()));
   }
 }
