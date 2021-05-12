@@ -6,12 +6,6 @@ export default class Battle extends Drawer {
   constructor() {
     super();
 
-    this.container = new PIXI.Container();
-    this.container.sortableChildren = true;
-
-    this.container.addChild(this.canvas);
-    this.canvas.zIndex = 1;
-
     this.backgroundTexture = getState()
       .resources
       .battleBackground
