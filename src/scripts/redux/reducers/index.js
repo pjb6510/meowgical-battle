@@ -1,6 +1,7 @@
 import {
   SET_PLAYER_ID,
   SET_RESOURCES,
+  SET_ROOM_CODE,
   SET_SCENE,
 } from "../constants/index";
 
@@ -20,6 +21,11 @@ const reducer = (state = {}, action) => {
       return {
         ...state,
         playerId: action.playerId,
+      };
+    case SET_ROOM_CODE:
+      return {
+        ...state,
+        roomCode: action.roomCode,
       };
     default:
       return state;
