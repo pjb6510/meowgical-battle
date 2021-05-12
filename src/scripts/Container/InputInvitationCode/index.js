@@ -7,8 +7,8 @@ import { getState } from "../../redux";
 import socket from "../../socket";
 
 export default class InputInvitationCode {
-  constructor(parent) {
-    this.parent = parent;
+  constructor(unmount) {
+    this.unmount = unmount;
 
     socket.subscribeJoinResult(
       this.handleJoinResultListen.bind(this)
@@ -179,8 +179,7 @@ export default class InputInvitationCode {
 
   handleBackButtonClick() {
     this.containerWillUnmount();
-    this.parent.removeInputInvitationCode();
-    this.parent.createMenu();
+    this.unmount(this);
   }
 
   showGuestWindow() {

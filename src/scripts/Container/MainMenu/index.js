@@ -8,10 +8,12 @@ import { getState } from "../../redux";
 export default class MainMenu {
   constructor() {
     this.container = new PIXI.Container();
+
     this.menu = null;
     this.hostWindow = null;
     this.guestWindow = null;
     this.inputInvitationCode = null;
+
     this.backgroundTexture = getState()
       .resources
       .mainBackground
@@ -35,7 +37,7 @@ export default class MainMenu {
           offsetY: -280,
         },
         {
-          text: "게임 개설",
+          text: "게임 생성",
           borderColor: 0x82c9f5,
           event: this.handleCreateGameClick.bind(this),
         },
@@ -51,37 +53,32 @@ export default class MainMenu {
   }
 
   createHostWindow() {
-    this.hostWindow = new HostWindow(this);
+    this.hostWindow = new HostWindow(
+      this.goBackToMenu.bind(this)
+    );
+
     this.container.addChild(this.hostWindow.container);
   }
 
-  removeHostWindow() {
-    this.container.removeChild(this.hostWindow.container);
-    this.hostWindow = null;
-  }
-
   createInputInvitationCode() {
-    this.inputInvitationCode = new InputInvitationCode(this);
+    this.inputInvitationCode = new InputInvitationCode(
+      this.goBackToMenu.bind(this)
+    );
+
     this.container.addChild(this.inputInvitationCode.container);
   }
 
-  removeInputInvitationCode() {
-    this.container.removeChild(this.inputInvitationCode.container);
-    this.inputInvitationCode = null;
-  }
-
   createGuestWindow(invitationCode) {
-    this.guestWindow = new GuestWindow(this, invitationCode);
+    this.guestWindow = new GuestWindow(
+      this.goBackToMenu.bind(this),
+      invitationCode
+    );
+
     this.container.addChild(this.guestWindow.container);
   }
 
-  removeGuestWindow() {
-    this.container.removeChild(this.guestWindow.container);
-    this.guestWindow = null;
-  }
-
-  handleGuestWindowBackButtonClick() {
-    this.removeGuestWindow();
+  goBackToMenu(scene) {
+    this.container.removeChild(scene.container);
     this.createMenu();
   }
 

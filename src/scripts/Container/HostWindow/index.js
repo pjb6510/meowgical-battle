@@ -11,8 +11,8 @@ import { broadcastedActions } from "../constants";
 import Peer from "simple-peer";
 
 export default class HostWindow {
-  constructor(parent) {
-    this.parent = parent;
+  constructor(unmount) {
+    this.unmount = unmount;
     this.isConnected = false;
     this.rightPlayerTexture = getState()
       .resources
@@ -117,15 +117,14 @@ export default class HostWindow {
     this.createGameStartButton();
   }
 
+  handleBackButtonClick() {
+    this.containerWillUnmount();
+    this.unmount(this);
+  }
+
   containerWillUnmount() {
     socket.unsubscribeRoomState();
     socket.removeGame(this.playerId);
-  }
-
-  handleBackButtonClick() {
-    this.containerWillUnmount();
-    this.parent.removeHostWindow();
-    this.parent.createMenu();
   }
 
   handleRoomStateListen(data) {
@@ -169,9 +168,12 @@ export default class HostWindow {
     });
 
     this.peer.on("connect", () => {
+      console.log("connect complete");
+      this.peer.send("hello!!");
     });
 
     this.peer.on("data", (data) => {
+      console.log(data);
     });
   }
 

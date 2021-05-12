@@ -10,8 +10,8 @@ import { broadcastedActions } from "../constants";
 import Peer from "simple-peer";
 
 export default class GuestWindow {
-  constructor(parent, invitationCode) {
-    this.parent = parent;
+  constructor(unmount, invitationCode) {
+    this.unmount = unmount;
     this.invitationCode = invitationCode;
     this.container = new PIXI.Container();
     this.playerId = getState().playerId;
@@ -70,8 +70,7 @@ export default class GuestWindow {
 
   handleBackButtonClick() {
     this.containerWillUnmount();
-    this.parent.removeGuestWindow();
-    this.parent.createMenu();
+    this.unmount(this);
   }
 
   handleRoomStateListen(data) {
@@ -108,6 +107,7 @@ export default class GuestWindow {
     });
 
     this.peer.on("connect", () => {
+      console.log("connect complete");
     });
 
     this.peer.on("signal", (guestSignal) => {
@@ -119,6 +119,7 @@ export default class GuestWindow {
     });
 
     this.peer.on("data", (data) => {
+      console.log(data);
     });
   }
 }
