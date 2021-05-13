@@ -8,7 +8,7 @@ const createBox = (boxOption) => {
     x,
     y,
     color,
-    borderRadius = 20,
+    radius = 20,
     borderWidth = 0,
     borderColor = 0x000000,
     borderAlpha = 1,
@@ -25,7 +25,7 @@ const createBox = (boxOption) => {
       y,
       width,
       height,
-      borderRadius
+      radius
     )
     .endFill();
 
