@@ -7,10 +7,9 @@ export default class Drawer {
     this.container = new PIXI.Container();
     this.container.sortableChildren = true;
 
-    this.canvas = null;
     this.lineStyle = {
       width: 12,
-      color: 0x345b99,
+      color: 0xd2ff1e,
       cap: "round",
     };
 
@@ -30,6 +29,7 @@ export default class Drawer {
     this.strokeRecognitionDistance = 16;
     this.strokeDirections = [];
 
+    this.canvas = null;
     this.createCanvas();
   }
 
