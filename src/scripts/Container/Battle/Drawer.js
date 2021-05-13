@@ -66,6 +66,10 @@ export default class Drawer {
       "pointerup",
       this.handlePointerUp.bind(this)
     );
+    this.canvas.on(
+      "pointerout",
+      this.handlePointerOut.bind(this)
+    );
 
     this.container.addChild(this.canvas);
   }
@@ -115,6 +119,20 @@ export default class Drawer {
     }
   }
 
+  handlePointerUp() {
+    this.isPointerDown = false;
+    this.canvas.clear();
+    this.clearArrows();
+    console.log(this.strokeDirections);
+    this.strokeDirections = [];
+  }
+
+  handlePointerOut() {
+    if (this.isPointerDown) {
+      this.handlePointerUp();
+    }
+  }
+
   updatePointerStartPos(x, y) {
     this.pointerStartPos = { x, y };
   }
@@ -131,14 +149,6 @@ export default class Drawer {
   drawLine(startX, startY, endX, endY) {
     this.canvas.moveTo(startX, startY);
     this.canvas.lineTo(endX, endY);
-  }
-
-  handlePointerUp() {
-    this.isPointerDown = false;
-    this.canvas.clear();
-    this.clearArrows();
-    console.log(this.strokeDirections);
-    this.strokeDirections = [];
   }
 
   createArrow(direction) {
@@ -176,6 +186,7 @@ export default class Drawer {
     arrow.y = arrowYPos;
     arrow.width = 100;
     arrow.height = 100;
+
     this.arrowPosition.x += arrow.width;
 
     this.arrows.push(arrow);
