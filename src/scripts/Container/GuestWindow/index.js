@@ -6,7 +6,7 @@ import { canvasSize } from "../../config";
 import { getState, dispatch } from "../../redux";
 import { setScene } from "../../redux/actions";
 import socket from "../../socket";
-import { broadcastedActions } from "../constants";
+import { broadcastedActions } from "../../constants";
 import Peer from "simple-peer";
 
 export default class GuestWindow {
