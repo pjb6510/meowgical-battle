@@ -190,6 +190,6 @@ export default class HostWindow {
     });
 
     this.containerWillUnmount();
-    globalStore.setStore("scene", new Battle());
+    globalStore.setStore("scene", new Battle(true));
   }
 }

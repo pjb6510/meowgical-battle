@@ -131,6 +131,6 @@ export default class GuestWindow {
 
   startGame() {
     this.containerWillUnmount();
-    globalStore.setStore("scene", new Battle());
+    globalStore.setStore("scene", new Battle(false));
   }
 }
