@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import { canvasSize } from "../config";
 import Loader from "../container/Loader";
-import Main from "../container/MainMenu";
+import MainMenu from "../container/MainMenu";
 import generateRandomString from "../utils/generateRandomString";
 import globalStore from "../globalStore";
 
@@ -40,7 +40,7 @@ export default class App {
 
       await this.loading();
 
-      globalStore.setStore("scene", new Main());
+      globalStore.setStore("scene", new MainMenu(this.playerId));
     } catch (err) {
       console.error(err);
     }
