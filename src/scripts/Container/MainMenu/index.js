@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import Menu from "./Menu";
 import HostWindow from "../HostWindow";
 import GuestWindow from "../GuestWindow";
-import InputInvitationCode from "../InputInvitationCode";
+import InvitationCodeInput from "../InvitationCodeInput";
 import globalStore from "../../globalStore";
 
 export default class MainMenu {
@@ -72,8 +72,8 @@ export default class MainMenu {
     this.container.addChild(this.guestWindow.container);
   }
 
-  createInputInvitationCode() {
-    this.inputInvitationCode = new InputInvitationCode(
+  createInvitationCodeInput() {
+    this.inputInvitationCode = new InvitationCodeInput(
       this.playerId,
       this.goToMenu.bind(this),
       this.goToGuestWindow.bind(this)
@@ -103,6 +103,6 @@ export default class MainMenu {
 
   handleJoinGameClick() {
     this.removeMenu();
-    this.createInputInvitationCode();
+    this.createInvitationCodeInput();
   }
 }

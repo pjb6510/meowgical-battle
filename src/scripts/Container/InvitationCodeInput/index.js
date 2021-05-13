@@ -5,7 +5,7 @@ import createButton from "../../pixiUtils/createButton";
 import { canvasSize } from "../../config";
 import socket from "../../socket";
 
-export default class InputInvitationCode {
+export default class InvitationCodeInput {
   constructor(playerId, unmountCallback, connectCallback) {
     this.unmountCallback = unmountCallback;
     this.connectCallback = connectCallback;
