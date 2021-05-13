@@ -3,15 +3,14 @@ import PixiTextInput from "pixi-text-input";
 import createBox from "../../pixiUtils/createBox";
 import createButton from "../../pixiUtils/createButton";
 import { canvasSize } from "../../config";
-import { getState } from "../../redux";
 import socket from "../../socket";
 
 export default class InputInvitationCode {
-  constructor(unmountCallback, connectCallback) {
+  constructor(playerId, unmountCallback, connectCallback) {
     this.unmountCallback = unmountCallback;
     this.connectCallback = connectCallback;
 
-    this.playerId = getState().playerId;
+    this.playerId = playerId;
     this.invitationCodeInputFormat = /\w{0,7}/;
     this.invitationCodeFormat = /\w{7}/;
     this.inputedCode = "";

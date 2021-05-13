@@ -3,22 +3,23 @@ import Menu from "./Menu";
 import HostWindow from "../HostWindow";
 import GuestWindow from "../GuestWindow";
 import InputInvitationCode from "../InputInvitationCode";
-import { getState } from "../../redux";
+import globalStore from "../../globalStore";
 
 export default class MainMenu {
-  constructor() {
+  constructor(playerId) {
+    this.playerId = playerId;
+
     this.container = new PIXI.Container();
+
+    this.backgroundTexture = globalStore
+      .getItem("resources")
+      .mainBackground
+      .texture;
 
     this.menu = null;
     this.hostWindow = null;
     this.guestWindow = null;
     this.inputInvitationCode = null;
-
-    this.backgroundTexture = getState()
-      .resources
-      .mainBackground
-      .texture;
-    this.playerId = getState().playerId;
 
     this.createBackground();
     this.createMenu();
@@ -54,6 +55,7 @@ export default class MainMenu {
 
   createHostWindow() {
     this.hostWindow = new HostWindow(
+      this.playerId,
       this.goToMenu.bind(this)
     );
 
@@ -62,8 +64,9 @@ export default class MainMenu {
 
   createGuestWindow(roomCode) {
     this.guestWindow = new GuestWindow(
-      this.goToMenu.bind(this),
-      roomCode
+      roomCode,
+      this.playerId,
+      this.goToMenu.bind(this)
     );
 
     this.container.addChild(this.guestWindow.container);
@@ -71,6 +74,7 @@ export default class MainMenu {
 
   createInputInvitationCode() {
     this.inputInvitationCode = new InputInvitationCode(
+      this.playerId,
       this.goToMenu.bind(this),
       this.goToGuestWindow.bind(this)
     );

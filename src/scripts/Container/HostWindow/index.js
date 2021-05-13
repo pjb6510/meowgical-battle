@@ -4,21 +4,20 @@ import InvitationCodeBox from "./InvitationCodeBox";
 import Battle from "../Battle";
 import createButton from "../../pixiUtils/createButton";
 import { canvasSize } from "../../config";
-import { getState, dispatch } from "../../redux";
-import { setScene } from "../../redux/actions";
 import socket from "../../socket";
 import { broadcastedActions } from "../../constants";
 import Peer from "simple-peer";
+import globalStore from "../../globalStore";
 
 export default class HostWindow {
-  constructor(unmountCallback) {
+  constructor(playerId, unmountCallback) {
+    this.playerId = playerId;
     this.unmountCallback = unmountCallback;
     this.isConnected = false;
-    this.rightPlayerTexture = getState()
-      .resources
+    this.rightPlayerTexture = globalStore
+      .getItem("resources")
       .rightPlayer
       .texture;
-    this.playerId = getState().playerId;
     this.peer = null;
 
     this.container = new PIXI.Container();
@@ -191,6 +190,6 @@ export default class HostWindow {
     });
 
     this.containerWillUnmount();
-    dispatch(setScene(new Battle()));
+    globalStore.setStore("scene", new Battle());
   }
 }

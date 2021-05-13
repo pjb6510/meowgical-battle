@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import { canvasSize } from "../../config";
-import { getState } from "../../redux";
+import globalStore from "../../globalStore";
 
 export default class Drawer {
   constructor() {
@@ -13,14 +13,22 @@ export default class Drawer {
       cap: "round",
     };
 
-    this.leftArrowTexture = getState()
-      .resources.leftArrow.texture;
-    this.rightArrowTexture = getState()
-      .resources.rightArrow.texture;
-    this.upArrowTexture = getState()
-      .resources.upArrow.texture;
-    this.downArrowTexture = getState()
-      .resources.downArrow.texture;
+    this.leftArrowTexture = globalStore
+      .getItem("resources")
+      .leftArrow
+      .texture;
+    this.rightArrowTexture = globalStore
+      .getItem("resources")
+      .rightArrow
+      .texture;
+    this.upArrowTexture = globalStore
+      .getItem("resources")
+      .upArrow
+      .texture;
+    this.downArrowTexture = globalStore
+      .getItem("resources")
+      .downArrow
+      .texture;
 
     this.arrows = [];
     this.arrowPosition = { x: 0, y: 0 };

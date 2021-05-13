@@ -3,17 +3,16 @@ import PlayerBox from "../shared/PlayerBox";
 import Battle from "../Battle";
 import createButton from "../../pixiUtils/createButton";
 import { canvasSize } from "../../config";
-import { getState, dispatch } from "../../redux";
-import { setScene } from "../../redux/actions";
 import socket from "../../socket";
 import { broadcastedActions } from "../../constants";
 import Peer from "simple-peer";
+import globalStore from "../../globalStore";
 
 export default class GuestWindow {
-  constructor(unmountCallback, roomCode) {
+  constructor(roomCode, playerId, unmountCallback) {
     this.unmountCallback = unmountCallback;
     this.roomCode = roomCode;
-    this.playerId = getState().playerId;
+    this.playerId = playerId;
 
     this.container = new PIXI.Container();
     this.playerBox = null;
@@ -132,6 +131,6 @@ export default class GuestWindow {
 
   startGame() {
     this.containerWillUnmount();
-    dispatch(setScene(new Battle()));
+    globalStore.setStore("scene", new Battle());
   }
 }

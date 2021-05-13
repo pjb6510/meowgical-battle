@@ -2,8 +2,7 @@ import * as PIXI from "pixi.js";
 import loaderConfig from "../../../assets/loaderConfig";
 import { canvasSize } from "../../config";
 import createBox from "../../pixiUtils/createBox";
-import { dispatch } from "../../redux";
-import { setResources } from "../../redux/actions";
+import globalStore from "../../globalStore";
 
 export default class Loader {
   constructor(loader) {
@@ -38,7 +37,7 @@ export default class Loader {
       });
 
       this.loader.load((loader, resources) => {
-        dispatch(setResources(resources));
+        globalStore.setStore("resources", resources);
         resolve();
       });
     });

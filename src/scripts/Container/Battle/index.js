@@ -1,13 +1,13 @@
 import * as PIXI from "pixi.js";
 import Drawer from "./Drawer";
-import { getState } from "../../redux";
+import globalStore from "../../globalStore";
 
 export default class Battle extends Drawer {
   constructor() {
     super();
 
-    this.backgroundTexture = getState()
-      .resources
+    this.backgroundTexture = globalStore
+      .getItem("resources")
       .battleBackground
       .texture;
     this.background = null;

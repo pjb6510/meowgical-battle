@@ -3,22 +3,18 @@ import { canvasSize } from "../config";
 import Loader from "../container/Loader";
 import Main from "../container/MainMenu";
 import generateRandomString from "../utils/generateRandomString";
-import { dispatch, getState, subscribe } from "../redux";
-import { setPlayerId, setScene } from "../redux/actions";
+import globalStore from "../globalStore";
 
 export default class App {
   constructor() {
-    this.currentScene = null;
-
     this.app = null;
     this.loader = null;
 
-    dispatch(
-      setPlayerId(generateRandomString())
-    );
+    this.currentScene = null;
+    this.playerId = generateRandomString();
 
-    subscribe(() => {
-      const newScene = getState().scene;
+    globalStore.subscribe((newStore) => {
+      const { scene: newScene } = newStore;
 
       if (newScene && this.currentScene !== newScene) {
         this.updateScene(newScene);
@@ -44,9 +40,7 @@ export default class App {
 
       await this.loading();
 
-      dispatch(
-        setScene(new Main())
-      );
+      globalStore.setStore("scene", new Main());
     } catch (err) {
       console.error(err);
     }

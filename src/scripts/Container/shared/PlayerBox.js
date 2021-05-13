@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import createBox from "../../pixiUtils/createBox";
 import { canvasSize } from "../../config";
-import { getState } from "../../redux";
+import globalStore from "../../globalStore";
 
 export default class PlayerBox {
   constructor(isLeft, titleText) {
@@ -9,12 +9,12 @@ export default class PlayerBox {
     this.titleText = titleText;
     this.container = new PIXI.Container();
 
-    const leftCharacterTexture = getState()
-      .resources
+    const leftCharacterTexture = globalStore
+      .getItem("resources")
       .leftPlayer
       .texture;
-    const rightCharacterTexture = getState()
-      .resources
+    const rightCharacterTexture = globalStore
+      .getItem("resources")
       .rightPlayer
       .texture;
     this.characterTextrue = this.isLeft ? leftCharacterTexture : rightCharacterTexture;
