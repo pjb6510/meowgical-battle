@@ -31,11 +31,13 @@ export default class Drawer {
       .texture;
 
     this.arrows = [];
-    this.arrowPosition = { x: 0, y: 0 };
+    this.arrowInitialPosition = { x: 50, y: 200 };
+    this.arrowPosition = { ...this.arrowInitialPosition };
 
     this.pointerStartPos = { x: 0, y: 0 };
     this.strokeRecognitionDistance = 16;
     this.strokeDirections = [];
+    this.directionsLengthLimit = 18;
 
     this.canvas = null;
     this.createCanvas();
@@ -113,7 +115,6 @@ export default class Drawer {
 
     if (isOverRecognitionDistance) {
       this.updatePointerStartPos(x, y);
-      this.createArrow(strokeDirection);
       this.addStrokeDirection(strokeDirection);
       this.drawLine(startX, startY, x, y);
     }
@@ -141,8 +142,13 @@ export default class Drawer {
     const lastStrokeDirection =
       this.strokeDirections[this.strokeDirections.length - 1];
 
-    if (lastStrokeDirection !== direction) {
+    const shouldAddDirection =
+      lastStrokeDirection !== direction &&
+        this.strokeDirections.length < this.directionsLengthLimit;
+
+    if (shouldAddDirection) {
       this.strokeDirections.push(direction);
+      this.createArrowIcon(direction);
     }
   }
 
@@ -151,14 +157,7 @@ export default class Drawer {
     this.canvas.lineTo(endX, endY);
   }
 
-  createArrow(direction) {
-    const lastStrokeDirection =
-      this.strokeDirections[this.strokeDirections.length - 1];
-
-    if (lastStrokeDirection === direction) {
-      return;
-    }
-
+  createArrowIcon(direction) {
     let arrow = null;
     const {
       x: arrowXPos,
@@ -198,6 +197,6 @@ export default class Drawer {
       this.container.removeChild(this.arrows[i]);
     }
 
-    this.arrowPosition = { x: 0, y: 0 };
+    this.arrowPosition = { ...this.arrowInitialPosition };
   }
 }
