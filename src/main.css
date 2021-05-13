@@ -6,3 +6,17 @@
   width: 960px;
   height: 540px;
 }
+
+@media screen and (max-width: 480px) {
+  .container > canvas {
+    width: 320px;
+    height: 180px;
+  }
+}
+
+@media screen and (min-width:480px) and (max-width:800px) {
+  .container > canvas {
+    width: 560px;
+    height: 315px;
+  }
+}
