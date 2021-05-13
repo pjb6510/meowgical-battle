@@ -31,7 +31,7 @@ export default class Drawer {
       .texture;
 
     this.arrows = [];
-    this.arrowInitialPosition = { x: 50, y: 200 };
+    this.arrowInitialPosition = { x: 50, y: 250 };
     this.arrowPosition = { ...this.arrowInitialPosition };
 
     this.pointerStartPos = { x: 0, y: 0 };
