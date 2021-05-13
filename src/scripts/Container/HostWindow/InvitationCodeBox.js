@@ -13,7 +13,11 @@ export default class InvitationCodeBox {
     this.invitationCode = null;
     this.copyButton = null;
 
-    this.createInvitationBox();
+    this.createWrapper();
+    this.createTitle();
+    this.createContents();
+
+    this.render();
   }
 
   createWrapper() {
@@ -26,8 +30,6 @@ export default class InvitationCodeBox {
       borderWidth: 10,
       borderColor: 0x82c9f5,
     });
-
-    this.container.addChild(this.wrapper);
   }
 
   createTitle() {
@@ -42,8 +44,6 @@ export default class InvitationCodeBox {
     this.title.anchor.set(0.5, 0.5);
     this.title.x = canvasSize.width / 2 + 300;
     this.title.y = canvasSize.height / 2 - 200;
-
-    this.container.addChild(this.title);
   }
 
   createContents() {
@@ -80,16 +80,14 @@ export default class InvitationCodeBox {
       },
       handleCopyButtonClick
     );
+  }
 
+  render() {
     this.container.addChild(
+      this.wrapper,
+      this.title,
       this.invitationCode,
       this.copyButton
     );
-  }
-
-  createInvitationBox() {
-    this.createWrapper();
-    this.createTitle();
-    this.createContents();
   }
 }

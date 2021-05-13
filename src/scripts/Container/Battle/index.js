@@ -12,10 +12,15 @@ export default class Battle extends Drawer {
       .texture;
     this.background = null;
     this.createBackground();
+
+    this.render();
   }
 
   createBackground() {
     this.background = new PIXI.Sprite(this.backgroundTexture);
+  }
+
+  render() {
     this.container.addChild(this.background);
   }
 }

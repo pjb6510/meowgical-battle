@@ -24,7 +24,11 @@ export default class PlayerBox {
     this.title = null;
     this.character = null;
 
-    this.createPlayerBox();
+    this.createWrapper();
+    this.createTitle();
+    this.createCharacter();
+
+    this.render();
   }
 
   createWrapper() {
@@ -37,8 +41,6 @@ export default class PlayerBox {
       borderWidth: 10,
       borderColor: 0x82c9f5,
     });
-
-    this.container.addChild(this.wrapper);
   }
 
   createTitle() {
@@ -53,8 +55,6 @@ export default class PlayerBox {
     this.title.anchor.set(0.5, 0.5);
     this.title.x = canvasSize.width / 2 + this.xOffset;
     this.title.y = canvasSize.height / 2 - 200;
-
-    this.container.addChild(this.title);
   }
 
   createCharacter() {
@@ -63,13 +63,13 @@ export default class PlayerBox {
     this.character.x = canvasSize.width / 2 + this.xOffset;
     this.character.y = canvasSize.height / 2 + 50;
     this.character.scale.set(0.5);
-
-    this.container.addChild(this.character);
   }
 
-  createPlayerBox() {
-    this.createWrapper();
-    this.createTitle();
-    this.createCharacter();
+  render() {
+    this.container.addChild(
+      this.wrapper,
+      this.title,
+      this.character
+    );
   }
 }

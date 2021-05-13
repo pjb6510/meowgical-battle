@@ -7,12 +7,18 @@ import { setResources } from "../../redux/actions";
 
 export default class Loader {
   constructor(loader) {
-    this.container = new PIXI.Container();
-    this.loadingPercentageText = null;
-    this.showLoadingProgress();
-
     this.loader = loader;
     this.resources = loaderConfig;
+    this.container = new PIXI.Container();
+
+    this.wrapper = null;
+    this.title = null;
+    this.loadingPercentageText = null;
+    this.createWrapper();
+    this.createTitle();
+    this.createLoadingPercentageText();
+
+    this.render();
   }
 
   preload() {
@@ -38,18 +44,18 @@ export default class Loader {
     });
   }
 
-  showLoadingProgress() {
-    const loadingProgress = new PIXI.Container();
-
-    const loadingBox = createBox({
+  createWrapper() {
+    this.wrapper = createBox({
       width: 500,
       height: 350,
       x: canvasSize.width / 2,
       y: canvasSize.height / 2,
       color: 0xffffff,
     });
+  }
 
-    const loadingText = new PIXI.Text(
+  createTitle() {
+    this.title = new PIXI.Text(
       "Loading",
       {
         fontFamily: "sans-serif",
@@ -57,11 +63,13 @@ export default class Loader {
         align: "center",
       }
     );
-    loadingText.anchor.set(0.5, 0.5);
-    loadingText.x = canvasSize.width / 2;
-    loadingText.y = canvasSize.height / 2 - 50;
+    this.title.anchor.set(0.5, 0.5);
+    this.title.x = canvasSize.width / 2;
+    this.title.y = canvasSize.height / 2 - 50;
+  }
 
-    const loadingPercentage = new PIXI.Text(
+  createLoadingPercentageText() {
+    this.loadingPercentageText = new PIXI.Text(
       "0%",
       {
         fontFamily: "sans-serif",
@@ -69,18 +77,16 @@ export default class Loader {
         align: "center",
       }
     );
-    loadingPercentage.anchor.set(0.5, 0.5);
-    loadingPercentage.x = canvasSize.width / 2;
-    loadingPercentage.y = canvasSize.height / 2 + 70;
+    this.loadingPercentageText.anchor.set(0.5, 0.5);
+    this.loadingPercentageText.x = canvasSize.width / 2;
+    this.loadingPercentageText.y = canvasSize.height / 2 + 70;
+  }
 
-    this.loadingPercentageText = loadingPercentage;
-
-    loadingProgress.addChild(
-      loadingBox,
-      loadingText,
-      loadingPercentage
+  render() {
+    this.container.addChild(
+      this.wrapper,
+      this.title,
+      this.loadingPercentageText
     );
-
-    this.container.addChild(loadingProgress);
   }
 }

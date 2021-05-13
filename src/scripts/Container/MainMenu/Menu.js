@@ -9,7 +9,10 @@ export default class Menu {
     this.buttonInfos = buttonInfos;
 
     this.container = new PIXI.Container();
+    this.menuButtons = [];
     this.createMenu();
+
+    this.render();
   }
 
   createMenu() {
@@ -40,7 +43,11 @@ export default class Menu {
         buttonInfo.event
       );
 
-      this.container.addChild(button);
+      this.menuButtons.push(button);
     }
+  }
+
+  render() {
+    this.container.addChild(...this.menuButtons);
   }
 }
