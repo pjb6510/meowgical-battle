@@ -13,6 +13,9 @@ const createBox = (boxOption) => {
     borderColor = 0x000000,
     borderAlpha = 1,
     borderAlignment = 1,
+    pivotX = width / 2,
+    pivotY = height / 2,
+    hasShadow = true,
   } = boxOption;
 
   const box = new PIXI.Graphics();
@@ -30,11 +33,13 @@ const createBox = (boxOption) => {
     .endFill();
 
   box.pivot.set(
-    width / 2,
-    height / 2
+    pivotX,
+    pivotY
   );
 
-  box.filters = [new DropShadowFilter()];
+  if (hasShadow) {
+    box.filters = [new DropShadowFilter()];
+  }
 
   return box;
 };
