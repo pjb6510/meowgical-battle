@@ -3,20 +3,15 @@ import HpBar from "./HpBar";
 import Portrait from "./Portrait";
 
 export default class StatusBar {
-  constructor({ x, y, isLeftCharacter }) {
+  constructor({ x, y, isLeftPlayer }) {
     this.x = x;
     this.y = y;
-    this.isLeftCharacter = isLeftCharacter;
+    this.isLeftPlayer = isLeftPlayer;
 
     this.portraitHpBarDistance = 150;
 
     this.portraitXOffset = -(this.portraitHpBarDistance) - 50;
     this.portraitYOffset = 0;
-    this.portraitOption = {
-      x: this.x + this.portraitXOffset,
-      y: this.y + this.portraitYOffset,
-      isLeftCharacter: this.isLeftCharacter,
-    };
 
     this.hpBarXOffset = this.portraitHpBarDistance - 50;
     this.hpBarYOffset = 0;
@@ -40,9 +35,11 @@ export default class StatusBar {
   }
 
   createPortrait() {
-    this.portrait = new Portrait(
-      this.portraitOption
-    );
+    this.portrait = new Portrait({
+      x: this.x + this.portraitXOffset,
+      y: this.y + this.portraitYOffset,
+      isLeftPlayer: this.isLeftPlayer,
+    });
   }
 
   render() {
