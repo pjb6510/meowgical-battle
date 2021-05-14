@@ -2,9 +2,9 @@ import * as PIXI from "pixi.js";
 import createBox from "../../pixiUtils/createBox";
 
 export default class HpBar {
-  constructor(position, hpPercentage = 100) {
-    this.x = position.x;
-    this.y = position.y;
+  constructor({ x, y, hpPercentage = 100 }) {
+    this.x = x;
+    this.y = y;
     this.hpPercentage = hpPercentage;
 
     this.container = new PIXI.Container();

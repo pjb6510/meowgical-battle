@@ -3,9 +3,9 @@ import globalStore from "../../globalStore";
 import { DropShadowFilter } from "@pixi/filter-drop-shadow";
 
 export default class Portrait {
-  constructor(position, isLeftCharacter) {
-    this.x = position.x;
-    this.y = position.y;
+  constructor({ x, y, isLeftCharacter }) {
+    this.x = x;
+    this.y = y;
     this.isLeftCharacter = isLeftCharacter;
 
     this.container = new PIXI.Container();

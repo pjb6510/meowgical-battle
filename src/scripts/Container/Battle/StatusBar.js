@@ -12,14 +12,15 @@ export default class StatusBar {
 
     this.portraitXOffset = -(this.portraitHpBarDistance) - 50;
     this.portraitYOffset = 0;
-    this.portraitPostion = {
+    this.portraitOption = {
       x: this.x + this.portraitXOffset,
       y: this.y + this.portraitYOffset,
+      isLeftCharacter: this.isLeftCharacter,
     };
 
     this.hpBarXOffset = this.portraitHpBarDistance - 50;
     this.hpBarYOffset = 0;
-    this.hpBarPosition = {
+    this.hpBarOption = {
       x: this.x + this.hpBarXOffset,
       y: this.y + this.hpBarYOffset,
     };
@@ -35,13 +36,12 @@ export default class StatusBar {
   }
 
   createHpBar() {
-    this.hpBar = new HpBar(this.hpBarPosition);
+    this.hpBar = new HpBar(this.hpBarOption);
   }
 
   createPortrait() {
     this.portrait = new Portrait(
-      this.portraitPostion,
-      this.isLeftCharacter
+      this.portraitOption
     );
   }
 
