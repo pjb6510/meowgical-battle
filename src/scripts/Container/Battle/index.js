@@ -10,7 +10,7 @@ import isEqualArray from "../../utils/isEqualArray";
 export default class Battle extends Drawer {
   constructor(isHost) {
     super();
-    this.isHost = !isHost;
+    this.isHost = isHost;
     this.drawingCallback = this.handleDraw;
 
     this.backgroundTexture = globalStore
