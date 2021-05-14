@@ -2,12 +2,14 @@ import * as PIXI from "pixi.js";
 import Drawer from "./Drawer";
 import StatusBar from "./StatusBar";
 import Tiles from "./Tiles";
+import Player from "./Player";
 import globalStore from "../../globalStore";
 import { canvasSize } from "../../config";
 
 export default class Battle extends Drawer {
   constructor(isHost) {
     super();
+    this.isLeftPlayer = isHost;
 
     this.backgroundTexture = globalStore
       .getItem("resources")
@@ -18,34 +20,53 @@ export default class Battle extends Drawer {
     this.playerStatusBarOption = {
       x: canvasSize.width / 2 - this.statusBarDistance,
       y: canvasSize.height / 2 - 400,
-      isLeftCharacter: isHost,
+      isLeftPlayer: this.isLeftPlayer,
     };
     this.opponentStatusBarOption = {
       x: canvasSize.width / 2 + this.statusBarDistance,
       y: canvasSize.height / 2 - 400,
-      isLeftCharacter: !isHost,
+      isLeftPlayer: !this.isLeftPlayer,
     };
 
-    this.playerTilesDistance = 340;
-    this.playerTilesOption = {
-      x: canvasSize.width / 2 - this.playerTilesDistance,
-      y: canvasSize.height / 2 + 200,
-      tileWidth: 150,
-      tileHeight: 80,
-      tileBorderWidth: 10,
-      tileBorderColor: isHost ? 0xa8e8ca : 0x9abeff,
-      tilesXDistance: 20,
-      tilesYDistance: 20,
+    this.tilesGap = 340;
+    this.tilesYOffset = 250;
+    this.tileGap = 20;
+    this.tileSize = {
+      width: 150,
+      height: 60,
     };
-    this.opponentTilesOption = {
-      x: canvasSize.width / 2 + this.playerTilesDistance,
-      y: canvasSize.height / 2 + 200,
-      tileWidth: 150,
-      tileHeight: 80,
-      tileBorderWidth: 10,
-      tileBorderColor: isHost ? 0x9abeff : 0xa8e8ca,
-      tilesXDistance: 20,
-      tilesYDistance: 20,
+    this.tileBorderWidth = 10;
+    this.leftPlayerTileColor = 0xa8e8ca;
+    this.rightPlayerTileColor = 0x9abeff;
+
+    this.playerTilesPosition = {
+      x: canvasSize.width / 2 - this.tilesGap,
+      y: canvasSize.height / 2 + this.tilesYOffset,
+    };
+    this.opponentTilesPosition = {
+      x: canvasSize.width / 2 + this.tilesGap,
+      y: canvasSize.height / 2 + this.tilesYOffset,
+    };
+
+    this.playerFirstTilePosition = {
+      x: this.playerTilesPosition.x -
+        (this.tileSize.width / 2) -
+        this.tileGap -
+        this.tileSize.width,
+      y: this.playerTilesPosition.y -
+        (this.tileSize.height / 2) -
+        this.tileGap -
+        this.tileSize.height,
+    };
+    this.opponentFirstTilePosition = {
+      x: this.opponentTilesPosition.x +
+        (this.tileSize.width / 2) +
+        this.tileGap +
+        this.tileSize.width,
+      y: this.opponentTilesPosition.y -
+        (this.tileSize.height / 2) -
+        this.tileGap -
+        this.tileSize.height,
     };
 
     this.background = null;
@@ -58,6 +79,8 @@ export default class Battle extends Drawer {
     this.createOpponentStatusBar();
     this.createPlayerTiles();
     this.createOpponentTiles();
+    this.createPlayer();
+    this.createOpponent();
 
     this.render();
   }
@@ -75,11 +98,49 @@ export default class Battle extends Drawer {
   }
 
   createPlayerTiles() {
-    this.playerTiles = new Tiles(this.playerTilesOption);
+    this.playerTiles = new Tiles({
+      x: this.playerTilesPosition.x,
+      y: this.playerTilesPosition.y,
+      tileWidth: this.tileSize.width,
+      tileHeight: this.tileSize.height,
+      tileBorderWidth: this.tileBorderWidth,
+      tileBorderColor: this.isLeftPlayer
+        ? this.leftPlayerTileColor
+        : this.rightPlayerTileColor,
+      tileXGap: this.tileGap,
+      tileYGap: this.tileGap,
+    });
   }
 
   createOpponentTiles() {
-    this.opponentTiles = new Tiles(this.opponentTilesOption);
+    this.opponentTiles = new Tiles({
+      x: this.opponentTilesPosition.x,
+      y: this.opponentTilesPosition.y,
+      tileWidth: this.tileSize.width,
+      tileHeight: this.tileSize.height,
+      tileBorderWidth: this.tileBorderWidth,
+      tileBorderColor: this.isLeftPlayer
+        ? this.rightPlayerTileColor
+        : this.leftPlayerTileColor,
+      tileXGap: this.tileGap,
+      tileYGap: this.tileGap,
+    });
+  }
+
+  createPlayer() {
+    this.player = new Player({
+      isLeftPlayer: this.isLeftPlayer,
+      x: this.playerFirstTilePosition.x,
+      y: this.playerFirstTilePosition.y,
+    });
+  }
+
+  createOpponent() {
+    this.opponent = new Player({
+      isLeftPlayer: !this.isLeftPlayer,
+      x: this.opponentFirstTilePosition.x,
+      y: this.opponentFirstTilePosition.y,
+    });
   }
 
   render() {
@@ -88,7 +149,9 @@ export default class Battle extends Drawer {
       this.playerStatusBar.container,
       this.opponentStatusBar.container,
       this.playerTiles.container,
-      this.opponentTiles.container
+      this.opponentTiles.container,
+      this.player.container,
+      this.opponent.container
     );
   }
 }
