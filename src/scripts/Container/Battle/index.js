@@ -33,7 +33,7 @@ export default class Battle extends Drawer {
       tileWidth: 150,
       tileHeight: 80,
       tileBorderWidth: 10,
-      tileBorderColor: 0xa8e8ca,
+      tileBorderColor: isHost ? 0xa8e8ca : 0x9abeff,
       tilesXDistance: 20,
       tilesYDistance: 20,
     };
@@ -43,7 +43,7 @@ export default class Battle extends Drawer {
       tileWidth: 150,
       tileHeight: 80,
       tileBorderWidth: 10,
-      tileBorderColor: 0x9abeff,
+      tileBorderColor: isHost ? 0x9abeff : 0xa8e8ca,
       tilesXDistance: 20,
       tilesYDistance: 20,
     };
