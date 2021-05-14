@@ -88,21 +88,21 @@ export default class Drawer {
 
     const { x: startX, y: startY } = this.pointerStartPos;
 
-    const leftX = startX - this.strokeRecognitionDistance;
-    const rightX = startX + this.strokeRecognitionDistance;
-    const topY = startY - this.strokeRecognitionDistance;
-    const bottomY = startY + this.strokeRecognitionDistance;
+    const leftBorder = startX - this.strokeRecognitionDistance;
+    const rightBorder = startX + this.strokeRecognitionDistance;
+    const topBorder = startY - this.strokeRecognitionDistance;
+    const bottomBorder = startY + this.strokeRecognitionDistance;
 
     let isOverRecognitionDistance = true;
     let strokeDirection = "";
 
-    if (x < leftX) {
+    if (x < leftBorder) {
       strokeDirection = "left";
-    } else if (x > rightX) {
+    } else if (x > rightBorder) {
       strokeDirection = "right";
-    } else if (y < topY) {
+    } else if (y < topBorder) {
       strokeDirection = "up";
-    } else if (y > bottomY) {
+    } else if (y > bottomBorder) {
       strokeDirection = "down";
     } else {
       isOverRecognitionDistance = false;
