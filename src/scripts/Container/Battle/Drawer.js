@@ -34,6 +34,7 @@ export default class Drawer {
     this.directionsLengthLimit = 18;
 
     this.canvas = null;
+    this.drawingCallback = null;
     this.createCanvas();
   }
 
@@ -118,6 +119,11 @@ export default class Drawer {
     this.isPointerDown = false;
     this.canvas.clear();
     this.clearArrows();
+
+    if (this.drawingCallback) {
+      this.drawingCallback(this.strokeDirections);
+    }
+
     this.strokeDirections = [];
   }
 
