@@ -13,7 +13,7 @@ export default class MainMenu {
 
     this.backgroundTexture = globalStore
       .getItem("resources")
-      .mainBackground
+      .mainMenuBackground
       .texture;
 
     this.menu = null;
