@@ -13,13 +13,12 @@ export default class Drawer {
       cap: "round",
     };
 
-    const resources = globalStore.getItem("resources");
     const {
       leftArrow,
       rightArrow,
       upArrow,
       downArrow,
-    } = resources;
+    } = globalStore.getItem("resources");
 
     this.leftArrowTexture = leftArrow.texture;
     this.rightArrowTexture = rightArrow.texture;
@@ -119,7 +118,6 @@ export default class Drawer {
     this.isPointerDown = false;
     this.canvas.clear();
     this.clearArrows();
-    console.log(this.strokeDirections);
     this.strokeDirections = [];
   }
 

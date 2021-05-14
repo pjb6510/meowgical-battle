@@ -14,10 +14,6 @@ export default class HostWindow {
     this.playerId = playerId;
     this.unmountCallback = unmountCallback;
     this.isConnected = false;
-    this.rightPlayerTexture = globalStore
-      .getItem("resources")
-      .rightPlayer
-      .texture;
     this.peer = null;
 
     this.container = new PIXI.Container();
