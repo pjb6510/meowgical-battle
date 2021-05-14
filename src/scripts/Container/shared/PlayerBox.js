@@ -12,7 +12,7 @@ export default class PlayerBox {
     if (isHost) {
       this.characterTextrue = globalStore
         .getItem("resources")
-        .HostPlayer
+        .hostPlayer
         .texture;
 
       this.xOffset = -300;
