@@ -13,23 +13,18 @@ export default class Drawer {
       cap: "round",
     };
 
-    this.leftArrowTexture = globalStore
-      .getItem("resources")
-      .leftArrow
-      .texture;
-    this.rightArrowTexture = globalStore
-      .getItem("resources")
-      .rightArrow
-      .texture;
-    this.upArrowTexture = globalStore
-      .getItem("resources")
-      .upArrow
-      .texture;
-    this.downArrowTexture = globalStore
-      .getItem("resources")
-      .downArrow
-      .texture;
+    const resources = globalStore.getItem("resources");
+    const {
+      leftArrow,
+      rightArrow,
+      upArrow,
+      downArrow,
+    } = resources;
 
+    this.leftArrowTexture = leftArrow.texture;
+    this.rightArrowTexture = rightArrow.texture;
+    this.upArrowTexture = upArrow.texture;
+    this.downArrowTexture = downArrow.texture;
     this.arrows = [];
     this.arrowInitialPosition = { x: 50, y: 250 };
     this.arrowPosition = { ...this.arrowInitialPosition };

@@ -9,15 +9,14 @@ export default class PlayerBox {
     this.titleText = titleText;
     this.container = new PIXI.Container();
 
-    const leftCharacterTexture = globalStore
-      .getItem("resources")
-      .leftPlayer
-      .texture;
-    const rightCharacterTexture = globalStore
-      .getItem("resources")
-      .rightPlayer
-      .texture;
-    this.characterTextrue = this.isLeft ? leftCharacterTexture : rightCharacterTexture;
+    const resources = globalStore.getItem("resources");
+    const { leftPlayer, rightPlayer } = resources;
+
+    const leftCharacterTexture = leftPlayer.texture;
+    const rightCharacterTexture = rightPlayer.texture;
+    this.characterTextrue = this.isLeft
+      ? leftCharacterTexture
+      : rightCharacterTexture;
     this.xOffset = this.isLeft ? -300 : 300;
 
     this.wrapper = null;
