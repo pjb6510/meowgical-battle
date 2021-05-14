@@ -38,6 +38,7 @@ export default class Loader {
 
       this.loader.load((loader, resources) => {
         globalStore.setStore("resources", resources);
+
         resolve();
       });
     });
