@@ -5,6 +5,8 @@ export default class Tiles {
   constructor({
     x,
     y,
+    row,
+    column,
     tileWidth,
     tileHeight,
     tileBorderWidth,
@@ -21,8 +23,8 @@ export default class Tiles {
 
     this.container = new PIXI.Container();
 
-    this.row = 4;
-    this.column = 4;
+    this.row = row;
+    this.column = column;
     this.tileXGap = tileXGap;
     this.tileYGap = tileYGap;
     this.width =
