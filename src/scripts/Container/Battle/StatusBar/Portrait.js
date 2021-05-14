@@ -10,24 +10,23 @@ export default class Portrait {
 
     this.container = new PIXI.Container();
 
-    const {
-      leftPlayerPortrait,
-      leftPlayerHitPortrait,
-      rightPlayerPortrait,
-      rightPlayerHitPortrait,
-    } = globalStore.getItem("resources");
+    if (this.isLeftCharacter) {
+      const {
+        leftPlayerPortrait,
+        leftPlayerHitPortrait,
+      } = globalStore.getItem("resources");
 
-    this.leftPlayerPortraitTexture = leftPlayerPortrait.texture;
-    this.leftPlayerHitPortraitTexture = leftPlayerHitPortrait.texture;
-    this.rightPlayerPortraitTexture = rightPlayerPortrait.texture;
-    this.rightPlayerHitPortraitTexture = rightPlayerHitPortrait.texture;
+      this.portraitTexture = leftPlayerPortrait.texture;
+      this.hitPortraitTexture = leftPlayerHitPortrait.texture;
+    } else {
+      const {
+        rightPlayerPortrait,
+        rightPlayerHitPortrait,
+      } = globalStore.getItem("resources");
 
-    this.portraitTexture = this.isLeftCharacter
-      ? this.leftPlayerPortraitTexture
-      : this.rightPlayerPortraitTexture;
-    this.hitPortraitTexture = this.isLeftCharacter
-      ? this.leftPlayerHitPortraitTexture
-      : this.rightPlayerHitPortraitTexture;
+      this.portraitTexture = rightPlayerPortrait.texture;
+      this.hitPortraitTexture = rightPlayerHitPortrait.texture;
+    }
 
     this.portraitSize = 250;
     this.isHit = false;
