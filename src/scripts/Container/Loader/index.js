@@ -28,7 +28,7 @@ export default class Loader {
 
       this.loader.onProgress.add((e) => {
         if (this.loadingPercentageText) {
-          this.loadingPercentageText.text = `${e.progress}%`;
+          this.loadingPercentageText.text = `${Math.ceil(e.progress)}%`;
         }
       });
 
