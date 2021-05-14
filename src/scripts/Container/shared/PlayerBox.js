@@ -4,22 +4,22 @@ import { canvasSize } from "../../config";
 import globalStore from "../../globalStore";
 
 export default class PlayerBox {
-  constructor(isLeft, titleText) {
-    this.isLeft = isLeft;
+  constructor(isHost, titleText) {
+    this.isHost = isHost;
     this.titleText = titleText;
     this.container = new PIXI.Container();
 
-    if (isLeft) {
+    if (isHost) {
       this.characterTextrue = globalStore
         .getItem("resources")
-        .leftPlayer
+        .HostPlayer
         .texture;
 
       this.xOffset = -300;
     } else {
       this.characterTextrue = globalStore
         .getItem("resources")
-        .rightPlayer
+        .guestPlayer
         .texture;
 
       this.xOffset = 300;

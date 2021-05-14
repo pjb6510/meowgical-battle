@@ -3,29 +3,29 @@ import globalStore from "../../../globalStore";
 import { DropShadowFilter } from "@pixi/filter-drop-shadow";
 
 export default class Portrait {
-  constructor({ x, y, isLeftPlayer }) {
+  constructor({ x, y, isHost }) {
     this.x = x;
     this.y = y;
-    this.isLeftPlayer = isLeftPlayer;
+    this.isHost = isHost;
 
     this.container = new PIXI.Container();
 
-    if (this.isLeftPlayer) {
+    if (this.isHost) {
       const {
-        leftPlayerPortrait,
-        leftPlayerHitPortrait,
+        hostPlayerPortrait,
+        hostPlayerHitPortrait,
       } = globalStore.getItem("resources");
 
-      this.portraitTexture = leftPlayerPortrait.texture;
-      this.hitPortraitTexture = leftPlayerHitPortrait.texture;
+      this.portraitTexture = hostPlayerPortrait.texture;
+      this.hitPortraitTexture = hostPlayerHitPortrait.texture;
     } else {
       const {
-        rightPlayerPortrait,
-        rightPlayerHitPortrait,
+        guestPlayerPortrait,
+        guestPlayerHitPortrait,
       } = globalStore.getItem("resources");
 
-      this.portraitTexture = rightPlayerPortrait.texture;
-      this.hitPortraitTexture = rightPlayerHitPortrait.texture;
+      this.portraitTexture = guestPlayerPortrait.texture;
+      this.hitPortraitTexture = guestPlayerHitPortrait.texture;
     }
 
     this.portraitSize = 250;
