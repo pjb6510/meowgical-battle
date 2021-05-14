@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import createBox from "../../pixiUtils/createBox";
+import createBox from "../../../pixiUtils/createBox";
 
 export default class HpBar {
   constructor({ x, y, hpPercentage = 100 }) {

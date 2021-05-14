@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import globalStore from "../../globalStore";
+import globalStore from "../../../globalStore";
 import { DropShadowFilter } from "@pixi/filter-drop-shadow";
 
 export default class Portrait {
