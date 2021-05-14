@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import Tween from "@tweenjs/tween.js";
 import { canvasSize } from "../config";
 import Loader from "../container/Loader";
 import MainMenu from "../container/MainMenu";
@@ -41,6 +42,10 @@ export default class App {
       await this.loading();
 
       globalStore.setStore("scene", new MainMenu(this.playerId));
+
+      this.app.ticker.add((delta) => {
+        Tween.update();
+      });
     } catch (err) {
       console.error(err);
     }
