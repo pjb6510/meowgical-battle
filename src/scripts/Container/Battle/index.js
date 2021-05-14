@@ -5,11 +5,13 @@ import Tiles from "./Tiles";
 import Player from "./Player";
 import globalStore from "../../globalStore";
 import { canvasSize } from "../../config";
+import isEqualArray from "../../utils/isEqualArray";
 
 export default class Battle extends Drawer {
   constructor(isHost) {
     super();
-    this.isLeftPlayer = isHost;
+    this.isHost = !isHost;
+    this.drawingCallback = this.handleDraw;
 
     this.backgroundTexture = globalStore
       .getItem("resources")
@@ -20,24 +22,28 @@ export default class Battle extends Drawer {
     this.playerStatusBarOption = {
       x: canvasSize.width / 2 - this.statusBarDistance,
       y: canvasSize.height / 2 - 400,
-      isLeftPlayer: this.isLeftPlayer,
+      isHost: this.isHost,
     };
     this.opponentStatusBarOption = {
       x: canvasSize.width / 2 + this.statusBarDistance,
       y: canvasSize.height / 2 - 400,
-      isLeftPlayer: !this.isLeftPlayer,
+      isHost: !this.isHost,
     };
 
-    this.tilesGap = 340;
-    this.tilesYOffset = 250;
+    this.tilesGap = 440;
+    this.tilesYOffset = 300;
     this.tileGap = 20;
     this.tileSize = {
-      width: 150,
-      height: 60,
+      width: 200,
+      height: 80,
+    };
+    this.tilesSize = {
+      row: 4,
+      column: 4,
     };
     this.tileBorderWidth = 10;
-    this.leftPlayerTileColor = 0xa8e8ca;
-    this.rightPlayerTileColor = 0x9abeff;
+    this.hostPlayerTileColor = 0xa8e8ca;
+    this.guestPlayerTileColor = 0x9abeff;
 
     this.playerTilesPosition = {
       x: canvasSize.width / 2 - this.tilesGap,
@@ -101,12 +107,14 @@ export default class Battle extends Drawer {
     this.playerTiles = new Tiles({
       x: this.playerTilesPosition.x,
       y: this.playerTilesPosition.y,
+      row: this.tilesSize.row,
+      column: this.tilesSize.column,
       tileWidth: this.tileSize.width,
       tileHeight: this.tileSize.height,
       tileBorderWidth: this.tileBorderWidth,
-      tileBorderColor: this.isLeftPlayer
-        ? this.leftPlayerTileColor
-        : this.rightPlayerTileColor,
+      tileBorderColor: this.isHost
+        ? this.hostPlayerTileColor
+        : this.guestPlayerTileColor,
       tileXGap: this.tileGap,
       tileYGap: this.tileGap,
     });
@@ -116,12 +124,14 @@ export default class Battle extends Drawer {
     this.opponentTiles = new Tiles({
       x: this.opponentTilesPosition.x,
       y: this.opponentTilesPosition.y,
+      row: this.tilesSize.row,
+      column: this.tilesSize.column,
       tileWidth: this.tileSize.width,
       tileHeight: this.tileSize.height,
       tileBorderWidth: this.tileBorderWidth,
-      tileBorderColor: this.isLeftPlayer
-        ? this.rightPlayerTileColor
-        : this.leftPlayerTileColor,
+      tileBorderColor: this.isHost
+        ? this.guestPlayerTileColor
+        : this.hostPlayerTileColor,
       tileXGap: this.tileGap,
       tileYGap: this.tileGap,
     });
@@ -129,17 +139,27 @@ export default class Battle extends Drawer {
 
   createPlayer() {
     this.player = new Player({
-      isLeftPlayer: this.isLeftPlayer,
+      isHost: this.isHost,
+      shouldTurnAround: !this.isHost,
       x: this.playerFirstTilePosition.x,
       y: this.playerFirstTilePosition.y,
+      xStepMaxCount: this.tilesSize.column,
+      yStepMaxCount: this.tilesSize.row,
+      yStepDistance: this.tileSize.height + this.tileGap,
+      xStepDistance: this.tileSize.width + this.tileGap,
     });
   }
 
   createOpponent() {
     this.opponent = new Player({
-      isLeftPlayer: !this.isLeftPlayer,
+      isHost: !this.isHost,
+      shouldTurnAround: !this.isHost,
       x: this.opponentFirstTilePosition.x,
       y: this.opponentFirstTilePosition.y,
+      xStepMaxCount: this.tilesSize.column,
+      yStepMaxCount: this.tilesSize.row,
+      yStepDistance: this.tileSize.height + this.tileGap,
+      xStepDistance: this.tileSize.width + this.tileGap,
     });
   }
 
@@ -153,5 +173,30 @@ export default class Battle extends Drawer {
       this.player.container,
       this.opponent.container
     );
+  }
+
+  handleDraw(directions) {
+    if (directions.length === 1) {
+      switch (directions[0]) {
+        case "left":
+          this.player.moveLeft();
+          break;
+        case "right":
+          this.player.moveRight();
+          break;
+        case "up":
+          this.player.moveUp();
+          break;
+        case "down":
+          this.player.moveDown();
+          break;
+        default:
+          break;
+      }
+    }
+
+    if (isEqualArray(directions, ["right", "left", "right"])) {
+      this.player.attack();
+    }
   }
 }
