@@ -9,8 +9,8 @@ export default class Tiles {
     tileHeight,
     tileBorderWidth,
     tileBorderColor,
-    tilesXDistance,
-    tilesYDistance,
+    tileXGap,
+    tileYGap,
   }) {
     this.x = x;
     this.y = y;
@@ -19,25 +19,20 @@ export default class Tiles {
     this.tileWidth = tileWidth;
     this.tileHeight = tileHeight;
 
-    console.log(this.x);
-    console.log(this.y);
-
     this.container = new PIXI.Container();
 
     this.row = 4;
     this.column = 4;
-    this.tilesXDistance = tilesXDistance;
-    this.tilesYDistance = tilesYDistance;
+    this.tileXGap = tileXGap;
+    this.tileYGap = tileYGap;
     this.width =
-      (this.tileWidth + this.tilesXDistance) *
+      (this.tileWidth + this.tileXGap) *
         (this.row - 1) +
         this.tileWidth;
     this.height =
-      (this.tileHeight + this.tilesYDistance) *
+      (this.tileHeight + this.tileYGap) *
         (this.column - 1) +
         this.tileHeight;
-
-    console.log(this.width, this.height);
 
     this.container.pivot.set(this.width / 2, this.height / 2);
 
@@ -62,14 +57,12 @@ export default class Tiles {
 
       this.tileOption.y =
         this.y +
-          (this.tileHeight + this.tilesYDistance) *
-          i;
+          (this.tileHeight + this.tileYGap) * i;
 
       for (let j = 0; j < this.column; j += 1) {
         this.tileOption.x =
           this.x +
-            (this.tileWidth + this.tilesXDistance) *
-            j;
+            (this.tileWidth + this.tileXGap) * j;
 
         const tile = new Tile(this.tileOption);
         row.push(tile);
