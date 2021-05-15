@@ -95,21 +95,22 @@ export default class Player {
 
     const tween = new Tween.Tween(this.normalSprite);
 
-    tween.to(
-      { [axis]: nextPosition },
-      this.movingDuration
-    );
-    tween.onStart((player) => {
-      if (isBackMoving) {
-        player.texture = this.playerTexture.moveBack;
-      } else {
-        player.texture = this.playerTexture.moveFront;
-      }
-    });
-    tween.onComplete((player) => {
-      player.texture = this.playerTexture.normal;
-    });
-    tween.start();
+    tween
+      .to(
+        { [axis]: nextPosition },
+        this.movingDuration
+      )
+      .onStart((player) => {
+        if (isBackMoving) {
+          player.texture = this.playerTexture.moveBack;
+        } else {
+          player.texture = this.playerTexture.moveFront;
+        }
+      })
+      .onComplete((player) => {
+        player.texture = this.playerTexture.normal;
+      })
+      .start();
 
     this[axis] = nextPosition;
 
@@ -158,7 +159,7 @@ export default class Player {
     });
   }
 
-  attack() {
+  playAttackMotion() {
     this.attackMotionSprite.x = this.x;
     this.attackMotionSprite.y = this.y;
 
