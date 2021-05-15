@@ -45,7 +45,7 @@ export default class Player {
     this.render();
   }
 
-  setSpriteProperty(sprite) {
+  setSpriteProperties(sprite) {
     sprite.x = this.x;
     sprite.y = this.y;
     sprite.scale.set(this.scale);
@@ -61,7 +61,7 @@ export default class Player {
 
   createNormalSprite() {
     this.normalSprite = new PIXI.Sprite(this.playerTexture.normal);
-    this.setSpriteProperty(this.normalSprite);
+    this.setSpriteProperties(this.normalSprite);
   }
 
   createAttackMotionSprite() {
@@ -70,7 +70,7 @@ export default class Player {
       this.playerTexture.attack2,
       this.playerTexture.attack3,
     ]);
-    this.setSpriteProperty(this.attackMotionSprite);
+    this.setSpriteProperties(this.attackMotionSprite);
 
     this.attackMotionSprite.animationSpeed = this.attackMotionSpeed;
     this.attackMotionSprite.loop = false;
