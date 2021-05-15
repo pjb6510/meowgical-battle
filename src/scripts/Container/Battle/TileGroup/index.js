@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import Tile from "./Tile";
 
-export default class Tiles {
+export default class TileGroup {
   constructor({
     x,
     y,
@@ -49,11 +49,11 @@ export default class Tiles {
 
     this.tiles = [];
 
-    this.createTiles();
+    this.createTileGroup();
     this.render();
   }
 
-  createTiles() {
+  createTileGroup() {
     for (let i = 0; i < this.row; i += 1) {
       const row = [];
 

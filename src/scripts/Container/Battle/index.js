@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import Drawer from "./Drawer";
 import StatusBar from "./StatusBar";
-import Tiles from "./Tiles";
+import TileGroup from "./TileGroup";
 import Player from "./Player";
 import globalStore from "../../globalStore";
 import { canvasSize } from "../../config";
@@ -30,14 +30,14 @@ export default class Battle extends Drawer {
       isHost: !this.isHost,
     };
 
-    this.tilesGap = 440;
-    this.tilesYOffset = 300;
+    this.tileGroupGap = 440;
+    this.tileGroupYOffset = 300;
     this.tileGap = 20;
     this.tileSize = {
       width: 200,
       height: 80,
     };
-    this.tilesSize = {
+    this.tileGroupSize = {
       row: 4,
       column: 4,
     };
@@ -45,31 +45,31 @@ export default class Battle extends Drawer {
     this.hostPlayerTileColor = 0xa8e8ca;
     this.guestPlayerTileColor = 0x9abeff;
 
-    this.playerTilesPosition = {
-      x: canvasSize.width / 2 - this.tilesGap,
-      y: canvasSize.height / 2 + this.tilesYOffset,
+    this.playerTileGroupPosition = {
+      x: canvasSize.width / 2 - this.tileGroupGap,
+      y: canvasSize.height / 2 + this.tileGroupYOffset,
     };
-    this.opponentTilesPosition = {
-      x: canvasSize.width / 2 + this.tilesGap,
-      y: canvasSize.height / 2 + this.tilesYOffset,
+    this.opponentTileGroupPosition = {
+      x: canvasSize.width / 2 + this.tileGroupGap,
+      y: canvasSize.height / 2 + this.tileGroupYOffset,
     };
 
     this.playerFirstTilePosition = {
-      x: this.playerTilesPosition.x -
+      x: this.playerTileGroupPosition.x -
         (this.tileSize.width / 2) -
         this.tileGap -
         this.tileSize.width,
-      y: this.playerTilesPosition.y -
+      y: this.playerTileGroupPosition.y -
         (this.tileSize.height / 2) -
         this.tileGap -
         this.tileSize.height,
     };
     this.opponentFirstTilePosition = {
-      x: this.opponentTilesPosition.x +
+      x: this.opponentTileGroupPosition.x +
         (this.tileSize.width / 2) +
         this.tileGap +
         this.tileSize.width,
-      y: this.opponentTilesPosition.y -
+      y: this.opponentTileGroupPosition.y -
         (this.tileSize.height / 2) -
         this.tileGap -
         this.tileSize.height,
@@ -78,13 +78,13 @@ export default class Battle extends Drawer {
     this.background = null;
     this.playerStatusBar = null;
     this.opponentStatusBar = null;
-    this.playerTiles = null;
-    this.opponentTiles = null;
+    this.playerTileGroup = null;
+    this.opponentTileGroup = null;
     this.createBackground();
     this.createPlayerStatusBar();
     this.createOpponentStatusBar();
-    this.createPlayerTiles();
-    this.createOpponentTiles();
+    this.createPlayerTileGroup();
+    this.createOpponentTileGroup();
     this.createPlayer();
     this.createOpponent();
 
@@ -103,12 +103,12 @@ export default class Battle extends Drawer {
     this.opponentStatusBar = new StatusBar(this.opponentStatusBarOption);
   }
 
-  createPlayerTiles() {
-    this.playerTiles = new Tiles({
-      x: this.playerTilesPosition.x,
-      y: this.playerTilesPosition.y,
-      row: this.tilesSize.row,
-      column: this.tilesSize.column,
+  createPlayerTileGroup() {
+    this.playerTileGroup = new TileGroup({
+      x: this.playerTileGroupPosition.x,
+      y: this.playerTileGroupPosition.y,
+      row: this.tileGroupSize.row,
+      column: this.tileGroupSize.column,
       tileWidth: this.tileSize.width,
       tileHeight: this.tileSize.height,
       tileBorderWidth: this.tileBorderWidth,
@@ -120,12 +120,12 @@ export default class Battle extends Drawer {
     });
   }
 
-  createOpponentTiles() {
-    this.opponentTiles = new Tiles({
-      x: this.opponentTilesPosition.x,
-      y: this.opponentTilesPosition.y,
-      row: this.tilesSize.row,
-      column: this.tilesSize.column,
+  createOpponentTileGroup() {
+    this.opponentTileGroup = new TileGroup({
+      x: this.opponentTileGroupPosition.x,
+      y: this.opponentTileGroupPosition.y,
+      row: this.tileGroupSize.row,
+      column: this.tileGroupSize.column,
       tileWidth: this.tileSize.width,
       tileHeight: this.tileSize.height,
       tileBorderWidth: this.tileBorderWidth,
@@ -143,8 +143,8 @@ export default class Battle extends Drawer {
       shouldTurnAround: !this.isHost,
       x: this.playerFirstTilePosition.x,
       y: this.playerFirstTilePosition.y,
-      xPositionRange: this.tilesSize.column,
-      yPositionRange: this.tilesSize.row,
+      xPositionRange: this.tileGroupSize.column,
+      yPositionRange: this.tileGroupSize.row,
       xMovingDistance: this.tileSize.width + this.tileGap,
       yMovingDistance: this.tileSize.height + this.tileGap,
     });
@@ -156,8 +156,8 @@ export default class Battle extends Drawer {
       shouldTurnAround: !this.isHost,
       x: this.opponentFirstTilePosition.x,
       y: this.opponentFirstTilePosition.y,
-      xPositionRange: this.tilesSize.column,
-      yPositionRange: this.tilesSize.row,
+      xPositionRange: this.tileGroupSize.column,
+      yPositionRange: this.tileGroupSize.row,
       xMovingDistance: this.tileSize.height + this.tileGap,
       yMovingDistance: this.tileSize.width + this.tileGap,
     });
@@ -168,8 +168,8 @@ export default class Battle extends Drawer {
       this.background,
       this.playerStatusBar.container,
       this.opponentStatusBar.container,
-      this.playerTiles.container,
-      this.opponentTiles.container,
+      this.playerTileGroup.container,
+      this.opponentTileGroup.container,
       this.player.container,
       this.opponent.container
     );
