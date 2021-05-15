@@ -7,7 +7,9 @@ export default class Player {
     x,
     y,
     isHost,
-    shouldTurnAround,
+    isHeadingToRight,
+    xPosition,
+    yPosition,
     xPositionRange,
     yPositionRange,
     xMovingDistance,
@@ -16,7 +18,9 @@ export default class Player {
     this.x = x;
     this.y = y;
     this.isHost = isHost;
-    this.shouldTurnAround = shouldTurnAround;
+    this.isHeadingToRight = isHeadingToRight;
+    this.xPosition = xPosition;
+    this.yPosition = yPosition;
     this.xPositionRange = xPositionRange;
     this.yPositionRange = yPositionRange;
     this.xMovingDistance = xMovingDistance;
@@ -27,8 +31,6 @@ export default class Player {
 
     this.container = new PIXI.Container();
 
-    this.xPosition = 0;
-    this.yPosition = 0;
     this.anchor = {
       x: 0.5,
       y: 0.85,
@@ -54,7 +56,7 @@ export default class Player {
       this.anchor.y
     );
 
-    if (this.shouldTurnAround) {
+    if (!this.isHeadingToRight) {
       sprite.scale.x *= -1;
     }
   }
@@ -123,7 +125,7 @@ export default class Player {
       axis: "x",
       nextPosition: this.normalSprite.x - this.xMovingDistance,
       condition: this.xPosition - 1 >= 0,
-      isBackMoving: true,
+      isBackMoving: this.isHeadingToRight,
       positionIncrease: -1,
     });
   }
@@ -133,6 +135,7 @@ export default class Player {
       axis: "x",
       nextPosition: this.normalSprite.x + this.xMovingDistance,
       condition: this.xPosition + 1 < this.xPositionRange,
+      isBackMoving: !this.isHeadingToRight,
       positionIncrease: 1,
     });
   }

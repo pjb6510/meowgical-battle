@@ -97,9 +97,11 @@ const mixinSetBattleElementsOptions = {
   setPlayersOptions() {
     this.playerOption = {
       isHost: this.isHost,
-      shouldTurnAround: !this.isHost,
+      isHeadingToRight: true,
       x: this.playerFirstTilePosition.x,
       y: this.playerFirstTilePosition.y,
+      xPosition: 0,
+      yPosition: 0,
       xPositionRange: this.tileGroupSize.column,
       yPositionRange: this.tileGroupSize.row,
       xMovingDistance: this.tileSize.width + this.tileGap,
@@ -107,13 +109,15 @@ const mixinSetBattleElementsOptions = {
     };
     this.opponentOption = {
       isHost: !this.isHost,
-      shouldTurnAround: !this.isHost,
+      isHeadingToRight: false,
       x: this.opponentFirstTilePosition.x,
       y: this.opponentFirstTilePosition.y,
+      xPosition: this.tileGroupSize.column - 1,
+      yPosition: 0,
       xPositionRange: this.tileGroupSize.column,
       yPositionRange: this.tileGroupSize.row,
-      xMovingDistance: this.tileSize.height + this.tileGap,
-      yMovingDistance: this.tileSize.width + this.tileGap,
+      xMovingDistance: this.tileSize.width + this.tileGap,
+      yMovingDistance: this.tileSize.height + this.tileGap,
     };
   },
 };
