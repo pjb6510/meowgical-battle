@@ -5,7 +5,7 @@ import TileGroup from "./TileGroup";
 import Player from "./Player";
 import globalStore from "../../globalStore";
 import isEqualArray from "../../utils/isEqualArray";
-import mixinSetBattleElementsOptions from "./setBattleElementsOptions";
+import mixinSetBattleElementsOptions from "./mixinSetBattleElementsOptions";
 
 export default class Battle extends Drawer {
   constructor(isHost) {
