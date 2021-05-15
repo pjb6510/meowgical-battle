@@ -143,10 +143,10 @@ export default class Battle extends Drawer {
       shouldTurnAround: !this.isHost,
       x: this.playerFirstTilePosition.x,
       y: this.playerFirstTilePosition.y,
-      xStepMaxCount: this.tilesSize.column,
-      yStepMaxCount: this.tilesSize.row,
-      yStepDistance: this.tileSize.height + this.tileGap,
-      xStepDistance: this.tileSize.width + this.tileGap,
+      xPositionRange: this.tilesSize.column,
+      yPositionRange: this.tilesSize.row,
+      xMovingDistance: this.tileSize.width + this.tileGap,
+      yMovingDistance: this.tileSize.height + this.tileGap,
     });
   }
 
@@ -156,10 +156,10 @@ export default class Battle extends Drawer {
       shouldTurnAround: !this.isHost,
       x: this.opponentFirstTilePosition.x,
       y: this.opponentFirstTilePosition.y,
-      xStepMaxCount: this.tilesSize.column,
-      yStepMaxCount: this.tilesSize.row,
-      yStepDistance: this.tileSize.height + this.tileGap,
-      xStepDistance: this.tileSize.width + this.tileGap,
+      xPositionRange: this.tilesSize.column,
+      yPositionRange: this.tilesSize.row,
+      xMovingDistance: this.tileSize.height + this.tileGap,
+      yMovingDistance: this.tileSize.width + this.tileGap,
     });
   }
 

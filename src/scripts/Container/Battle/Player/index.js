@@ -8,26 +8,26 @@ export default class Player {
     y,
     isHost,
     shouldTurnAround,
-    xStepMaxCount,
-    yStepMaxCount,
-    xStepDistance,
-    yStepDistance,
+    xPositionRange,
+    yPositionRange,
+    xMovingDistance,
+    yMovingDistance,
   }) {
     this.x = x;
     this.y = y;
     this.isHost = isHost;
     this.shouldTurnAround = shouldTurnAround;
-    this.xStepMaxCount = xStepMaxCount;
-    this.yStepMaxCount = yStepMaxCount;
-    this.xStepDistance = xStepDistance;
-    this.yStepDistance = yStepDistance;
+    this.xPositionRange = xPositionRange;
+    this.yPositionRange = yPositionRange;
+    this.xMovingDistance = xMovingDistance;
+    this.yMovingDistance = yMovingDistance;
 
     this.loadPlayerTexture();
 
     this.container = new PIXI.Container();
 
-    this.xStepCount = 0;
-    this.yStepCount = 0;
+    this.xPosition = 0;
+    this.yPosition = 0;
     this.anchor = {
       x: 0.5,
       y: 0.85,
@@ -84,8 +84,8 @@ export default class Player {
     axis,
     nextPosition,
     condition,
-    isMoveBack = false,
-    stepCount,
+    isBackMoving = false,
+    positionIncrease,
   }) {
     if (!condition) {
       return;
@@ -98,7 +98,7 @@ export default class Player {
       this.movingDuration
     );
     tween.onStart((player) => {
-      if (isMoveBack) {
+      if (isBackMoving) {
         player.texture = this.playerTexture.moveBack;
       } else {
         player.texture = this.playerTexture.moveFront;
@@ -110,43 +110,48 @@ export default class Player {
     tween.start();
 
     this[axis] = nextPosition;
-    this[`${axis}StepCount`] += stepCount;
+
+    if (axis === "x") {
+      this.xPosition += positionIncrease;
+    } else {
+      this.yPosition += positionIncrease;
+    }
   }
 
   moveLeft() {
     this.move({
       axis: "x",
-      nextPosition: this.sprite.x - this.xStepDistance,
-      condition: this.xStepCount - 1 >= 0,
-      isMoveBack: true,
-      stepCount: -1,
+      nextPosition: this.sprite.x - this.xMovingDistance,
+      condition: this.xPosition - 1 >= 0,
+      isBackMoving: true,
+      positionIncrease: -1,
     });
   }
 
   moveRight() {
     this.move({
       axis: "x",
-      nextPosition: this.sprite.x + this.xStepDistance,
-      condition: this.xStepCount + 1 < this.xStepMaxCount,
-      stepCount: 1,
+      nextPosition: this.sprite.x + this.xMovingDistance,
+      condition: this.xPosition + 1 < this.xPositionRange,
+      positionIncrease: 1,
     });
   }
 
   moveUp() {
     this.move({
       axis: "y",
-      nextPosition: this.sprite.y - this.yStepDistance,
-      condition: this.yStepCount - 1 >= 0,
-      stepCount: -1,
+      nextPosition: this.sprite.y - this.yMovingDistance,
+      condition: this.yPosition - 1 >= 0,
+      positionIncrease: -1,
     });
   }
 
   moveDown() {
     this.move({
       axis: "y",
-      nextPosition: this.sprite.y + this.yStepDistance,
-      condition: this.yStepCount + 1 < this.yStepMaxCount,
-      stepCount: 1,
+      nextPosition: this.sprite.y + this.yMovingDistance,
+      condition: this.yPosition + 1 < this.yPositionRange,
+      positionIncrease: 1,
     });
   }
 
