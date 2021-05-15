@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
-import { canvasSize } from "../../config";
-import globalStore from "../../globalStore";
+import { canvasSize } from "../../../config";
+import globalStore from "../../../globalStore";
 
 export default class Drawer {
   constructor() {
