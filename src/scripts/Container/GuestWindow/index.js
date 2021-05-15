@@ -118,15 +118,18 @@ export default class GuestWindow {
       console.log("connect complete");
     });
 
-    this.peer.signal(receivedSignal);
-
     this.peer.on("signal", (guestSignal) => {
+      console.log("guest signal", guestSignal);
+
       socket.broadcastAction({
         action: broadcastedActions.SEND_PEER,
         payload: guestSignal,
         from: this.playerId,
       });
     });
+
+    this.peer.signal(receivedSignal);
+    console.log("guest recive", receivedSignal);
   }
 
   startGame() {

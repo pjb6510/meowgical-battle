@@ -158,24 +158,29 @@ export default class HostWindow {
       objectMode: true,
     });
 
+    this.peer.on("error", (err) => {
+      console.error(err);
+      this.sendPeerSignal();
+    });
+
+    this.peer.on("connect", () => {
+      this.startGame();
+    });
+
     this.peer.on("signal", (hostSignal) => {
+      console.log("host signal", hostSignal);
+
       socket.broadcastAction({
         action: broadcastedActions.SEND_PEER,
         payload: hostSignal,
         from: this.playerId,
       });
     });
-
-    this.peer.on("error", (err) => {
-      console.error(err);
-    });
-
-    this.peer.on("connect", () => {
-      this.startGame();
-    });
   }
 
   receivePeerSignal(receivedSignal) {
+    console.log("host receive", receivedSignal);
+
     this.peer.signal(receivedSignal);
   }
 
