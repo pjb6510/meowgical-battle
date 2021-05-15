@@ -11,6 +11,7 @@ export default class Battle extends Drawer {
   constructor(isHost, peer) {
     super();
     this.isHost = isHost;
+    this.peer = peer;
     this.drawingCallback = this.handleDraw;
 
     this.backgroundTexture = globalStore
@@ -35,6 +36,8 @@ export default class Battle extends Drawer {
     this.opponentStatusBar = null;
     this.playerTileGroup = null;
     this.opponentTileGroup = null;
+    this.player = null;
+    this.opponent = null;
     this.createBackground();
     this.createPlayerStatusBar();
     this.createOpponentStatusBar();
@@ -42,6 +45,8 @@ export default class Battle extends Drawer {
     this.createOpponentTileGroup();
     this.createPlayer();
     this.createOpponent();
+
+    this.setPeerListener();
 
     this.render();
   }
@@ -90,15 +95,19 @@ export default class Battle extends Drawer {
     if (directions.length === 1) {
       switch (directions[0]) {
         case "left":
+          this.peer.send("moveBack");
           this.player.moveLeft();
           break;
         case "right":
+          this.peer.send("moveFront");
           this.player.moveRight();
           break;
         case "up":
+          this.peer.send("moveUp");
           this.player.moveUp();
           break;
         case "down":
+          this.peer.send("moveDown");
           this.player.moveDown();
           break;
         default:
@@ -107,8 +116,33 @@ export default class Battle extends Drawer {
     }
 
     if (isEqualArray(directions, ["right", "left", "right"])) {
+      this.peer.send("attack");
       this.player.attack();
     }
+  }
+
+  setPeerListener() {
+    this.peer.on("data", (action) => {
+      switch (action) {
+        case "moveFront":
+          this.opponent.moveLeft();
+          break;
+        case "moveBack":
+          this.opponent.moveRight();
+          break;
+        case "moveUp":
+          this.opponent.moveUp();
+          break;
+        case "moveDown":
+          this.opponent.moveDown();
+          break;
+        case "attack":
+          this.opponent.attack();
+          break;
+        default:
+          break;
+      }
+    });
   }
 }
 
