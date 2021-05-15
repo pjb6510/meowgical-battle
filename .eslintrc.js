@@ -30,5 +30,6 @@ module.exports = {
     ],
     "no-var": "error",
     "arrow-parens": ["error", "always"],
+    "no-console": "warn",
   },
 };
