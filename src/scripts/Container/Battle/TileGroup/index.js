@@ -29,12 +29,10 @@ export default class TileGroup {
     this.tileYGap = tileYGap;
     this.width =
       (this.tileWidth + this.tileXGap) *
-        (this.row - 1) +
-        this.tileWidth;
+        (this.column - 1) + this.tileWidth;
     this.height =
       (this.tileHeight + this.tileYGap) *
-        (this.column - 1) +
-        this.tileHeight;
+        (this.row - 1) + this.tileHeight;
 
     this.container.pivot.set(this.width / 2, this.height / 2);
 
@@ -58,13 +56,11 @@ export default class TileGroup {
       const row = [];
 
       this.tileOption.y =
-        this.y +
-          (this.tileHeight + this.tileYGap) * i;
+        this.y + (this.tileHeight + this.tileYGap) * i;
 
       for (let j = 0; j < this.column; j += 1) {
         this.tileOption.x =
-          this.x +
-            (this.tileWidth + this.tileXGap) * j;
+          this.x + (this.tileWidth + this.tileXGap) * j;
 
         const tile = new Tile(this.tileOption);
         row.push(tile);
@@ -82,6 +78,7 @@ export default class TileGroup {
 
       for (let j = 0; j < row.length; j += 1) {
         const tile = row[j];
+
         this.container.addChild(tile.graphic);
       }
     }
