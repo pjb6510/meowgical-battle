@@ -29,5 +29,6 @@ module.exports = {
       },
     ],
     "no-var": "error",
+    "arrow-parens": ["error", "always"],
   },
 };
