@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import Tween from "@tweenjs/tween.js";
-import loadPlayerTextureMixin from "./loadPlayerTextureMixin";
+import loadPlayerTextureMixin from "./mixinLoadPlayerTexture";
 
 export default class Player {
   constructor({

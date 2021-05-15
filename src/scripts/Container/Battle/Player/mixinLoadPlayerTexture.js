@@ -1,6 +1,6 @@
 import globalStore from "../../../globalStore";
 
-const loadPlayerTextureMixin = {
+const mixinLoadPlayerTexture = {
   loadPlayerTexture() {
     if (this.isHost) {
       const {
@@ -42,4 +42,4 @@ const loadPlayerTextureMixin = {
   },
 };
 
-export default loadPlayerTextureMixin;
+export default mixinLoadPlayerTexture;
