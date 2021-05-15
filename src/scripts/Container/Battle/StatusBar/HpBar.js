@@ -13,6 +13,17 @@ export default class HpBar {
     this.hpBarSecondColor = 0xf5ef42;
     this.hpBarThirdColor = 0xff1c14;
     this.hpBarLength = 350;
+
+    this.hpBarBackgroundOption = {
+      x: this.x,
+      y: this.y,
+      width: this.hpBarLength,
+      height: 50,
+      color: 0xeeeeee,
+      radius: 20,
+      pivotX: this.hpBarLength / 2,
+      hasShadow: true,
+    };
     this.hpBarOption = {
       x: this.x,
       y: this.y,
@@ -33,12 +44,7 @@ export default class HpBar {
   }
 
   createHpBarBackground() {
-    this.hpBarBackground = createBox({
-      ...this.hpBarOption,
-      width: this.hpBarLength,
-      color: 0xeeeeee,
-      hasShadow: true,
-    });
+    this.hpBarBackground = createBox(this.hpBarBackgroundOption);
   }
 
   createHpBar() {

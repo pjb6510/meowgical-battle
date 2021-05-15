@@ -39,24 +39,25 @@ export default class Portrait {
     this.render();
   }
 
+  setSpriteProperties(sprite) {
+    sprite.x = this.x;
+    sprite.y = this.y;
+    sprite.width = this.portraitSize;
+    sprite.height = this.portraitSize;
+    sprite.anchor.set(0.5, 0.5);
+    sprite.filters = [new DropShadowFilter()];
+  }
+
   createNormalPortrait() {
     this.normalPortrait = new PIXI.Sprite(this.portraitTexture);
-    this.normalPortrait.x = this.x;
-    this.normalPortrait.y = this.y;
-    this.normalPortrait.width = this.portraitSize;
-    this.normalPortrait.height = this.portraitSize;
-    this.normalPortrait.anchor.set(0.5, 0.5);
-    this.normalPortrait.filters = [new DropShadowFilter()];
+
+    this.setSpriteProperties(this.normalPortrait);
   }
 
   createHitPortrait() {
     this.hitPortrait = new PIXI.Sprite(this.hitPortraitTexture);
-    this.hitPortrait.x = this.x;
-    this.hitPortrait.y = this.y;
-    this.hitPortrait.width = this.portraitSize;
-    this.hitPortrait.height = this.portraitSize;
-    this.hitPortrait.anchor.set(0.5, 0.5);
-    this.hitPortrait.filters = [new DropShadowFilter()];
+
+    this.setSpriteProperties(this.hitPortrait);
   }
 
   render() {

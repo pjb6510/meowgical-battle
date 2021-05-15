@@ -19,6 +19,11 @@ export default class StatusBar {
       x: this.x + this.hpBarXOffset,
       y: this.y + this.hpBarYOffset,
     };
+    this.portraitOption = {
+      x: this.x + this.portraitXOffset,
+      y: this.y + this.portraitYOffset,
+      isHost: this.isHost,
+    };
 
     this.container = new PIXI.Container();
 
@@ -35,11 +40,7 @@ export default class StatusBar {
   }
 
   createPortrait() {
-    this.portrait = new Portrait({
-      x: this.x + this.portraitXOffset,
-      y: this.y + this.portraitYOffset,
-      isHost: this.isHost,
-    });
+    this.portrait = new Portrait(this.portraitOption);
   }
 
   render() {
