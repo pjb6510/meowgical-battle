@@ -22,6 +22,7 @@ export default class Player {
     this.xMovingDistance = xMovingDistance;
     this.yMovingDistance = yMovingDistance;
 
+    this.playerTexture = null;
     this.loadPlayerTexture();
 
     this.container = new PIXI.Container();
