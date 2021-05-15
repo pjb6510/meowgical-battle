@@ -82,7 +82,7 @@ export default class TileGroup {
 
       for (let j = 0; j < row.length; j += 1) {
         const tile = row[j];
-        this.container.addChild(tile.rect);
+        this.container.addChild(tile.graphic);
       }
     }
   }

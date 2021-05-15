@@ -12,15 +12,15 @@ export default class Tile {
 
     this.container = new PIXI.Container();
 
-    this.rect = null;
+    this.graphic = null;
     this.createTile();
   }
 
   createTile() {
-    this.rect = new PIXI.Graphics();
+    this.graphic = new PIXI.Graphics();
 
-    this.rect.pivot.set(0.5, 0.5);
-    this.rect
+    this.graphic.pivot.set(0.5, 0.5);
+    this.graphic
       .lineStyle(
         this.borderWidth,
         this.borderColor
@@ -32,7 +32,7 @@ export default class Tile {
         this.height
       );
 
-    this.rect.filters = [new DropShadowFilter({
+    this.graphic.filters = [new DropShadowFilter({
       distance: 2,
     })];
   }
