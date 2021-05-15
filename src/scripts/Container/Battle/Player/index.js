@@ -33,15 +33,14 @@ export default class Player {
       x: 0.5,
       y: 0.85,
     };
+    this.scale = 0.7;
     this.movingDuration = 100;
     this.attackMotionSpeed = 0.2;
 
-    this.sprite = null;
-
     this.normalSprite = null;
-    this.attackSprite = null;
-    this.createSprite();
-    this.createAttackSprite();
+    this.attackMotionSprite = null;
+    this.createNormalSprite();
+    this.createAttackMotionSprite();
 
     this.render();
   }
@@ -49,7 +48,7 @@ export default class Player {
   setSpriteProperty(sprite) {
     sprite.x = this.x;
     sprite.y = this.y;
-    sprite.scale.set(0.7);
+    sprite.scale.set(this.scale);
     sprite.anchor.set(
       this.anchor.x,
       this.anchor.y
@@ -60,25 +59,25 @@ export default class Player {
     }
   }
 
-  createSprite() {
-    this.sprite = new PIXI.Sprite(this.playerTexture.normal);
-    this.setSpriteProperty(this.sprite);
+  createNormalSprite() {
+    this.normalSprite = new PIXI.Sprite(this.playerTexture.normal);
+    this.setSpriteProperty(this.normalSprite);
   }
 
-  createAttackSprite() {
-    this.attackSprite = new PIXI.AnimatedSprite([
+  createAttackMotionSprite() {
+    this.attackMotionSprite = new PIXI.AnimatedSprite([
       this.playerTexture.attack1,
       this.playerTexture.attack2,
       this.playerTexture.attack3,
     ]);
-    this.setSpriteProperty(this.attackSprite);
+    this.setSpriteProperty(this.attackMotionSprite);
 
-    this.attackSprite.animationSpeed = this.attackMotionSpeed;
-    this.attackSprite.loop = false;
+    this.attackMotionSprite.animationSpeed = this.attackMotionSpeed;
+    this.attackMotionSprite.loop = false;
   }
 
   render() {
-    this.container.addChild(this.sprite);
+    this.container.addChild(this.normalSprite);
   }
 
   move({
@@ -92,7 +91,7 @@ export default class Player {
       return;
     }
 
-    const tween = new Tween.Tween(this.sprite);
+    const tween = new Tween.Tween(this.normalSprite);
 
     tween.to(
       { [axis]: nextPosition },
@@ -122,7 +121,7 @@ export default class Player {
   moveLeft() {
     this.move({
       axis: "x",
-      nextPosition: this.sprite.x - this.xMovingDistance,
+      nextPosition: this.normalSprite.x - this.xMovingDistance,
       condition: this.xPosition - 1 >= 0,
       isBackMoving: true,
       positionIncrease: -1,
@@ -132,7 +131,7 @@ export default class Player {
   moveRight() {
     this.move({
       axis: "x",
-      nextPosition: this.sprite.x + this.xMovingDistance,
+      nextPosition: this.normalSprite.x + this.xMovingDistance,
       condition: this.xPosition + 1 < this.xPositionRange,
       positionIncrease: 1,
     });
@@ -141,7 +140,7 @@ export default class Player {
   moveUp() {
     this.move({
       axis: "y",
-      nextPosition: this.sprite.y - this.yMovingDistance,
+      nextPosition: this.normalSprite.y - this.yMovingDistance,
       condition: this.yPosition - 1 >= 0,
       positionIncrease: -1,
     });
@@ -150,23 +149,23 @@ export default class Player {
   moveDown() {
     this.move({
       axis: "y",
-      nextPosition: this.sprite.y + this.yMovingDistance,
+      nextPosition: this.normalSprite.y + this.yMovingDistance,
       condition: this.yPosition + 1 < this.yPositionRange,
       positionIncrease: 1,
     });
   }
 
   attack() {
-    this.attackSprite.x = this.x;
-    this.attackSprite.y = this.y;
+    this.attackMotionSprite.x = this.x;
+    this.attackMotionSprite.y = this.y;
 
-    this.container.removeChild(this.sprite);
-    this.container.addChild(this.attackSprite);
+    this.container.removeChild(this.normalSprite);
+    this.container.addChild(this.attackMotionSprite);
 
-    this.attackSprite.gotoAndPlay(0);
-    this.attackSprite.onComplete = () => {
-      this.container.removeChild(this.attackSprite);
-      this.container.addChild(this.sprite);
+    this.attackMotionSprite.gotoAndPlay(0);
+    this.attackMotionSprite.onComplete = () => {
+      this.container.removeChild(this.attackMotionSprite);
+      this.container.addChild(this.normalSprite);
     };
   }
 }
