@@ -186,6 +186,9 @@ export default class HostWindow {
     });
 
     this.containerWillUnmount();
-    globalStore.setStore("scene", new Battle(true));
+    globalStore.setStore(
+      "scene",
+      new Battle(true, this.peer)
+    );
   }
 }

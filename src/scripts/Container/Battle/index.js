@@ -8,7 +8,7 @@ import isEqualArray from "../../utils/isEqualArray";
 import mixinSetBattleElementsOptions from "./mixinSetBattleElementsOptions";
 
 export default class Battle extends Drawer {
-  constructor(isHost) {
+  constructor(isHost, peer) {
     super();
     this.isHost = isHost;
     this.drawingCallback = this.handleDraw;
