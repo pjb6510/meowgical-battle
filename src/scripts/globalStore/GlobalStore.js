@@ -1,35 +1,35 @@
-const GlobalStore = () => {
-  const _store = {};
-  const _subscribers = [];
+export default class GlobalStores {
+  constructor() {
+    this._store = {};
+    this._subscribers = [];
+  }
 
-  GlobalStore.prototype.setStore = function (key, value) {
+  setStore(key, value) {
     if (process.env.NODE_ENV !== "production") {
-      console.log("prev store", _store);
+      console.log("prev store", this._store);
     }
 
-    _store[key] = value;
+    this._store[key] = value;
 
     if (process.env.NODE_ENV !== "production") {
-      console.log("new store", _store);
+      console.log("new store", this._store);
     }
 
     this.handleStoreChange();
-  };
+  }
 
-  GlobalStore.prototype.getItem = function (key) {
-    return _store[key];
-  };
+  getItem(key) {
+    return this._store[key];
+  }
 
-  GlobalStore.prototype.handleStoreChange = function () {
-    for (let i = 0; i < _subscribers.length; i += 1) {
-      const subscribeCallback = _subscribers[i];
-      subscribeCallback(_store);
+  handleStoreChange() {
+    for (let i = 0; i < this._subscribers.length; i += 1) {
+      const subscribeCallback = this._subscribers[i];
+      subscribeCallback(this._store);
     }
-  };
+  }
 
-  GlobalStore.prototype.subscribe = function (callback) {
-    _subscribers.push(callback);
-  };
-};
-
-export default GlobalStore;
+  subscribe(callback) {
+    this._subscribers.push(callback);
+  }
+}
