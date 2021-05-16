@@ -67,11 +67,9 @@ export default class Player {
   }
 
   createAttackMotionSprite() {
-    this.attackMotionSprite = new PIXI.AnimatedSprite([
-      this.playerTextures.attack1,
-      this.playerTextures.attack2,
-      this.playerTextures.attack3,
-    ]);
+    this.attackMotionSprite = new PIXI.AnimatedSprite(
+      this.playerTextures.attackMotion
+    );
     this.setSpriteProperties(this.attackMotionSprite);
 
     this.attackMotionSprite.animationSpeed = this.attackMotionSpeed;

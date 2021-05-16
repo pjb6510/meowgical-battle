@@ -7,36 +7,28 @@ const mixinLoadPlayerTexture = {
         hostPlayer,
         hostPlayerMoveFront,
         hostPlayerMoveBack,
-        hostPlayerAttack1,
-        hostPlayerAttack2,
-        hostPlayerAttack3,
+        hostPlayerAttackMotion,
       } = globalStore.getItem("resources");
 
       this.playerTextures = {
         normal: hostPlayer.texture,
         moveFront: hostPlayerMoveFront.texture,
         moveBack: hostPlayerMoveBack.texture,
-        attack1: hostPlayerAttack1.texture,
-        attack2: hostPlayerAttack2.texture,
-        attack3: hostPlayerAttack3.texture,
+        attackMotion: Object.values(hostPlayerAttackMotion.textures),
       };
     } else {
       const {
         guestPlayer,
         guestPlayerMoveFront,
         guestPlayerMoveBack,
-        guestPlayerAttack1,
-        guestPlayerAttack2,
-        guestPlayerAttack3,
+        guestPlayerAttackMotion,
       } = globalStore.getItem("resources");
 
       this.playerTextures = {
         normal: guestPlayer.texture,
         moveFront: guestPlayerMoveFront.texture,
         moveBack: guestPlayerMoveBack.texture,
-        attack1: guestPlayerAttack1.texture,
-        attack2: guestPlayerAttack2.texture,
-        attack3: guestPlayerAttack3.texture,
+        attackMotion: Object.values(guestPlayerAttackMotion.textures),
       };
     }
   },
