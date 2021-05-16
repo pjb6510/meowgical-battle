@@ -1,33 +1,33 @@
-import mainMenuBackground from "./images/mainMenuBackground/main.png";
-import battleBackground from "./images/battleBackground/battleBackground.png";
+import mainMenuBackground from "./images/backgrounds/mainMenuBackground/mainBackground.png";
+import battleBackground from "./images/backgrounds/battleBackground/battleBackground.png";
 
-import hostPlayer from "./images/hostPlayer/1.png";
+import hostPlayer from "./images/players/host/normal/1.png";
 
-import hostPlayerMoveFront from "./images/hostPlayerMove/front.png";
-import hostPlayerMoveBack from "./images/hostPlayerMove/back.png";
+import hostPlayerMoveFront from "./images/players/host/move/front.png";
+import hostPlayerMoveBack from "./images/players/host/move/back.png";
 
-import hostPlayerAttack1 from "./images/hostPlayerAttack/1.png";
-import hostPlayerAttack2 from "./images/hostPlayerAttack/2.png";
-import hostPlayerAttack3 from "./images/hostPlayerAttack/3.png";
+import hostPlayerAttack1 from "./images/players/host/attack/1.png";
+import hostPlayerAttack2 from "./images/players/host/attack/2.png";
+import hostPlayerAttack3 from "./images/players/host/attack/3.png";
 
-import guestPlayer from "./images/guestPlayer/1.png";
+import guestPlayer from "./images/players/guest/normal/1.png";
 
-import guestPlayerMoveFront from "./images/guestPlayerMove/front.png";
-import guestPlayerMoveBack from "./images/guestPlayerMove/back.png";
+import guestPlayerMoveFront from "./images/players/guest/move/front.png";
+import guestPlayerMoveBack from "./images/players/guest/move/back.png";
 
-import guestPlayerAttack1 from "./images/guestPlayerAttack/1.png";
-import guestPlayerAttack2 from "./images/guestPlayerAttack/2.png";
-import guestPlayerAttack3 from "./images/guestPlayerAttack/3.png";
+import guestPlayerAttack1 from "./images/players/guest/attack/1.png";
+import guestPlayerAttack2 from "./images/players/guest/attack/2.png";
+import guestPlayerAttack3 from "./images/players/guest/attack/3.png";
 
-import hostPlayerPortrait from "./images/hostPlayerPortrait/hostPlayerPortrait.png";
-import hostPlayerHitPortrait from "./images/hostPlayerPortrait/hostPlayerHitPortrait.png";
-import guestPlayerPortrait from "./images/guestPlayerPortrait/guestPlayerPortrait.png";
-import guestPlayerHitPortrait from "./images/guestPlayerPortrait/guestPlayerHitPortrait.png";
+import hostPlayerPortrait from "./images/players/host/portrait/normal.png";
+import hostPlayerHitPortrait from "./images/players/host/portrait/hit.png";
+import guestPlayerPortrait from "./images/players/guest/portrait/normal.png";
+import guestPlayerHitPortrait from "./images/players/guest/portrait/hit.png";
 
-import upArrow from "./images/arrows/upArrow.png";
-import downArrow from "./images/arrows/downArrow.png";
-import leftArrow from "./images/arrows/leftArrow.png";
-import rightArrow from "./images/arrows/rightArrow.png";
+import upArrow from "./images/arrowIcons/upArrow.png";
+import downArrow from "./images/arrowIcons/downArrow.png";
+import leftArrow from "./images/arrowIcons/leftArrow.png";
+import rightArrow from "./images/arrowIcons/rightArrow.png";
 
 const loaderConfig = {
   mainMenuBackground,
