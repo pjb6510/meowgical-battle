@@ -8,10 +8,10 @@ export default class Player {
     y,
     isHost,
     isHeadingToRight,
-    xPosition,
-    yPosition,
-    xPositionRange,
-    yPositionRange,
+    columnIndex,
+    rowIndex,
+    columnRange,
+    rowRange,
     xMovingDistance,
     yMovingDistance,
   }) {
@@ -19,14 +19,14 @@ export default class Player {
     this.y = y;
     this.isHost = isHost;
     this.isHeadingToRight = isHeadingToRight;
-    this.xPosition = xPosition;
-    this.yPosition = yPosition;
-    this.xPositionRange = xPositionRange;
-    this.yPositionRange = yPositionRange;
+    this.columnIndex = columnIndex;
+    this.rowIndex = rowIndex;
+    this.columnRange = columnRange;
+    this.rowRange = rowRange;
     this.xMovingDistance = xMovingDistance;
     this.yMovingDistance = yMovingDistance;
 
-    this.playerTexture = null;
+    this.playerTextures = null;
     this.loadPlayerTexture();
 
     this.container = new PIXI.Container();
@@ -62,15 +62,15 @@ export default class Player {
   }
 
   createNormalSprite() {
-    this.normalSprite = new PIXI.Sprite(this.playerTexture.normal);
+    this.normalSprite = new PIXI.Sprite(this.playerTextures.normal);
     this.setSpriteProperties(this.normalSprite);
   }
 
   createAttackMotionSprite() {
     this.attackMotionSprite = new PIXI.AnimatedSprite([
-      this.playerTexture.attack1,
-      this.playerTexture.attack2,
-      this.playerTexture.attack3,
+      this.playerTextures.attack1,
+      this.playerTextures.attack2,
+      this.playerTextures.attack3,
     ]);
     this.setSpriteProperties(this.attackMotionSprite);
 
@@ -102,22 +102,22 @@ export default class Player {
       )
       .onStart((player) => {
         if (isBackMoving) {
-          player.texture = this.playerTexture.moveBack;
+          player.texture = this.playerTextures.moveBack;
         } else {
-          player.texture = this.playerTexture.moveFront;
+          player.texture = this.playerTextures.moveFront;
         }
       })
       .onComplete((player) => {
-        player.texture = this.playerTexture.normal;
+        player.texture = this.playerTextures.normal;
       })
       .start();
 
     this[axis] = nextPosition;
 
     if (axis === "x") {
-      this.xPosition += positionIncrease;
+      this.columnIndex += positionIncrease;
     } else {
-      this.yPosition += positionIncrease;
+      this.rowIndex += positionIncrease;
     }
   }
 
@@ -125,7 +125,7 @@ export default class Player {
     this.move({
       axis: "x",
       nextPosition: this.normalSprite.x - this.xMovingDistance,
-      condition: this.xPosition - 1 >= 0,
+      condition: this.columnIndex - 1 >= 0,
       isBackMoving: this.isHeadingToRight,
       positionIncrease: -1,
     });
@@ -135,7 +135,7 @@ export default class Player {
     this.move({
       axis: "x",
       nextPosition: this.normalSprite.x + this.xMovingDistance,
-      condition: this.xPosition + 1 < this.xPositionRange,
+      condition: this.columnIndex + 1 < this.columnRange,
       isBackMoving: !this.isHeadingToRight,
       positionIncrease: 1,
     });
@@ -145,7 +145,7 @@ export default class Player {
     this.move({
       axis: "y",
       nextPosition: this.normalSprite.y - this.yMovingDistance,
-      condition: this.yPosition - 1 >= 0,
+      condition: this.rowIndex - 1 >= 0,
       positionIncrease: -1,
     });
   }
@@ -154,7 +154,7 @@ export default class Player {
     this.move({
       axis: "y",
       nextPosition: this.normalSprite.y + this.yMovingDistance,
-      condition: this.yPosition + 1 < this.yPositionRange,
+      condition: this.rowIndex + 1 < this.rowRange,
       positionIncrease: 1,
     });
   }

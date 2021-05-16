@@ -12,7 +12,7 @@ const mixinLoadPlayerTexture = {
         hostPlayerAttack3,
       } = globalStore.getItem("resources");
 
-      this.playerTexture = {
+      this.playerTextures = {
         normal: hostPlayer.texture,
         moveFront: hostPlayerMoveFront.texture,
         moveBack: hostPlayerMoveBack.texture,
@@ -30,7 +30,7 @@ const mixinLoadPlayerTexture = {
         guestPlayerAttack3,
       } = globalStore.getItem("resources");
 
-      this.playerTexture = {
+      this.playerTextures = {
         normal: guestPlayer.texture,
         moveFront: guestPlayerMoveFront.texture,
         moveBack: guestPlayerMoveBack.texture,
