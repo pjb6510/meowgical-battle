@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run clean && parcel src/index.html",
-    "build": "npm run clean && parcel build src/index.html --public-url ./",
-    "clean": "rimraf ./dist ./.cache"
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html --public-url ./"
   },
   "author": "been",
   "license": "ISC",
@@ -20,7 +19,10 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
-    "rimraf": "^3.0.2"
+    "parcel": "^2.0.0-beta.2",
+    "parcel-bundler": "^1.12.5",
+    "parcel-plugin-nuke-dist": "^1.0.1",
+    "parcel-plugin-static-files-copy": "^2.6.0"
   },
   "dependencies": {
     "@pixi/filter-drop-shadow": "^4.1.0",
@@ -29,5 +31,14 @@
     "pixi.js": "^6.0.2",
     "simple-peer": "^9.11.0",
     "socket.io-client": "^4.0.2"
+  },
+  "staticFiles": {
+    "staticPath": [
+      {
+        "staticPath": "src/assets",
+        "staticOutDir": "assets"
+      }
+    ],
+    "watcherGlob": "**"
   }
 }
