@@ -117,6 +117,8 @@ export default class Player {
     } else {
       this.rowIndex += positionIncrease;
     }
+
+    this.container.zIndex = this.rowIndex;
   }
 
   moveLeft() {
