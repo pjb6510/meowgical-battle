@@ -39,6 +39,7 @@
         "staticOutDir": "assets"
       }
     ],
-    "watcherGlob": "**"
+    "watcherGlob": "**",
+    "excludeGlob": "*.DS_Store"
   }
 }
