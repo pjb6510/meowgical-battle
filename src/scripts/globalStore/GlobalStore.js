@@ -32,4 +32,13 @@ export default class GlobalStores {
   subscribe(callback) {
     this._subscribers.push(callback);
   }
+
+  unsubscribe(callback) {
+    const subscriberIndex = this._subscribers
+      .findIndex((subscriber) => callback === subscriber);
+
+    if (subscriberIndex !== -1) {
+      this._subscribers.splice(subscriberIndex, 1);
+    }
+  }
 }
