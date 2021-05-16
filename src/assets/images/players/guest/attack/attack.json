@@ -1,0 +1,75 @@
+{
+	"frames": {
+		"1.png": {
+			"frame": {
+				"x": 1,
+				"y": 1,
+				"w": 828,
+				"h": 828
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 828,
+				"h": 828
+			},
+			"sourceSize": {
+				"w": 828,
+				"h": 828
+			}
+		},
+		"2.png": {
+			"frame": {
+				"x": 831,
+				"y": 1,
+				"w": 828,
+				"h": 828
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 828,
+				"h": 828
+			},
+			"sourceSize": {
+				"w": 828,
+				"h": 828
+			}
+		},
+		"3.png": {
+			"frame": {
+				"x": 1,
+				"y": 831,
+				"w": 828,
+				"h": 828
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 828,
+				"h": 828
+			},
+			"sourceSize": {
+				"w": 828,
+				"h": 828
+			}
+		}
+	},
+	"meta": {
+		"app": "http://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"image": "attack.png",
+		"format": "RGBA8888",
+		"size": {
+			"w": 1660,
+			"h": 1660
+		},
+		"scale": "1"
+	}
+}
