@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import loaderConfig from "../../../assets/loaderConfig";
+import loaderConfig from "./loaderConfig";
 import { canvasSize } from "../../config";
 import createBox from "../../pixiUtils/createBox";
 import globalStore from "../../globalStore";
