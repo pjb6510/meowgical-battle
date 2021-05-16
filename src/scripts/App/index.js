@@ -3,6 +3,7 @@ import Tween from "@tweenjs/tween.js";
 import { canvasSize } from "../config";
 import Loader from "../container/Loader";
 import MainMenu from "../container/MainMenu";
+import Battle from "../container/Battle";
 import generateRandomString from "../utils/generateRandomString";
 import globalStore from "../globalStore";
 
@@ -12,13 +13,14 @@ export default class App {
     this.loader = null;
 
     this.currentScene = null;
+    this.battleScene = null;
     this.playerId = generateRandomString();
 
     globalStore.subscribe((newStore) => {
       const { scene: newScene } = newStore;
 
       if (newScene && this.currentScene !== newScene) {
-        this.updateScene(newScene);
+        this.changeScene(newScene);
       }
     });
   }
@@ -45,6 +47,10 @@ export default class App {
 
       this.app.ticker.add((delta) => {
         Tween.update();
+
+        if (this.battleScene) {
+          this.battleScene.update();
+        }
       });
     } catch (err) {
       console.error(err);
@@ -58,12 +64,17 @@ export default class App {
     this.app.stage.removeChild(this.loader.container);
   }
 
-  updateScene(newScene) {
+  changeScene(newScene) {
     if (this.currentScene) {
       this.app.stage.removeChild(this.currentScene.container);
     }
 
     this.currentScene = newScene;
+
+    if (this.currentScene instanceof Battle) {
+      this.battleScene = this.currentScene;
+    }
+
     this.app.stage.addChild(this.currentScene.container);
   }
 }

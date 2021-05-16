@@ -7,12 +7,15 @@ import globalStore from "../../globalStore";
 import isEqualArray from "../../utils/isEqualArray";
 import mixinSetBattleElementsOptions from "./mixinSetBattleElementsOptions";
 
+import Fireball from "./Skills/Fireball";
+
 export default class Battle extends Drawer {
   constructor(isHost, peer) {
     super();
     this.isHost = isHost;
     this.peer = peer;
     this.drawingCallback = this.handleDraw;
+    this.skills = [];
 
     this.backgroundTexture = globalStore
       .getItem("resources")
@@ -30,6 +33,8 @@ export default class Battle extends Drawer {
     this.playerOption = null;
     this.opponentOption = null;
     this.setPlayersOptions();
+
+    this.backgroundZIndex = -10;
 
     this.background = null;
     this.playerStatusBar = null;
@@ -53,6 +58,7 @@ export default class Battle extends Drawer {
 
   createBackground() {
     this.background = new PIXI.Sprite(this.backgroundTexture);
+    this.background.zIndex = this.backgroundZIndex;
   }
 
   createPlayerStatusBar() {
@@ -117,7 +123,14 @@ export default class Battle extends Drawer {
 
     if (isEqualArray(directions, ["right", "left", "right"])) {
       this.peer.send("attack");
-      this.player.attack();
+      this.player.playAttackMotion();
+      const fireball = new Fireball({
+        x: this.player.x,
+        y: this.player.y,
+        rowIndex: this.player.rowIndex,
+      });
+      this.container.addChild(fireball.container);
+      this.skills.push(fireball);
     }
   }
 
@@ -143,6 +156,21 @@ export default class Battle extends Drawer {
           break;
       }
     });
+  }
+
+  update() {
+    this.removeTerminatedSkills();
+  }
+
+  removeTerminatedSkills() {
+    for (let i = this.skills.length - 1; i >= 0; i -= 1) {
+      const skill = this.skills[i];
+
+      if (skill.isTerminated) {
+        this.container.removeChild(skill.container);
+        this.skills.splice(i, 1);
+      }
+    }
   }
 }
 
