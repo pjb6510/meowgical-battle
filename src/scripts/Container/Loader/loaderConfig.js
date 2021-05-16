@@ -22,6 +22,9 @@ const loaderConfig = {
   rightArrow: "assets/images/arrowIcons/rightArrow.png",
 
   fireball: "assets/images/effects/fireball/fireball.json",
+  fireballExplosion1: "assets/images/effects/fireball/fireballExplosion-1.json",
+  fireballExplosion2: "assets/images/effects/fireball/fireballExplosion-2.json",
+  fireballExplosion3: "assets/images/effects/fireball/fireballExplosion-3.json",
 };
 
 export default loaderConfig;
