@@ -43,7 +43,7 @@ export default class Fireball extends Skill {
     );
 
     if (!this.isHeadingToRight) {
-      this.sprite.scale *= 1;
+      this.sprite.scale.x *= -1;
     }
 
     this.sprite.x = this.x;
@@ -68,7 +68,7 @@ export default class Fireball extends Skill {
       );
     } else {
       tween.to(
-        { x: this.x - this.sprite.width },
+        { x: 0 - (canvasSize.width - this.x) - this.sprite.width },
         this.movingDuration
       );
     }
