@@ -4,18 +4,14 @@ import StatusBar from "./StatusBar";
 import TileGroup from "./TileGroup";
 import Player from "./Player";
 import globalStore from "../../globalStore";
-import isEqualArray from "../../utils/isEqualArray";
 import mixinSetBattleElementsOptions from "./mixinSetBattleElementsOptions";
-
-import Fireball from "./Skills/Fireball";
+import mixinSetActionListener from "./mixinSetActionListener";
 
 export default class Battle extends Drawer {
   constructor(isHost, peer) {
     super();
     this.isHost = isHost;
     this.peer = peer;
-    this.drawingCallback = this.handleDraw;
-    this.skills = [];
 
     this.backgroundTexture = globalStore
       .getItem("resources")
@@ -51,7 +47,19 @@ export default class Battle extends Drawer {
     this.createPlayer();
     this.createOpponent();
 
-    this.setPeerListener();
+    this.drawingCallback = this.handleDraw;
+
+    this.playerSkills = [];
+    this.opponentSkills = [];
+
+    this.listenOpponentAction({
+      container: this.container,
+      opponentSkills: this.opponentSkills,
+      opponent: this.opponent,
+      peer: this.peer,
+    });
+    this.skillCommands = [];
+    this.setSkillCommands();
 
     this.render();
   }
@@ -98,43 +106,16 @@ export default class Battle extends Drawer {
   }
 
   handleDraw(directions) {
-    if (directions.length === 1) {
-      switch (directions[0]) {
-        case "left":
-          this.peer.send("moveBack");
-          this.player.moveLeft();
-          break;
-        case "right":
-          this.peer.send("moveFront");
-          this.player.moveRight();
-          break;
-        case "up":
-          this.peer.send("moveUp");
-          this.player.moveUp();
-          break;
-        case "down":
-          this.peer.send("moveDown");
-          this.player.moveDown();
-          break;
-        default:
-          break;
-      }
-    }
-
-    if (isEqualArray(directions, ["right", "left", "right"])) {
-      this.peer.send("attack");
-      this.player.playAttackMotion();
-      const fireball = new Fireball({
-        x: this.player.x,
-        y: this.player.y,
-        rowIndex: this.player.rowIndex,
-      });
-      this.container.addChild(fireball.container);
-      this.skills.push(fireball);
-    }
+    this.handlePlayerActionListen({
+      container: this.container,
+      playerSkills: this.playerSkills,
+      inputtedCommand: directions,
+      player: this.player,
+      peer: this.peer,
+    });
   }
 
-  setPeerListener() {
+  handleOpponentActionListen() {
     this.peer.on("data", (action) => {
       switch (action) {
         case "moveFront":
@@ -149,7 +130,7 @@ export default class Battle extends Drawer {
         case "moveDown":
           this.opponent.moveDown();
           break;
-        case "attack":
+        case "fireball":
           this.opponent.attack();
           break;
         default:
@@ -159,19 +140,20 @@ export default class Battle extends Drawer {
   }
 
   update() {
-    this.removeTerminatedSkills();
+    this.checkIsSkillTerminated();
   }
 
-  removeTerminatedSkills() {
-    for (let i = this.skills.length - 1; i >= 0; i -= 1) {
-      const skill = this.skills[i];
+  checkIsSkillTerminated() {
+    for (let i = this.playerSkills.length - 1; i >= 0; i -= 1) {
+      const skill = this.playerSkills[i];
 
       if (skill.isTerminated) {
         this.container.removeChild(skill.container);
-        this.skills.splice(i, 1);
+        this.playerSkills.splice(i, 1);
       }
     }
   }
 }
 
 Object.assign(Battle.prototype, mixinSetBattleElementsOptions);
+Object.assign(Battle.prototype, mixinSetActionListener);
