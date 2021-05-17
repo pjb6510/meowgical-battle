@@ -29,12 +29,33 @@ export default class Fireball extends Skill {
       x: 0.5,
       y: 0.85,
     };
-    this.hasCollided = false;
+    this.animationSpeed = 0.4;
+
+    this.xHitAreaOffset = 90;
+    this.xHitAreaWidth = 70;
+    this.xHitAreaRange = null;
+    this.updateHitAreaRange();
 
     this.sprite = null;
     this.createSprite();
+    this.createExplosionSprite();
 
     this.render();
+  }
+
+  setSpriteProperties(sprite) {
+    if (!this.isHeadingToRight) {
+      sprite.scale.x *= -1;
+    }
+
+    sprite.x = this.x;
+    sprite.y = this.y;
+    sprite.anchor.set(
+      this.anchor.x,
+      this.anchor.y
+    );
+
+    sprite.animationSpeed = this.animationSpeed;
   }
 
   createSprite() {
@@ -42,20 +63,19 @@ export default class Fireball extends Skill {
       this.fireballTextures
     );
 
-    if (!this.isHeadingToRight) {
-      this.sprite.scale.x *= -1;
-    }
+    this.setSpriteProperties(this.sprite);
 
-    this.sprite.x = this.x;
-    this.sprite.y = this.y;
-    this.sprite.anchor.set(
-      this.anchor.x,
-      this.anchor.y
-    );
-
-    this.sprite.animationSpeed = 0.4;
     this.sprite.play();
     this.move();
+  }
+
+  createExplosionSprite() {
+    this.explosionSprite = new PIXI.AnimatedSprite(
+      this.explosionFireballTextures
+    );
+
+    this.setSpriteProperties(this.explosionSprite);
+    this.explosionSprite.loop = false;
   }
 
   move() {
@@ -73,14 +93,79 @@ export default class Fireball extends Skill {
       );
     }
 
-    tween.onComplete(() => {
-      this.terminate();
-    });
+    tween
+      .onUpdate((sprite) => {
+        this.x = sprite.x;
+        this.y = sprite.y;
+        this.updateHitAreaRange();
+      })
+      .onComplete(() => {
+        this.terminate();
+      });
 
     tween.start();
   }
 
   render() {
     this.container.addChild(this.sprite);
+  }
+
+  updateHitAreaRange() {
+    if (this.isHeadingToRight) {
+      this.xHitAreaRange = {
+        min: this.x + this.xHitAreaOffset,
+        max: this.x + this.xHitAreaOffset + this.xHitAreaWidth,
+      };
+    } else {
+      this.xHitAreaRange = {
+        min: this.x - this.xHitAreaOffset - this.xHitAreaWidth,
+        max: this.x - this.xHitAreaOffset,
+      };
+    }
+  }
+
+  checkIsHit({ rowIndex: objectRowIndex, xHitAreaRange: objectXHitArea }) {
+    const objectWidth = objectXHitArea.max - objectXHitArea.min;
+
+    const isSameRowIndex = objectRowIndex === this.rowIndex;
+    if (!isSameRowIndex) {
+      return;
+    }
+
+    let isXOverlap = false;
+    if (this.xHitAreaWidth <= objectWidth) {
+      const ifObjectIsInLeft =
+        (this.xHitAreaRange.min <= objectXHitArea.max) &&
+          (this.xHitAreaRange.min >= objectXHitArea.min);
+      const ifObjectIsInRight =
+        (this.xHitAreaRange.max >= objectXHitArea.min) &&
+          (this.xHitAreaRange.max <= objectXHitArea.max);
+      isXOverlap = ifObjectIsInLeft || ifObjectIsInRight;
+    } else {
+      const ifObjectIsInLeft =
+        (objectXHitArea.max >= this.xHitAreaRange.min) &&
+          (objectXHitArea.max <= this.xHitAreaRange.max);
+      const ifObjectIsInRight =
+        (objectXHitArea.min <= this.xHitAreaRange.max) &&
+          (objectXHitArea.min >= this.xHitAreaRange.min);
+      isXOverlap = ifObjectIsInLeft || ifObjectIsInRight;
+    }
+
+    if (isXOverlap && isSameRowIndex) {
+      this.explode();
+    }
+  }
+
+  explode() {
+    this.explosionSprite.x = this.x;
+    this.explosionSprite.y = this.y;
+
+    this.container.removeChild(this.sprite);
+    this.container.addChild(this.explosionSprite);
+
+    this.explosionSprite.play();
+    this.explosionSprite.onComplete = () => {
+      this.terminate();
+    };
   }
 }

@@ -115,31 +115,8 @@ export default class Battle extends Drawer {
     });
   }
 
-  handleOpponentActionListen() {
-    this.peer.on("data", (action) => {
-      switch (action) {
-        case "moveFront":
-          this.opponent.moveLeft();
-          break;
-        case "moveBack":
-          this.opponent.moveRight();
-          break;
-        case "moveUp":
-          this.opponent.moveUp();
-          break;
-        case "moveDown":
-          this.opponent.moveDown();
-          break;
-        case "fireball":
-          this.opponent.attack();
-          break;
-        default:
-          break;
-      }
-    });
-  }
-
   update() {
+    this.checkIsSkillHit();
     this.checkIsSkillTerminated();
   }
 
@@ -150,6 +127,25 @@ export default class Battle extends Drawer {
       if (skill.isTerminated) {
         this.container.removeChild(skill.container);
         this.playerSkills.splice(i, 1);
+      }
+    }
+
+    for (let i = this.opponentSkills.length - 1; i >= 0; i -= 1) {
+      const skill = this.opponentSkills[i];
+
+      if (skill.isTerminated) {
+        this.container.removeChild(skill.container);
+        this.opponentSkills.splice(i, 1);
+      }
+    }
+  }
+
+  checkIsSkillHit() {
+    for (let i = 0; i < this.opponentSkills.length; i += 1) {
+      const skill = this.opponentSkills[i];
+
+      if (skill.checkIsHit) {
+        skill.checkIsHit(this.player);
       }
     }
   }

@@ -39,6 +39,11 @@ export default class Player {
     this.movingDuration = 100;
     this.attackMotionSpeed = 0.2;
 
+    this.xHitAreaBackWidth = 50;
+    this.xHitAreaFrontWidth = 60;
+    this.xHitAreaRange = null;
+    this.updateHitAreaRange();
+
     this.normalSprite = null;
     this.attackMotionSprite = null;
     this.createNormalSprite();
@@ -104,6 +109,11 @@ export default class Player {
         } else {
           player.texture = this.playerTextures.moveFront;
         }
+      })
+      .onUpdate((player) => {
+        this.x = player.x;
+        this.y = player.y;
+        this.updateHitAreaRange();
       })
       .onComplete((player) => {
         player.texture = this.playerTextures.normal;
@@ -171,6 +181,20 @@ export default class Player {
       this.container.removeChild(this.attackMotionSprite);
       this.container.addChild(this.normalSprite);
     };
+  }
+
+  updateHitAreaRange() {
+    if (this.isHeadingToRight) {
+      this.xHitAreaRange = {
+        min: this.x - this.xHitAreaBackWidth,
+        max: this.x + this.xHitAreaFrontWidth,
+      };
+    } else {
+      this.xHitAreaRange = {
+        min: this.x - this.xHitAreaFrontWidth,
+        max: this.x + this.xHitAreaBackWidth,
+      };
+    }
   }
 }
 
