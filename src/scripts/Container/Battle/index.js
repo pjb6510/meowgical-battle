@@ -308,7 +308,7 @@ export default class Battle {
 
         if (isEqualArray(inputtedCommand, command)) {
           useSkill({
-            player: this.player,
+            caster: this.player,
             shouldSendAction: true,
             startCallback: this.addPlayerSkill.bind(this),
             terminationCallback: this.removePlayerSkill.bind(this),
@@ -346,7 +346,7 @@ export default class Battle {
           break;
         case "fireball":
           this.createFireball({
-            player: this.opponent,
+            caster: this.opponent,
             isHeadingToRight: false,
             shouldSendAction: false,
             startCallback: this.addOpponentSkill.bind(this),
@@ -386,7 +386,7 @@ export default class Battle {
   }
 
   createFireball({
-    player,
+    caster,
     isHeadingToRight = true,
     shouldSendAction,
     startCallback,
@@ -398,12 +398,12 @@ export default class Battle {
       );
     }
 
-    player.playAttackMotion();
+    caster.playAttackMotion();
 
     new Fireball({
-      x: player.x,
-      y: player.y,
-      rowIndex: player.rowIndex,
+      x: caster.x,
+      y: caster.y,
+      rowIndex: caster.rowIndex,
       isHeadingToRight,
       startCallback,
       terminationCallback,
