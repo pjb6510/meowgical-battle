@@ -3,7 +3,9 @@ import { canvasSize } from "../../../config";
 import globalStore from "../../../globalStore";
 
 export default class Drawer {
-  constructor() {
+  constructor(drawingCallback) {
+    this.drawingCallback = drawingCallback;
+
     this.container = new PIXI.Container();
     this.container.sortableChildren = true;
 
@@ -24,8 +26,10 @@ export default class Drawer {
     this.rightArrowTexture = rightArrow.texture;
     this.upArrowTexture = upArrow.texture;
     this.downArrowTexture = downArrow.texture;
+
     this.arrows = [];
     this.arrowInitialPosition = { x: 50, y: 250 };
+    this.arrowSize = { width: 100, height: 100 };
     this.arrowPosition = { ...this.arrowInitialPosition };
 
     this.pointerStartPos = { x: 0, y: 0 };
@@ -33,15 +37,12 @@ export default class Drawer {
     this.strokeDirections = [];
     this.directionsLengthLimit = 18;
 
-    this.canvasZIndex = 10;
     this.canvas = null;
-    this.drawingCallback = null;
     this.createCanvas();
   }
 
   createCanvas() {
     this.canvas = new PIXI.Graphics();
-    this.canvas.zIndex = this.canvasZIndex;
     this.canvas.hitArea = new PIXI.Rectangle(
       0,
       0,
@@ -183,8 +184,8 @@ export default class Drawer {
 
     arrow.x = arrowXPos;
     arrow.y = arrowYPos;
-    arrow.width = 100;
-    arrow.height = 100;
+    arrow.width = this.arrowSize.width;
+    arrow.height = this.arrowSize.height;
 
     this.arrowPosition.x += arrow.width;
 
