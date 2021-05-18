@@ -13,28 +13,27 @@ export default class Portrait {
     if (this.isHost) {
       const {
         hostPlayerPortrait,
-        hostPlayerHitPortrait,
+        hostPlayerBeHitPortrait,
       } = globalStore.getItem("resources");
 
       this.portraitTexture = hostPlayerPortrait.texture;
-      this.hitPortraitTexture = hostPlayerHitPortrait.texture;
+      this.beHitPortraitTexture = hostPlayerBeHitPortrait.texture;
     } else {
       const {
         guestPlayerPortrait,
-        guestPlayerHitPortrait,
+        guestPlayerBeHitPortrait,
       } = globalStore.getItem("resources");
 
       this.portraitTexture = guestPlayerPortrait.texture;
-      this.hitPortraitTexture = guestPlayerHitPortrait.texture;
+      this.beHitPortraitTexture = guestPlayerBeHitPortrait.texture;
     }
 
     this.portraitSize = 250;
-    this.isHit = false;
 
     this.normalPortrait = null;
-    this.hitPortrait = null;
+    this.beHitPortrait = null;
     this.createNormalPortrait();
-    this.createHitPortrait();
+    this.createBeHitPortrait();
 
     this.render();
   }
@@ -54,15 +53,15 @@ export default class Portrait {
     this.setSpriteProperties(this.normalPortrait);
   }
 
-  createHitPortrait() {
-    this.hitPortrait = new PIXI.Sprite(this.hitPortraitTexture);
+  createBeHitPortrait() {
+    this.beHitPortrait = new PIXI.Sprite(this.beHitPortraitTexture);
 
-    this.setSpriteProperties(this.hitPortrait);
+    this.setSpriteProperties(this.beHitPortrait);
   }
 
   render() {
     if (this.isHit) {
-      this.container.addChild(this.hitPortrait);
+      this.container.addChild(this.beHitPortrait);
     } else {
       this.container.addChild(this.normalPortrait);
     }
