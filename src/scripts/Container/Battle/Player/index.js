@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import Tween from "@tweenjs/tween.js";
-import loadPlayerTextureMixin from "./mixinLoadPlayerTexture";
+import globalStore from "../../../globalStore";
 
 export default class Player {
   constructor({
@@ -52,6 +52,42 @@ export default class Player {
     this.createBeHitMotionSprite();
 
     this.render();
+  }
+
+  loadPlayerTexture() {
+    if (this.isHost) {
+      const {
+        hostPlayer,
+        hostPlayerMoveFront,
+        hostPlayerMoveBack,
+        hostPlayerAttackMotion,
+        hostPlayerBeHitMotion,
+      } = globalStore.getItem("resources");
+
+      this.playerTextures = {
+        normal: hostPlayer.texture,
+        moveFront: hostPlayerMoveFront.texture,
+        moveBack: hostPlayerMoveBack.texture,
+        attackMotion: Object.values(hostPlayerAttackMotion.textures),
+        beHitMotion: Object.values(hostPlayerBeHitMotion.textures),
+      };
+    } else {
+      const {
+        guestPlayer,
+        guestPlayerMoveFront,
+        guestPlayerMoveBack,
+        guestPlayerAttackMotion,
+        guestPlayerBeHitMotion,
+      } = globalStore.getItem("resources");
+
+      this.playerTextures = {
+        normal: guestPlayer.texture,
+        moveFront: guestPlayerMoveFront.texture,
+        moveBack: guestPlayerMoveBack.texture,
+        attackMotion: Object.values(guestPlayerAttackMotion.textures),
+        beHitMotion: Object.values(guestPlayerBeHitMotion.textures),
+      };
+    }
   }
 
   setSpriteProperties(sprite) {
@@ -217,5 +253,3 @@ export default class Player {
     this.playMotion(this.beHitMotionSprite);
   }
 }
-
-Object.assign(Player.prototype, loadPlayerTextureMixin);
