@@ -1,7 +1,7 @@
 import socketIOClient from "socket.io-client";
 
 const socket = socketIOClient(
-  `http://localhost:${process.env.SERVER_PORT}`
+  process.env.SERVER_URL
 );
 
 const createGame = (playerId) => {
