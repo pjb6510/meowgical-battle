@@ -1,11 +1,21 @@
 import * as PIXI from "pixi.js";
 
 export default class Skill {
-  constructor({ x, y, rowIndex, isHeadingToRight = true }) {
+  constructor({
+    x,
+    y,
+    rowIndex,
+    isHeadingToRight = true,
+    startCallback,
+    terminationCallback,
+  }) {
     this.x = x;
     this.y = y;
     this.rowIndex = rowIndex;
     this.isHeadingToRight = isHeadingToRight;
+    this.startCallback = startCallback;
+    this.terminationCallback = terminationCallback;
+
     this.isTerminated = false;
     this.isAbleHit = true;
     this.handleHit = null;
@@ -14,9 +24,15 @@ export default class Skill {
 
     this.container = new PIXI.Container();
     this.container.zIndex = this.rowIndex + this.skillZindexOffset;
+
+    if (this.startCallback) {
+      this.startCallback(this);
+    }
   }
 
   terminate() {
     this.isTerminated = true;
+
+    this.terminationCallback(this);
   }
 }

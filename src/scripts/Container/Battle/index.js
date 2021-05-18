@@ -47,18 +47,20 @@ export default class Battle extends Drawer {
     this.createPlayer();
     this.createOpponent();
 
+    this.playerSkills = {};
+    this.nextPlayerSkillIndex = 0;
+    this.opponentSkills = {};
+    this.nextOpponentSkillIndex = 0;
+
     this.drawingCallback = this.handleDraw;
 
-    this.playerSkills = [];
-    this.opponentSkills = [];
-
     this.listenOpponentAction({
-      container: this.container,
       opponent: this.opponent,
       opponentSkills: this.opponentSkills,
       opponentStatusBar: this.opponentStatusBar,
-      playerSkills: this.playerSkills,
       peer: this.peer,
+      skillStartCallback: this.addOpponentSkill.bind(this),
+      skillTerminationCallback: this.removeOpponentSkill.bind(this),
     });
 
     this.skillCommands = [];
@@ -110,42 +112,45 @@ export default class Battle extends Drawer {
 
   handleDraw(directions) {
     this.handlePlayerActionListen({
-      container: this.container,
-      playerSkills: this.playerSkills,
-      inputtedCommand: directions,
       player: this.player,
+      inputtedCommand: directions,
       peer: this.peer,
+      skillStartCallback: this.addPlayerSkill.bind(this),
+      skillTerminationCallback: this.removePlayerSkill.bind(this),
     });
   }
 
   update() {
     this.checkIsSkillHit();
-    this.checkIsSkillTerminated();
   }
 
-  checkIsSkillTerminated() {
-    for (let i = this.playerSkills.length - 1; i >= 0; i -= 1) {
-      const skill = this.playerSkills[i];
+  addPlayerSkill(skill) {
+    this.container.addChild(skill.container);
+    skill.skillIndex = this.nextPlayerSkillIndex;
+    this.playerSkills[this.nextPlayerSkillIndex] = skill;
+    this.nextPlayerSkillIndex += 1;
+  }
 
-      if (skill.isTerminated) {
-        this.container.removeChild(skill.container);
-        this.playerSkills.splice(i, 1);
-      }
-    }
+  addOpponentSkill(skill) {
+    this.container.addChild(skill.container);
+    skill.skillIndex = this.nextOpponentSkillIndex;
+    this.opponentSkills[this.nextOpponentSkillIndex] = skill;
+    this.nextOpponentSkillIndex += 1;
+  }
 
-    for (let i = this.opponentSkills.length - 1; i >= 0; i -= 1) {
-      const skill = this.opponentSkills[i];
+  removePlayerSkill(skill) {
+    this.container.removeChild(skill.container);
+    delete this.playerSkills[skill.skillIndex];
+  }
 
-      if (skill.isTerminated) {
-        this.container.removeChild(skill.container);
-        this.opponentSkills.splice(i, 1);
-      }
-    }
+  removeOpponentSkill(skill) {
+    this.container.removeChild(skill.container);
+    delete this.opponentSkills[skill.skillIndex];
   }
 
   checkIsSkillHit() {
-    for (let i = 0; i < this.opponentSkills.length; i += 1) {
-      const skill = this.opponentSkills[i];
+    for (const skillIndex in this.opponentSkills) {
+      const skill = this.opponentSkills[skillIndex];
 
       if (skill.checkIsHit && skill.isAbleHit) {
         const isHit = skill.checkIsHit(this.player);
@@ -155,7 +160,7 @@ export default class Battle extends Drawer {
             player: this.player,
             playerStatusBar: this.playerStatusBar,
             opponentSkills: this.opponentSkills,
-            skillIndex: i,
+            skillIndex,
             peer: this.peer,
           });
         }

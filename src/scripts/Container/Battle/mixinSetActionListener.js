@@ -19,11 +19,11 @@ const mixinSetActionListener = {
   },
 
   handlePlayerActionListen({
-    container,
-    playerSkills,
     inputtedCommand,
     player,
     peer,
+    skillStartCallback,
+    skillTerminationCallback,
   }) {
     if (inputtedCommand.length === 1) {
       switch (inputtedCommand[0]) {
@@ -63,8 +63,8 @@ const mixinSetActionListener = {
           useSkill({
             player,
             peer,
-            container,
-            playerSkills,
+            startCallback: skillStartCallback,
+            terminationCallback: skillTerminationCallback,
           });
         }
       }
@@ -72,12 +72,12 @@ const mixinSetActionListener = {
   },
 
   listenOpponentAction({
-    container,
     opponent,
-    opponentSkills,
     opponentStatusBar,
     playerSkills,
     peer,
+    skillStartCallback,
+    skillTerminationCallback,
   }) {
     peer.on("data", (data) => {
       const opponentAction = JSON.parse(data);
@@ -106,9 +106,9 @@ const mixinSetActionListener = {
         case "fireball":
           this.createFireball({
             player: opponent,
-            container: container,
-            playerSkills: opponentSkills,
             isHeadingToRight: false,
+            startCallback: skillStartCallback,
+            terminationCallback: skillTerminationCallback,
           });
           break;
         default:
@@ -144,9 +144,9 @@ const mixinSetActionListener = {
   createFireball({
     player,
     peer = null,
-    playerSkills,
     isHeadingToRight = true,
-    container,
+    startCallback,
+    terminationCallback,
   }) {
     if (peer) {
       peer.send(
@@ -155,14 +155,15 @@ const mixinSetActionListener = {
     }
 
     player.playAttackMotion();
+
     const fireball = new Fireball({
       x: player.x,
       y: player.y,
       rowIndex: player.rowIndex,
       isHeadingToRight,
+      startCallback,
+      terminationCallback,
     });
-    container.addChild(fireball.container);
-    playerSkills.push(fireball);
   },
 };
 
