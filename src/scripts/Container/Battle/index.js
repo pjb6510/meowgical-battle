@@ -56,8 +56,8 @@ export default class Battle extends Drawer {
 
     this.listenOpponentAction({
       opponent: this.opponent,
-      opponentSkills: this.opponentSkills,
       opponentStatusBar: this.opponentStatusBar,
+      playerSkills: this.playerSkills,
       peer: this.peer,
       skillStartCallback: this.addOpponentSkill.bind(this),
       skillTerminationCallback: this.removeOpponentSkill.bind(this),
