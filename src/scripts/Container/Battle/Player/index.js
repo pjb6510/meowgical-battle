@@ -46,8 +46,10 @@ export default class Player {
 
     this.normalSprite = null;
     this.attackMotionSprite = null;
+    this.beHitMotionSprite = null;
     this.createNormalSprite();
     this.createAttackMotionSprite();
+    this.createBeHitMotionSprite();
 
     this.render();
   }
@@ -79,6 +81,16 @@ export default class Player {
 
     this.attackMotionSprite.animationSpeed = this.attackMotionSpeed;
     this.attackMotionSprite.loop = false;
+  }
+
+  createBeHitMotionSprite() {
+    this.beHitMotionSprite = new PIXI.AnimatedSprite(
+      this.playerTextures.beHitMotion
+    );
+    this.setSpriteProperties(this.beHitMotionSprite);
+
+    this.beHitMotionSprite.animationSpeed = this.attackMotionSpeed;
+    this.beHitMotionSprite.loop = false;
   }
 
   render() {
@@ -169,20 +181,6 @@ export default class Player {
     });
   }
 
-  playAttackMotion() {
-    this.attackMotionSprite.x = this.x;
-    this.attackMotionSprite.y = this.y;
-
-    this.container.removeChild(this.normalSprite);
-    this.container.addChild(this.attackMotionSprite);
-
-    this.attackMotionSprite.gotoAndPlay(0);
-    this.attackMotionSprite.onComplete = () => {
-      this.container.removeChild(this.attackMotionSprite);
-      this.container.addChild(this.normalSprite);
-    };
-  }
-
   updateHitAreaRange() {
     if (this.isHeadingToRight) {
       this.xHitAreaRange = {
@@ -195,6 +193,28 @@ export default class Player {
         max: this.x + this.xHitAreaBackWidth,
       };
     }
+  }
+
+  playMotion(motionSprite) {
+    motionSprite.x = this.x;
+    motionSprite.y = this.y;
+
+    this.container.removeChild(this.normalSprite);
+    this.container.addChild(motionSprite);
+
+    motionSprite.gotoAndPlay(0);
+    motionSprite.onComplete = () => {
+      this.container.removeChild(motionSprite);
+      this.container.addChild(this.normalSprite);
+    };
+  }
+
+  playAttackMotion() {
+    this.playMotion(this.attackMotionSprite);
+  }
+
+  playBeHitMotion() {
+    this.playMotion(this.beHitMotionSprite);
   }
 }
 
