@@ -33,6 +33,7 @@ export default class Drawer {
     this.strokeDirections = [];
     this.directionsLengthLimit = 18;
 
+    this.canvasZIndex = 10;
     this.canvas = null;
     this.drawingCallback = null;
     this.createCanvas();
@@ -40,7 +41,7 @@ export default class Drawer {
 
   createCanvas() {
     this.canvas = new PIXI.Graphics();
-    this.canvas.zIndex = 1;
+    this.canvas.zIndex = this.canvasZIndex;
     this.canvas.hitArea = new PIXI.Rectangle(
       0,
       0,
