@@ -130,6 +130,7 @@ const mixinSetActionListener = {
       skill.handleHit();
     }
     player.playBeHitMotion();
+    playerStatusBar.beHit(skill.damage);
 
     if (peer) {
       peer.send(

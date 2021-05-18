@@ -17,7 +17,7 @@ export default class Portrait {
       } = globalStore.getItem("resources");
 
       this.portraitTexture = hostPlayerPortrait.texture;
-      this.beHitPortraitTexture = hostPlayerBeHitPortrait.texture;
+      this.beHitSpriteTexture = hostPlayerBeHitPortrait.texture;
     } else {
       const {
         guestPlayerPortrait,
@@ -25,15 +25,17 @@ export default class Portrait {
       } = globalStore.getItem("resources");
 
       this.portraitTexture = guestPlayerPortrait.texture;
-      this.beHitPortraitTexture = guestPlayerBeHitPortrait.texture;
+      this.beHitSpriteTexture = guestPlayerBeHitPortrait.texture;
     }
 
     this.portraitSize = 250;
 
-    this.normalPortrait = null;
-    this.beHitPortrait = null;
+    this.normalSprite = null;
+    this.beHitSprite = null;
     this.createNormalPortrait();
     this.createBeHitPortrait();
+
+    this.beHitDuration = 400;
 
     this.render();
   }
@@ -48,28 +50,30 @@ export default class Portrait {
   }
 
   createNormalPortrait() {
-    this.normalPortrait = new PIXI.Sprite(this.portraitTexture);
+    this.normalSprite = new PIXI.Sprite(this.portraitTexture);
 
-    this.setSpriteProperties(this.normalPortrait);
+    this.setSpriteProperties(this.normalSprite);
   }
 
   createBeHitPortrait() {
-    this.beHitPortrait = new PIXI.Sprite(this.beHitPortraitTexture);
+    this.beHitSprite = new PIXI.Sprite(this.beHitSpriteTexture);
 
-    this.setSpriteProperties(this.beHitPortrait);
+    this.setSpriteProperties(this.beHitSprite);
   }
 
   render() {
-    if (this.isHit) {
-      this.container.addChild(this.beHitPortrait);
-    } else {
-      this.container.addChild(this.normalPortrait);
-    }
+    this.container.addChild(this.normalSprite);
   }
 
-  renewIsHit(isHit) {
-    this.isHit = isHit;
+  beHit() {
     this.container.removeChildren();
-    this.render();
+    this.container.addChild(this.beHitSprite);
+
+    clearTimeout(this.beHitTimerId);
+
+    this.beHitTimerId = setTimeout(() => {
+      this.container.removeChildren();
+      this.container.addChild(this.normalSprite);
+    }, this.beHitDuration);
   }
 }

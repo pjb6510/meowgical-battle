@@ -43,6 +43,17 @@ export default class StatusBar {
     this.portrait = new Portrait(this.portraitOption);
   }
 
+  beHit(damage) {
+    let newHp = this.hpBar.hpPercentage - damage;
+
+    if (newHp < 0) {
+      newHp = 0;
+    }
+
+    this.hpBar.renewHp(newHp);
+    this.portrait.beHit();
+  }
+
   render() {
     this.container.addChild(
       this.portrait.container,
