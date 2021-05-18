@@ -7,6 +7,8 @@ export default class Skill {
     this.rowIndex = rowIndex;
     this.isHeadingToRight = isHeadingToRight;
     this.isTerminated = false;
+    this.isAbleHit = true;
+    this.handleHit = null;
 
     this.skillZindexOffset = 0.5;
 

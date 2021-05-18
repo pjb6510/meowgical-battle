@@ -40,6 +40,8 @@ export default class Fireball extends Skill {
     this.createSprite();
     this.createExplosionSprite();
 
+    this.handleHit = this.explode;
+
     this.render();
   }
 
@@ -129,7 +131,7 @@ export default class Fireball extends Skill {
 
     const isSameRowIndex = objectRowIndex === this.rowIndex;
     if (!isSameRowIndex) {
-      return;
+      return false;
     }
 
     let isXOverlap = false;
@@ -151,9 +153,11 @@ export default class Fireball extends Skill {
       isXOverlap = ifObjectIsInLeft || ifObjectIsInRight;
     }
 
-    if (isXOverlap && isSameRowIndex) {
-      this.explode();
-    }
+    const isHit = isXOverlap && isSameRowIndex;
+
+    this.isAbleHit = !(isHit);
+
+    return isHit;
   }
 
   explode() {
