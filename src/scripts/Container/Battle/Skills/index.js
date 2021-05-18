@@ -18,6 +18,8 @@ export default class Skill {
 
     this.isTerminated = false;
     this.isAbleHit = true;
+    this.damage = 0;
+
     this.handleHit = null;
 
     this.skillZindexOffset = 0.5;

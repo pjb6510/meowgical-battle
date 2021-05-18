@@ -42,6 +42,8 @@ export default class Fireball extends Skill {
 
     this.handleHit = this.explode;
 
+    this.damage = 15;
+
     this.render();
   }
 
