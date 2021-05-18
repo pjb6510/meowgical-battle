@@ -156,7 +156,7 @@ const mixinSetActionListener = {
 
     player.playAttackMotion();
 
-    const fireball = new Fireball({
+    new Fireball({
       x: player.x,
       y: player.y,
       rowIndex: player.rowIndex,
