@@ -54,10 +54,13 @@ export default class Battle extends Drawer {
 
     this.listenOpponentAction({
       container: this.container,
-      opponentSkills: this.opponentSkills,
       opponent: this.opponent,
+      opponentSkills: this.opponentSkills,
+      opponentStatusBar: this.opponentStatusBar,
+      playerSkills: this.playerSkills,
       peer: this.peer,
     });
+
     this.skillCommands = [];
     this.setSkillCommands();
 
@@ -144,8 +147,18 @@ export default class Battle extends Drawer {
     for (let i = 0; i < this.opponentSkills.length; i += 1) {
       const skill = this.opponentSkills[i];
 
-      if (skill.checkIsHit) {
-        skill.checkIsHit(this.player);
+      if (skill.checkIsHit && skill.isAbleHit) {
+        const isHit = skill.checkIsHit(this.player);
+
+        if (isHit) {
+          this.hitPlayer({
+            player: this.player,
+            playerStatusBar: this.playerStatusBar,
+            opponentSkills: this.opponentSkills,
+            skillIndex: i,
+            peer: this.peer,
+          });
+        }
       }
     }
   }

@@ -1,5 +1,5 @@
-import Fireball from "./Skills/Fireball";
 import isEqualArray from "../../utils/isEqualArray";
+import Fireball from "./Skills/Fireball";
 
 const mixinSetActionListener = {
   skillCommands: [],
@@ -28,19 +28,27 @@ const mixinSetActionListener = {
     if (inputtedCommand.length === 1) {
       switch (inputtedCommand[0]) {
         case "left":
-          peer.send("moveBack");
+          peer.send(
+            JSON.stringify({ action: "moveBack" })
+          );
           player.moveLeft();
           break;
         case "right":
-          peer.send("moveFront");
+          peer.send(
+            JSON.stringify({ action: "moveFront" })
+          );
           player.moveRight();
           break;
         case "up":
-          peer.send("moveUp");
+          peer.send(
+            JSON.stringify({ action: "moveUp" })
+          );
           player.moveUp();
           break;
         case "down":
-          peer.send("moveDown");
+          peer.send(
+            JSON.stringify({ action: "moveDown" })
+          );
           player.moveDown();
           break;
         default:
@@ -65,12 +73,16 @@ const mixinSetActionListener = {
 
   listenOpponentAction({
     container,
-    opponentSkills,
     opponent,
+    opponentSkills,
+    opponentStatusBar,
+    playerSkills,
     peer,
   }) {
-    peer.on("data", (action) => {
-      switch (action) {
+    peer.on("data", (data) => {
+      const opponentAction = JSON.parse(data);
+
+      switch (opponentAction.action) {
         case "moveFront":
           opponent.moveLeft();
           break;
@@ -82,6 +94,14 @@ const mixinSetActionListener = {
           break;
         case "moveDown":
           opponent.moveDown();
+          break;
+        case "beHit":
+          this.hitPlayer({
+            player: opponent,
+            playerStatusBar: opponentStatusBar,
+            opponentSkills: playerSkills,
+            skillIndex: opponentAction.skillIndex,
+          });
           break;
         case "fireball":
           this.createFireball({
@@ -97,15 +117,41 @@ const mixinSetActionListener = {
     });
   },
 
+  hitPlayer({
+    player,
+    playerStatusBar,
+    opponentSkills,
+    skillIndex,
+    peer = null,
+  }) {
+    const skill = opponentSkills[skillIndex];
+
+    if (skill.handleHit) {
+      skill.handleHit();
+    }
+    player.playBeHitMotion();
+
+    if (peer) {
+      peer.send(
+        JSON.stringify({
+          action: "beHit",
+          skillIndex,
+        })
+      );
+    }
+  },
+
   createFireball({
     player,
-    container,
+    peer = null,
     playerSkills,
-    peer = false,
     isHeadingToRight = true,
+    container,
   }) {
     if (peer) {
-      peer.send("fireball");
+      peer.send(
+        JSON.stringify({ action: "fireball" })
+      );
     }
 
     player.playAttackMotion();
