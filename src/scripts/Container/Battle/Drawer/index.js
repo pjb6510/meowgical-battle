@@ -200,4 +200,8 @@ export default class Drawer {
 
     this.arrowPosition = { ...this.arrowInitialPosition };
   }
+
+  terminateDrawing() {
+    this.canvas.interactive = false;
+  }
 }
