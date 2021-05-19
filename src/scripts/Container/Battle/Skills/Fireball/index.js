@@ -43,8 +43,6 @@ export default class Fireball extends Skill {
     this.handleHit = this.explode;
 
     this.damage = 15;
-
-    this.render();
   }
 
   createSprite() {
@@ -53,9 +51,6 @@ export default class Fireball extends Skill {
     );
 
     this.setSpriteProperties(this.sprite);
-
-    this.sprite.play();
-    this.move();
   }
 
   createExplosionSprite() {
@@ -93,10 +88,6 @@ export default class Fireball extends Skill {
       });
 
     tween.start();
-  }
-
-  render() {
-    this.container.addChild(this.sprite);
   }
 
   updateHitAreaRange() {
@@ -142,7 +133,7 @@ export default class Fireball extends Skill {
 
     const isHit = isXOverlap && isSameRowIndex;
 
-    this.isAbleHit = !(isHit);
+    this.isAbleToHit = !(isHit);
 
     return isHit;
   }
@@ -158,5 +149,15 @@ export default class Fireball extends Skill {
     this.explosionSprite.onComplete = () => {
       this.terminate();
     };
+  }
+
+  start() {
+    if (this.startCallback) {
+      this.startCallback(this);
+    }
+
+    this.container.addChild(this.sprite);
+    this.sprite.play();
+    this.move();
   }
 }

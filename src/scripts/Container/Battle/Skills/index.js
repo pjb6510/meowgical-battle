@@ -5,6 +5,7 @@ export default class Skill {
     x,
     y,
     rowIndex,
+    xOffset,
     isHeadingToRight = true,
     startCallback,
     terminationCallback,
@@ -16,8 +17,13 @@ export default class Skill {
     this.startCallback = startCallback;
     this.terminationCallback = terminationCallback;
 
+    this.xOffset = xOffset;
+    if (!isHeadingToRight) {
+      this.xOffset = -(this.xOffset);
+    }
+
     this.isTerminated = false;
-    this.isAbleHit = true;
+    this.isAbleToHit = true;
     this.damage = 0;
     this.anchor = null;
     this.animationSpeed = 0.4;
@@ -28,10 +34,6 @@ export default class Skill {
 
     this.container = new PIXI.Container();
     this.container.zIndex = this.rowIndex + this.skillZindexOffset;
-
-    if (this.startCallback) {
-      this.startCallback(this);
-    }
   }
 
   setSpriteProperties(sprite) {
