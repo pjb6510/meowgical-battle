@@ -47,21 +47,6 @@ export default class Fireball extends Skill {
     this.render();
   }
 
-  setSpriteProperties(sprite) {
-    if (!this.isHeadingToRight) {
-      sprite.scale.x *= -1;
-    }
-
-    sprite.x = this.x;
-    sprite.y = this.y;
-    sprite.anchor.set(
-      this.anchor.x,
-      this.anchor.y
-    );
-
-    sprite.animationSpeed = this.animationSpeed;
-  }
-
   createSprite() {
     this.sprite = new PIXI.AnimatedSprite(
       this.fireballTextures

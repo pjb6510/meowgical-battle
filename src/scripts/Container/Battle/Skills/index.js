@@ -19,6 +19,8 @@ export default class Skill {
     this.isTerminated = false;
     this.isAbleHit = true;
     this.damage = 0;
+    this.anchor = null;
+    this.animationSpeed = 0.4;
 
     this.handleHit = null;
 
@@ -30,6 +32,21 @@ export default class Skill {
     if (this.startCallback) {
       this.startCallback(this);
     }
+  }
+
+  setSpriteProperties(sprite) {
+    if (!this.isHeadingToRight) {
+      sprite.scale.x *= -1;
+    }
+
+    sprite.x = this.x;
+    sprite.y = this.y;
+    sprite.anchor.set(
+      this.anchor.x,
+      this.anchor.y
+    );
+
+    sprite.animationSpeed = this.animationSpeed;
   }
 
   terminate() {
