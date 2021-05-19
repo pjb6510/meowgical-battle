@@ -38,7 +38,6 @@ export default class App {
 
       globalStore.setStore("scene", new MainMenu(this.playerId));
 
-
       this.addTicker();
     } catch (err) {
       if (process.env.NODE_ENV !== "production") {
