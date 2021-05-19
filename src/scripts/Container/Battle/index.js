@@ -266,6 +266,8 @@ export default class Battle {
         this.returnToMainMenu.bind(this)
       );
     }
+
+    this.resultModal.container.zIndex = this.resultModalZIndex;
   }
 
   render() {
