@@ -32,8 +32,8 @@ export default class Portrait {
 
     this.normalSprite = null;
     this.beHitSprite = null;
-    this.createNormalPortrait();
-    this.createBeHitPortrait();
+    this.createNormalSprite();
+    this.createBeHitSprite();
 
     this.beHitDuration = 400;
 
@@ -49,13 +49,13 @@ export default class Portrait {
     sprite.filters = [new DropShadowFilter()];
   }
 
-  createNormalPortrait() {
+  createNormalSprite() {
     this.normalSprite = new PIXI.Sprite(this.portraitTexture);
 
     this.setSpriteProperties(this.normalSprite);
   }
 
-  createBeHitPortrait() {
+  createBeHitSprite() {
     this.beHitSprite = new PIXI.Sprite(this.beHitSpriteTexture);
 
     this.setSpriteProperties(this.beHitSprite);
@@ -65,15 +65,29 @@ export default class Portrait {
     this.container.addChild(this.normalSprite);
   }
 
-  beHit() {
+  changeToNormalSprite() {
+    this.container.removeChildren();
+    this.container.addChild(this.normalSprite);
+  }
+
+  changeToBeHitSprite() {
     this.container.removeChildren();
     this.container.addChild(this.beHitSprite);
+  }
+
+  beHit() {
+    this.changeToBeHitSprite();
 
     clearTimeout(this.beHitTimerId);
 
     this.beHitTimerId = setTimeout(() => {
-      this.container.removeChildren();
-      this.container.addChild(this.normalSprite);
+      this.changeToNormalSprite();
     }, this.beHitDuration);
+  }
+
+  defeat() {
+    clearTimeout(this.beHitTimerId);
+
+    this.changeToBeHitSprite();
   }
 }
