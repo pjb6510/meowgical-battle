@@ -1,12 +1,19 @@
 import * as PIXI from "pixi.js";
+
+import MainMenu from "../MainMenu";
 import Drawer from "./Drawer";
 import StatusBar from "./StatusBar";
 import TileGroup from "./TileGroup";
 import Player from "./Player";
 import Fireball from "./Skills/Fireball";
+import ResultModal from "./ResultModal";
+
 import globalStore from "../../globalStore";
+
 import { canvasSize } from "../../config";
+
 import isEqualArray from "../../utils/isEqualArray";
+import generateRandomString from "../../utils/generateRandomString";
 
 export default class Battle {
   constructor(isHost, peer) {
@@ -32,6 +39,10 @@ export default class Battle {
     this.playerOption = null;
     this.opponentOption = null;
     this.setPlayersOptions();
+
+    this.winModalOption = null;
+    this.defeatModalOption = null;
+    this.setResultModalOptions();
 
     this.backgroundZIndex = -10;
     this.drawerZIndex = 10;
@@ -62,6 +73,8 @@ export default class Battle {
 
     this.skillCommands = [];
     this.setSkillCommands();
+
+    this.isPlaying = true;
 
     this.render();
   }
@@ -186,6 +199,25 @@ export default class Battle {
     };
   }
 
+  setResultModalOptions() {
+    this.winModalOption = {
+      width: 600,
+      height: 400,
+      x: canvasSize.width / 2,
+      y: canvasSize.height / 2,
+      color: 0xffffff,
+      borderWidth: 10,
+      borderColor: 0x1e90ff,
+    };
+
+    this.defeatModalOption = {
+      ...this.winModalOption,
+      borderColor: 0xd11137,
+    };
+
+    this.resultModalZIndex = 100;
+  }
+
   createDrawer() {
     this.drawer = new Drawer(this.handleDraw.bind(this));
     this.drawer.container.zIndex = this.drawerZIndex;
@@ -218,6 +250,24 @@ export default class Battle {
 
   createOpponent() {
     this.opponent = new Player(this.opponentOption);
+  }
+
+  createWinModal() {
+    this.resultModal = new ResultModal(
+      this.winModalOption,
+      true,
+      this.returnToMainMenu.bind(this)
+    );
+    this.resultModal.zIndex = this.resultModalZIndex;
+  }
+
+  createDefeatModal() {
+    this.resultModal = new ResultModal(
+      this.defeatModalOption,
+      false,
+      this.returnToMainMenu.bind(this)
+    );
+    this.resultModal.zIndex = this.resultModalZIndex;
   }
 
   render() {
@@ -436,6 +486,40 @@ export default class Battle {
   }
 
   checkIsGameOver() {
+    const playerHp = this.playerStatusBar.hpBar.hpPercentage;
+    const opponentHp = this.opponentStatusBar.hpBar.hpPercentage;
 
+    if (playerHp <= 0 || opponentHp <= 0) {
+      this.terminateGame();
+
+      if (playerHp > 0) {
+        this.handleWin();
+      } else {
+        this.handleDefeated();
+      }
+    }
+  }
+
+  terminateGame() {
+    this.isPlaying = false;
+    this.drawer.terminateDrawing();
+  }
+
+  handleWin() {
+    this.createWinModal();
+    this.container.addChild(this.resultModal.container);
+  }
+
+  handleDefeated() {
+    this.createDefeatModal();
+    this.container.addChild(this.resultModal.container);
+  }
+
+  returnToMainMenu() {
+    this.peer.destroy();
+    globalStore.setStore(
+      "scene",
+      new MainMenu(generateRandomString())
+    );
   }
 }
