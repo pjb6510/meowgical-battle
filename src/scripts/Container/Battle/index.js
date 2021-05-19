@@ -6,6 +6,7 @@ import StatusBar from "./StatusBar";
 import TileGroup from "./TileGroup";
 import Player from "./Player";
 import Fireball from "./Skills/Fireball";
+import Lightning from "./Skills/Lightning";
 import ResultModal from "./ResultModal";
 
 import globalStore from "../../globalStore";
@@ -311,7 +312,15 @@ export default class Battle {
     this
       .addSkillCommand({
         command: ["right", "left", "right"],
-        useSkill: this.createFireball.bind(this),
+        useSkill:
+          this.castMagic.bind(
+            this,
+            {
+              isPlayer: true,
+              Skill: Fireball,
+              dataToSend: { action: "fireball" },
+            }
+          ),
       });
   }
 
@@ -357,12 +366,7 @@ export default class Battle {
         const { command, useSkill } = skillCommand;
 
         if (isEqualArray(inputtedCommand, command)) {
-          useSkill({
-            caster: this.player,
-            shouldSendAction: true,
-            startCallback: this.addPlayerSkill.bind(this),
-            terminationCallback: this.removePlayerSkill.bind(this),
-          });
+          useSkill();
         }
       }
     }
@@ -395,12 +399,9 @@ export default class Battle {
           });
           break;
         case "fireball":
-          this.createFireball({
-            caster: this.opponent,
-            isHeadingToRight: false,
-            shouldSendAction: false,
-            startCallback: this.addOpponentSkill.bind(this),
-            terminationCallback: this.removeOpponentSkill.bind(this),
+          this.castMagic({
+            isPlayer: false,
+            Skill: Fireball,
           });
           break;
         default:
@@ -435,26 +436,41 @@ export default class Battle {
     }
   }
 
-  createFireball({
-    caster,
-    isHeadingToRight = true,
-    shouldSendAction,
-    startCallback,
-    terminationCallback,
+  castMagic({
+    isPlayer,
+    Skill,
+    dataToSend = null,
   }) {
-    if (shouldSendAction) {
+    let caster;
+    let startCallback;
+    let terminationCallback;
+
+    if (isPlayer) {
+      caster = this.player;
+      startCallback = this.addPlayerSkill.bind(this);
+      terminationCallback = this.removePlayerSkill.bind(this);
+    } else {
+      caster = this.opponent;
+      startCallback = this.addOpponentSkill.bind(this);
+      terminationCallback = this.removeOpponentSkill.bind(this);
+    }
+
+    if (isPlayer) {
       this.peer.send(
-        JSON.stringify({ action: "fireball" })
+        JSON.stringify(dataToSend)
       );
     }
 
     caster.playAttackMotion();
 
-    new Fireball({
+    new Skill({
       x: caster.x,
       y: caster.y,
       rowIndex: caster.rowIndex,
-      isHeadingToRight,
+      xOffset:
+        (this.tileSize.width + this.tileGap) *
+          this.tileGroupSize.column,
+      isHeadingToRight: isPlayer,
       startCallback,
       terminationCallback,
     });
@@ -498,6 +514,8 @@ export default class Battle {
     this.isPlaying = false;
     this.drawer.terminateDrawing();
 
+    this.peer.destroy();
+
     this.createResultModal(isWin);
     this.container.addChild(this.resultModal.container);
 
@@ -513,7 +531,6 @@ export default class Battle {
   }
 
   returnToMainMenu() {
-    this.peer.destroy();
     globalStore.setStore(
       "scene",
       new MainMenu(generateRandomString())
