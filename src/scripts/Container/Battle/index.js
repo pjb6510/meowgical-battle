@@ -1,19 +1,13 @@
 import * as PIXI from "pixi.js";
-
-import MainMenu from "../MainMenu";
 import Drawer from "./Drawer";
+import SkillCommandListener from "./SkillCommandListener";
+import MainMenu from "../MainMenu";
 import StatusBar from "./StatusBar";
 import TileGroup from "./TileGroup";
 import Player from "./Player";
-import Fireball from "./Skills/Fireball";
-import Lightning from "./Skills/Lightning";
 import ResultModal from "./ResultModal";
-
-import globalStore from "../../globalStore";
-
 import { canvasSize } from "../../config";
-
-import isEqualArray from "../../utils/isEqualArray";
+import globalStore from "../../globalStore";
 import generateRandomString from "../../utils/generateRandomString";
 
 export default class Battle {
@@ -48,7 +42,11 @@ export default class Battle {
     this.backgroundZIndex = -10;
     this.drawerZIndex = 10;
 
+    this.skillCommandListener = null;
+    this.createSkillCommandListener();
     this.drawer = null;
+    this.createDrawer();
+
     this.background = null;
     this.playerStatusBar = null;
     this.opponentStatusBar = null;
@@ -56,7 +54,6 @@ export default class Battle {
     this.opponentTileGroup = null;
     this.player = null;
     this.opponent = null;
-    this.createDrawer();
     this.createBackground();
     this.createPlayerStatusBar();
     this.createOpponentStatusBar();
@@ -65,14 +62,12 @@ export default class Battle {
     this.createPlayer();
     this.createOpponent();
 
-    this.playerSkills = {};
-    this.nextPlayerSkillIndex = 0;
-    this.opponentSkills = {};
-    this.nextOpponentSkillIndex = 0;
+    this.playerMagics = {};
+    this.nextPlayerMagicIndex = 0;
+    this.opponentMagics = {};
+    this.nextOpponentMagicIndex = 0;
 
     this.listenOpponentAction();
-
-    this.skillCommands = [];
     this.setSkillCommands();
 
     this.isPlaying = true;
@@ -185,6 +180,10 @@ export default class Battle {
       rowRange: this.tileGroupSize.row,
       xMovingDistance: this.tileSize.width + this.tileGap,
       yMovingDistance: this.tileSize.height + this.tileGap,
+      actionCallback: this.sendPlayerAction.bind(this),
+      beHitCallback: this.collideMagicWithPlayer.bind(this),
+      skillStartCallback: this.addPlayerSkill.bind(this),
+      skillTerminationCallback: this.removePlayerSkill.bind(this),
     };
     this.opponentOption = {
       isHost: !this.isHost,
@@ -197,6 +196,9 @@ export default class Battle {
       rowRange: this.tileGroupSize.row,
       xMovingDistance: this.tileSize.width + this.tileGap,
       yMovingDistance: this.tileSize.height + this.tileGap,
+      beHitCallback: this.collideMagicWithOpponent.bind(this),
+      skillStartCallback: this.addOpponentSkill.bind(this),
+      skillTerminationCallback: this.removeOpponentSkill.bind(this),
     };
   }
 
@@ -219,8 +221,16 @@ export default class Battle {
     this.resultModalZIndex = 100;
   }
 
+  createSkillCommandListener() {
+    this.skillCommandListener = new SkillCommandListener();
+  }
+
   createDrawer() {
-    this.drawer = new Drawer(this.handleDraw.bind(this));
+    this.drawer = new Drawer(
+      this.skillCommandListener.handleCommandListen.bind(
+        this.skillCommandListener
+      )
+    );
     this.drawer.container.zIndex = this.drawerZIndex;
   }
 
@@ -284,92 +294,52 @@ export default class Battle {
     );
   }
 
-  addPlayerSkill(skill) {
-    this.container.addChild(skill.container);
-    skill.skillIndex = this.nextPlayerSkillIndex;
-    this.playerSkills[this.nextPlayerSkillIndex] = skill;
-    this.nextPlayerSkillIndex += 1;
+  addPlayerSkill(magic) {
+    this.container.addChild(magic.container);
+    magic.magicIndex = this.nextPlayerMagicIndex;
+    this.playerMagics[this.nextPlayerMagicIndex] = magic;
+    this.nextPlayerMagicIndex += 1;
   }
 
-  addOpponentSkill(skill) {
-    this.container.addChild(skill.container);
-    skill.skillIndex = this.nextOpponentSkillIndex;
-    this.opponentSkills[this.nextOpponentSkillIndex] = skill;
-    this.nextOpponentSkillIndex += 1;
+  addOpponentSkill(magic) {
+    this.container.addChild(magic.container);
+    magic.magicIndex = this.nextOpponentMagicIndex;
+    this.opponentMagics[this.nextOpponentMagicIndex] = magic;
+    this.nextOpponentMagicIndex += 1;
   }
 
-  removePlayerSkill(skill) {
-    this.container.removeChild(skill.container);
-    delete this.playerSkills[skill.skillIndex];
+  removePlayerSkill(magic) {
+    this.container.removeChild(magic.container);
+    delete this.playerMagics[magic.magicIndex];
   }
 
-  removeOpponentSkill(skill) {
-    this.container.removeChild(skill.container);
-    delete this.opponentSkills[skill.skillIndex];
+  removeOpponentSkill(magic) {
+    this.container.removeChild(magic.container);
+    delete this.opponentMagics[magic.magicIndex];
   }
 
   setSkillCommands() {
-    this
+    this.skillCommandListener
+      .addSkillCommand({
+        command: ["left"],
+        skill: this.player.moveLeft.bind(this.player),
+      })
+      .addSkillCommand({
+        command: ["right"],
+        skill: this.player.moveRight.bind(this.player),
+      })
+      .addSkillCommand({
+        command: ["up"],
+        skill: this.player.moveUp.bind(this.player),
+      })
+      .addSkillCommand({
+        command: ["down"],
+        skill: this.player.moveDown.bind(this.player),
+      })
       .addSkillCommand({
         command: ["right", "left", "right"],
-        useSkill:
-          this.castMagic.bind(
-            this,
-            {
-              isPlayer: true,
-              Skill: Fireball,
-              dataToSend: { action: "fireball" },
-            }
-          ),
+        skill: this.player.castFireball.bind(this.player),
       });
-  }
-
-  addSkillCommand(skillInfo) {
-    this.skillCommands.push(skillInfo);
-
-    return this;
-  }
-
-  handleDraw(inputtedCommand) {
-    if (inputtedCommand.length === 1) {
-      switch (inputtedCommand[0]) {
-        case "left":
-          this.peer.send(
-            JSON.stringify({ action: "moveBack" })
-          );
-          this.player.moveLeft();
-          break;
-        case "right":
-          this.peer.send(
-            JSON.stringify({ action: "moveFront" })
-          );
-          this.player.moveRight();
-          break;
-        case "up":
-          this.peer.send(
-            JSON.stringify({ action: "moveUp" })
-          );
-          this.player.moveUp();
-          break;
-        case "down":
-          this.peer.send(
-            JSON.stringify({ action: "moveDown" })
-          );
-          this.player.moveDown();
-          break;
-        default:
-          break;
-      }
-    } else {
-      for (let i = 0; i < this.skillCommands.length; i += 1) {
-        const skillCommand = this.skillCommands[i];
-        const { command, useSkill } = skillCommand;
-
-        if (isEqualArray(inputtedCommand, command)) {
-          useSkill();
-        }
-      }
-    }
   }
 
   listenOpponentAction() {
@@ -390,19 +360,12 @@ export default class Battle {
           this.opponent.moveDown();
           break;
         case "beHit":
-          this.hitPlayer({
-            toBeHitPlayer: this.opponent,
-            toBeHitPlayerStatusBar: this.opponentStatusBar,
-            hittingPlayerSkills: this.playerSkills,
-            skillIndex: opponentAction.skillIndex,
-            shouldSendAction: false,
-          });
+          this.opponent.beHit(
+            this.playerMagics[opponentAction.magicIndex]
+          );
           break;
         case "fireball":
-          this.castMagic({
-            isPlayer: false,
-            Skill: Fireball,
-          });
+          this.opponent.castFireball();
           break;
         default:
           break;
@@ -410,100 +373,50 @@ export default class Battle {
     });
   }
 
-  hitPlayer({
-    toBeHitPlayer,
-    toBeHitPlayerStatusBar,
-    hittingPlayerSkills,
-    skillIndex,
-    shouldSendAction,
-  }) {
-    const skill = hittingPlayerSkills[skillIndex];
-
-    if (skill.handleHit) {
-      skill.handleHit();
+  collideMagicWithPlayer(hittingMagic) {
+    if (hittingMagic.handleHit) {
+      hittingMagic.handleHit();
     }
 
-    toBeHitPlayer.playBeHitMotion();
-    toBeHitPlayerStatusBar.beHit(skill.damage);
-
-    if (shouldSendAction) {
-      this.peer.send(
-        JSON.stringify({
-          action: "beHit",
-          skillIndex,
-        })
-      );
-    }
+    this.playerStatusBar.beHit(hittingMagic.damage);
   }
 
-  castMagic({
-    isPlayer,
-    Skill,
-    dataToSend = null,
-  }) {
-    let caster;
-    let startCallback;
-    let terminationCallback;
-
-    if (isPlayer) {
-      caster = this.player;
-      startCallback = this.addPlayerSkill.bind(this);
-      terminationCallback = this.removePlayerSkill.bind(this);
-    } else {
-      caster = this.opponent;
-      startCallback = this.addOpponentSkill.bind(this);
-      terminationCallback = this.removeOpponentSkill.bind(this);
+  collideMagicWithOpponent(hittingMagic) {
+    if (hittingMagic.handleHit) {
+      hittingMagic.handleHit();
     }
 
-    if (isPlayer) {
-      this.peer.send(
-        JSON.stringify(dataToSend)
-      );
-    }
+    this.opponentStatusBar.beHit(hittingMagic.damage);
+  }
 
-    caster.playAttackMotion();
-
-    new Skill({
-      x: caster.x,
-      y: caster.y,
-      rowIndex: caster.rowIndex,
-      xOffset:
-        (this.tileSize.width + this.tileGap) *
-          this.tileGroupSize.column,
-      isHeadingToRight: isPlayer,
-      startCallback,
-      terminationCallback,
-    });
+  sendPlayerAction(data) {
+    this.peer.send(
+      JSON.stringify(data)
+    );
   }
 
   update() {
     this.checkIsGameOver();
-    this.checkIsSkillHit();
+    this.checkIsPlayerHit();
   }
 
-  checkIsSkillHit() {
-    for (const skillIndex in this.opponentSkills) {
-      const skill = this.opponentSkills[skillIndex];
+  checkIsPlayerHit() {
+    for (const magicIndex in this.opponentMagics) {
+      const skill = this.opponentMagics[magicIndex];
 
-      if (skill.checkIsHit && skill.isAbleHit) {
+      if (skill.checkIsHit && skill.isAbleToHit) {
         const isHit = skill.checkIsHit(this.player);
 
         if (isHit) {
-          this.hitPlayer({
-            toBeHitPlayer: this.player,
-            toBeHitPlayerStatusBar: this.playerStatusBar,
-            hittingPlayerSkills: this.opponentSkills,
-            skillIndex,
-            shouldSendAction: true,
-          });
+          this.player.beHit(skill);
         }
       }
     }
   }
 
   checkIsGameOver() {
-    const playerHp = this.playerStatusBar.hpBar.hpPercentage;
-    const opponentHp = this.opponentStatusBar.hpBar.hpPercentage;
+    const playerHp = this.player.hp;
+    const opponentHp = this.opponent.hp;
 
     if (playerHp <= 0 || opponentHp <= 0) {
       this.terminateGame(playerHp > 0);
@@ -522,11 +435,11 @@ export default class Battle {
     if (isWin) {
       this.opponentStatusBar.portrait.defeat();
       this.player.win();
-      this.opponent.defeat();
+      this.opponent.beDefeated();
     } else {
       this.playerStatusBar.portrait.defeat();
       this.opponent.win();
-      this.player.defeat();
+      this.player.beDefeated();
     }
   }
 

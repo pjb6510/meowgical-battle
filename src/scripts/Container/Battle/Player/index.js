@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js";
 import Tween from "@tweenjs/tween.js";
 import globalStore from "../../../globalStore";
+import Fireball from "../Skills/Fireball";
 
 export default class Player {
   constructor({
@@ -14,6 +15,10 @@ export default class Player {
     rowRange,
     xMovingDistance,
     yMovingDistance,
+    actionCallback = null,
+    beHitCallback,
+    skillStartCallback,
+    skillTerminationCallback,
   }) {
     this.x = x;
     this.y = y;
@@ -25,6 +30,10 @@ export default class Player {
     this.rowRange = rowRange;
     this.xMovingDistance = xMovingDistance;
     this.yMovingDistance = yMovingDistance;
+    this.actionCallback = actionCallback;
+    this.beHitCallback = beHitCallback;
+    this.skillStartCallback = skillStartCallback;
+    this.skillTerminationCallback = skillTerminationCallback;
 
     this.playerTextures = null;
     this.loadPlayerTexture();
@@ -44,6 +53,7 @@ export default class Player {
     this.xHitAreaRange = null;
     this.updateHitAreaRange();
 
+    this.hp = 100;
     this.isOver = false;
 
     this.normalSprite = null;
@@ -168,6 +178,32 @@ export default class Player {
       return;
     }
 
+    if (this.actionCallback) {
+      let action = "";
+
+      if (axis === "x" && positionIncrease === 1) {
+        if (this.isHeadingToRight) {
+          action = "moveFront";
+        } else {
+          action = "moveBack";
+        }
+      } else if (axis === "x" && positionIncrease === -1) {
+        if (this.isHeadingToRight) {
+          action = "moveBack";
+        } else {
+          action = "moveFront";
+        }
+      } else {
+        if (axis === "y" && positionIncrease === 1) {
+          action = "moveDown";
+        } else {
+          action = "moveUp";
+        }
+      }
+
+      this.actionCallback({ action });
+    }
+
     const tween = new Tween.Tween(this.normalSprite);
 
     tween
@@ -275,8 +311,42 @@ export default class Player {
     this.playMotion(this.attackMotionSprite);
   }
 
+  castFireball() {
+    if (this.actionCallback) {
+      this.actionCallback({ action: "fireball" });
+    }
+
+    this.playAttackMotion();
+
+    const fireball = new Fireball({
+      x: this.x,
+      y: this.y,
+      rowIndex: this.rowIndex,
+      xOffset: this.xMovingDistance * this.columnRange,
+      isHeadingToRight: this.isHeadingToRight,
+      startCallback: this.skillStartCallback,
+      terminationCallback: this.skillTerminationCallback,
+    });
+
+    fireball.start();
+  }
+
   playBeHitMotion() {
     this.playMotion(this.beHitMotionSprite);
+  }
+
+  beHit(hittingMagic) {
+    if (this.actionCallback) {
+      this.actionCallback({
+        action: "beHit",
+        magicIndex: hittingMagic.magicIndex,
+      });
+    }
+
+    this.hp -= hittingMagic.damage;
+
+    this.playBeHitMotion();
+    this.beHitCallback(hittingMagic);
   }
 
   win() {
@@ -289,7 +359,7 @@ export default class Player {
     this.container.addChild(this.winSprite);
   }
 
-  defeat() {
+  beDefeated() {
     this.isOver = true;
 
     this.defeatSprite.x = this.x;
