@@ -355,6 +355,10 @@ export default class Battle {
       .addSkillCommand({
         command: ["right", "left", "right"],
         skill: this.player.castFireball.bind(this.player),
+      })
+      .addSkillCommand({
+        command: ["down", "left", "right", "left", "down"],
+        skill: this.player.castLightning.bind(this.player),
       });
   }
 
@@ -382,6 +386,9 @@ export default class Battle {
           break;
         case "fireball":
           this.opponent.castFireball();
+          break;
+        case "lightning":
+          this.opponent.castLightning();
           break;
         default:
           break;

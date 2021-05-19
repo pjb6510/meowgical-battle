@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import Tween from "@tweenjs/tween.js";
 import globalStore from "../../../globalStore";
 import Fireball from "../Skills/Fireball";
+import Lightning from "../Magics/Lightning";
 
 export default class Player {
   constructor({
@@ -322,6 +323,7 @@ export default class Player {
       x: this.x,
       y: this.y,
       rowIndex: this.rowIndex,
+      columnIndex: this.columnIndex,
       xOffset: this.xMovingDistance * this.columnRange,
       isHeadingToRight: this.isHeadingToRight,
       startCallback: this.magicStartCallback,
@@ -329,6 +331,27 @@ export default class Player {
     });
 
     fireball.start();
+  }
+
+  castLightning() {
+    if (this.actionCallback) {
+      this.actionCallback({ action: "lightning" });
+    }
+
+    this.playAttackMotion();
+
+    const lightning = new Lightning({
+      x: this.x,
+      y: this.y,
+      rowIndex: this.rowIndex,
+      columnIndex: this.columnIndex,
+      xOffset: this.xMovingDistance * this.columnRange,
+      isHeadingToRight: this.isHeadingToRight,
+      startCallback: this.magicStartCallback,
+      terminationCallback: this.magicTerminationCallback,
+    });
+
+    lightning.start();
   }
 
   playBeHitMotion() {

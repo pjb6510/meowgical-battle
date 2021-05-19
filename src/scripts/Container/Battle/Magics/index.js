@@ -4,6 +4,7 @@ export default class Magic {
   constructor({
     x,
     y,
+    columnIndex,
     rowIndex,
     xOffset,
     isHeadingToRight = true,
@@ -12,6 +13,7 @@ export default class Magic {
   }) {
     this.x = x;
     this.y = y;
+    this.columnIndex = columnIndex;
     this.rowIndex = rowIndex;
     this.isHeadingToRight = isHeadingToRight;
     this.startCallback = startCallback;
@@ -22,6 +24,7 @@ export default class Magic {
       this.xOffset = -(this.xOffset);
     }
 
+    this.magicIndex = -1;
     this.isTerminated = false;
     this.isAbleToHit = true;
     this.damage = 0;
@@ -55,5 +58,11 @@ export default class Magic {
     this.isTerminated = true;
 
     this.terminationCallback(this);
+  }
+
+  start() {
+    if (this.startCallback) {
+      this.startCallback(this);
+    }
   }
 }

@@ -31,6 +31,9 @@ const loaderConfig = {
   fireballExplosion1: "assets/images/effects/fireball/fireballExplosion-1.json",
   fireballExplosion2: "assets/images/effects/fireball/fireballExplosion-2.json",
   fireballExplosion3: "assets/images/effects/fireball/fireballExplosion-3.json",
+
+  lightning1: "assets/images/effects/lightning/lightning1.json",
+  lightning2: "assets/images/effects/lightning/lightning2.json",
 };
 
 export default loaderConfig;
