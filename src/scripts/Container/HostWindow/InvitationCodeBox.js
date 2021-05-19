@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import createBox from "../../pixiUtils/createBox";
 import { canvasSize } from "../../config";
 import createButton from "../../pixiUtils/createButton";
+import copyToClipboard from "../../utils/copyToClipboard";
 
 export default class InvitationCodeBox {
   constructor(playerId) {
@@ -60,7 +61,13 @@ export default class InvitationCodeBox {
     this.invitationCode.y = canvasSize.height / 2;
 
     const handleCopyButtonClick = () => {
-      navigator.clipboard.writeText(this.playerId);
+      try {
+        copyToClipboard(this.playerId);
+      } catch (err) {
+        if (process.env.NODE_ENV !== "production") {
+          console.error(err);
+        }
+      }
     };
 
     this.copyButton = createButton(
