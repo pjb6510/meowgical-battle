@@ -16,13 +16,7 @@ export default class App {
     this.battleScene = null;
     this.playerId = generateRandomString();
 
-    globalStore.subscribe((newStore) => {
-      const { scene: newScene } = newStore;
-
-      if (newScene && this.currentScene !== newScene) {
-        this.changeScene(newScene);
-      }
-    });
+    this.subscribeScene();
   }
 
   async run() {
@@ -33,28 +27,54 @@ export default class App {
         backgroundColor: 0xeeeeee,
       });
 
+      this.app.stage.sortableChildren = true;
+
       const $container = document.querySelector(".container");
-
-      this.app.view.addEventListener("contextmenu", (e) => {
-        e.preventDefault();
-      });
-
       $container.appendChild(this.app.view);
+
+      this.restrictMouseRightClick();
 
       await this.loading();
 
       globalStore.setStore("scene", new MainMenu(this.playerId));
 
-      this.app.ticker.add((delta) => {
-        Tween.update();
 
-        if (this.battleScene) {
-          this.battleScene.update();
-        }
-      });
+      this.addTicker();
     } catch (err) {
-      console.error(err);
+      if (process.env.NODE_ENV !== "production") {
+        console.error(err);
+      }
     }
+  }
+
+  addTicker() {
+    this.app.ticker.add((delta) => {
+      Tween.update();
+
+      if (this.battleScene && this.battleScene.isPlaying) {
+        this.battleScene.update();
+      }
+    });
+  }
+
+  restrictMouseRightClick() {
+    this.app.view.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+    });
+  }
+
+  subscribeScene() {
+    globalStore.subscribe((newStore) => {
+      const { scene: newScene } = newStore;
+
+      if (newScene && this.currentScene !== newScene) {
+        if (this.currentScene instanceof Battle) {
+          this.battleScene = null;
+        }
+
+        this.changeScene(newScene);
+      }
+    });
   }
 
   async loading() {
