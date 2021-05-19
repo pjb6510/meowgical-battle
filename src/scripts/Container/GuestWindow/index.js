@@ -111,15 +111,21 @@ export default class GuestWindow {
     });
 
     this.peer.on("error", (err) => {
-      console.error(err);
+      if (process.env.NODE_ENV !== "production") {
+        console.error(err);
+      }
     });
 
     this.peer.on("connect", () => {
-      console.log("connect complete");
+      if (process.env.NODE_ENV !== "production") {
+        console.log("connect complete");
+      }
     });
 
     this.peer.on("signal", (guestSignal) => {
-      console.log("guest signal", guestSignal);
+      if (process.env.NODE_ENV !== "production") {
+        console.log("guest signal", guestSignal);
+      }
 
       socket.broadcastAction({
         action: broadcastedActions.SEND_PEER,
@@ -129,7 +135,9 @@ export default class GuestWindow {
     });
 
     this.peer.signal(receivedSignal);
-    console.log("guest recive", receivedSignal);
+    if (process.env.NODE_ENV !== "production") {
+      console.log("guest recive", receivedSignal);
+    }
   }
 
   startGame() {

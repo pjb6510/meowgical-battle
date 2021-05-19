@@ -159,7 +159,10 @@ export default class HostWindow {
     });
 
     this.peer.on("error", (err) => {
-      console.error(err);
+      if (process.env.NODE_ENV !== "production") {
+        console.error(err);
+      }
+
       this.sendPeerSignal();
     });
 
@@ -168,7 +171,9 @@ export default class HostWindow {
     });
 
     this.peer.on("signal", (hostSignal) => {
-      console.log("host signal", hostSignal);
+      if (process.env.NODE_ENV !== "production") {
+        console.log("host signal", hostSignal);
+      }
 
       socket.broadcastAction({
         action: broadcastedActions.SEND_PEER,
@@ -179,7 +184,9 @@ export default class HostWindow {
   }
 
   receivePeerSignal(receivedSignal) {
-    console.log("host receive", receivedSignal);
+    if (process.env.NODE_ENV !== "production") {
+      console.log("host receive", receivedSignal);
+    }
 
     this.peer.signal(receivedSignal);
   }
