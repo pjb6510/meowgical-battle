@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 import Tween from "@tweenjs/tween.js";
-import Magic from "../";
+import Magic from "..";
 import globalStore from "../../../../globalStore";
 import { canvasSize } from "../../../../config";
 
