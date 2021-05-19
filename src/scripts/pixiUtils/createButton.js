@@ -9,7 +9,10 @@ const createButton = (boxOption, text, textOption, onClick) => {
   const buttonBox = createBox(boxOption);
   buttonBox.interactive = true;
   buttonBox.buttonMode = true;
-  buttonBox.on("pointerdown", onClick);
+
+  if (onClick) {
+    buttonBox.on("pointerdown", onClick);
+  }
 
   const buttonText = new PIXI.Text(text, textOption);
   buttonText.anchor.set(0.5, 0.5);
