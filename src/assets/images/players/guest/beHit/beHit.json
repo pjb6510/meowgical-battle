@@ -1,6 +1,6 @@
 {
 	"frames": {
-		"beHit_01.png": {
+		"guestPlayerBeHit_01.png": {
 			"frame": {
 				"x": 1,
 				"y": 637,
@@ -20,7 +20,7 @@
 				"h": 828
 			}
 		},
-		"beHit_02.png": {
+		"guestPlayerBeHit_02.png": {
 			"frame": {
 				"x": 1,
 				"y": 1,
@@ -42,9 +42,9 @@
 		}
 	},
 	"animations": {
-		"beHit": [
-			"beHit_01.png",
-			"beHit_02.png"
+		"guestPlayerBeHit": [
+			"guestPlayerBeHit_01.png",
+			"guestPlayerBeHit_02.png"
 		]
 	},
 	"meta": {

@@ -1,6 +1,6 @@
 {
 	"frames": {
-		"attack_01.png": {
+		"guestPlayerAttack_01.png": {
 			"frame": {
 				"x": 0,
 				"y": 0,
@@ -20,7 +20,7 @@
 				"h": 828
 			}
 		},
-		"attack_02.png": {
+		"guestPlayerAttack_02.png": {
 			"frame": {
 				"x": 828,
 				"y": 0,
@@ -40,7 +40,7 @@
 				"h": 828
 			}
 		},
-		"attack_03.png": {
+		"guestPlayerAttack_03.png": {
 			"frame": {
 				"x": 0,
 				"y": 828,
@@ -62,10 +62,10 @@
 		}
 	},
 	"animations": {
-		"attack": [
-			"attack_01.png",
-			"attack_02.png",
-			"attack_03.png"
+		"guestPlayerAttack": [
+			"guestPlayerAttack_01.png",
+			"guestPlayerAttack_02.png",
+			"guestPlayerAttack_03.png"
 		]
 	},
 	"meta": {
