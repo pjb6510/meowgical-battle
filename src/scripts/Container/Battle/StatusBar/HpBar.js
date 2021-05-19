@@ -24,6 +24,7 @@ export default class HpBar {
       pivotX: this.hpBarLength / 2,
       hasShadow: true,
     };
+
     this.hpBarOption = {
       x: this.x,
       y: this.y,
@@ -34,6 +35,8 @@ export default class HpBar {
       pivotX: this.hpBarLength / 2,
       hasShadow: false,
     };
+
+    this.hpPercentageMin = 0;
 
     this.hpBarBackground = null;
     this.hpBar = null;
@@ -68,7 +71,12 @@ export default class HpBar {
   }
 
   renewHp(newHpPercentage) {
-    this.hpPercentage = newHpPercentage;
+    if (newHpPercentage < this.hpPercentageMin) {
+      this.hpPercentage = this.hpPercentageMin;
+    } else {
+      this.hpPercentage = newHpPercentage;
+    }
+
     this.container.removeChild(this.hpBar);
     this.createHpBar();
     this.container.addChild(this.hpBar);

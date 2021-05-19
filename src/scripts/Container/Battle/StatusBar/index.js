@@ -44,11 +44,7 @@ export default class StatusBar {
   }
 
   beHit(damage) {
-    let newHp = this.hpBar.hpPercentage - damage;
-
-    if (newHp < 0) {
-      newHp = 0;
-    }
+    const newHp = this.hpBar.hpPercentage - damage;
 
     this.hpBar.renewHp(newHp);
     this.portrait.beHit();
