@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import createBox from "./createBox";
 
-const createButton = (boxOption, text, textOption, onClick) => {
+const createButton = (boxOption, textContent, textOption, handleClick) => {
   const { x, y } = boxOption;
 
   const container = new PIXI.Container();
@@ -10,11 +10,11 @@ const createButton = (boxOption, text, textOption, onClick) => {
   buttonBox.interactive = true;
   buttonBox.buttonMode = true;
 
-  if (onClick) {
-    buttonBox.on("pointerdown", onClick);
+  if (handleClick) {
+    buttonBox.on("pointerdown", handleClick);
   }
 
-  const buttonText = new PIXI.Text(text, textOption);
+  const buttonText = new PIXI.Text(textContent, textOption);
   buttonText.anchor.set(0.5, 0.5);
   buttonText.x = x;
   buttonText.y = y;
