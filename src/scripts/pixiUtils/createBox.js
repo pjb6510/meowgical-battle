@@ -7,6 +7,7 @@ const createBox = ({
   x,
   y,
   color,
+  alpha = 1,
   radius = 20,
   borderWidth = 0,
   borderColor = 0x000000,
@@ -25,7 +26,7 @@ const createBox = ({
       borderAlpha,
       borderAlignment
     )
-    .beginFill(color)
+    .beginFill(color, alpha)
     .drawRoundedRect(
       x,
       y,
