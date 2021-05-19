@@ -44,10 +44,16 @@ export default class Player {
     this.xHitAreaRange = null;
     this.updateHitAreaRange();
 
+    this.isOver = false;
+
     this.normalSprite = null;
+    this.winSprite = null;
+    this.defeatSprite = null;
     this.attackMotionSprite = null;
     this.beHitMotionSprite = null;
     this.createNormalSprite();
+    this.createWinSprite();
+    this.createDefeatSprite();
     this.createAttackMotionSprite();
     this.createBeHitMotionSprite();
 
@@ -60,6 +66,8 @@ export default class Player {
         hostPlayer,
         hostPlayerMoveFront,
         hostPlayerMoveBack,
+        hostPlayerWin,
+        hostPlayerDefeat,
         hostPlayerAttackMotion,
         hostPlayerBeHitMotion,
       } = globalStore.getItem("resources");
@@ -68,6 +76,8 @@ export default class Player {
         normal: hostPlayer.texture,
         moveFront: hostPlayerMoveFront.texture,
         moveBack: hostPlayerMoveBack.texture,
+        win: hostPlayerWin.texture,
+        defeat: hostPlayerDefeat.texture,
         attackMotion: Object.values(hostPlayerAttackMotion.textures),
         beHitMotion: Object.values(hostPlayerBeHitMotion.textures),
       };
@@ -76,6 +86,8 @@ export default class Player {
         guestPlayer,
         guestPlayerMoveFront,
         guestPlayerMoveBack,
+        guestPlayerWin,
+        guestPlayerDefeat,
         guestPlayerAttackMotion,
         guestPlayerBeHitMotion,
       } = globalStore.getItem("resources");
@@ -84,6 +96,8 @@ export default class Player {
         normal: guestPlayer.texture,
         moveFront: guestPlayerMoveFront.texture,
         moveBack: guestPlayerMoveBack.texture,
+        win: guestPlayerWin.texture,
+        defeat: guestPlayerDefeat.texture,
         attackMotion: Object.values(guestPlayerAttackMotion.textures),
         beHitMotion: Object.values(guestPlayerBeHitMotion.textures),
       };
@@ -107,6 +121,16 @@ export default class Player {
   createNormalSprite() {
     this.normalSprite = new PIXI.Sprite(this.playerTextures.normal);
     this.setSpriteProperties(this.normalSprite);
+  }
+
+  createWinSprite() {
+    this.winSprite = new PIXI.Sprite(this.playerTextures.win);
+    this.setSpriteProperties(this.winSprite);
+  }
+
+  createDefeatSprite() {
+    this.defeatSprite = new PIXI.Sprite(this.playerTextures.defeat);
+    this.setSpriteProperties(this.defeatSprite);
   }
 
   createAttackMotionSprite() {
@@ -240,8 +264,10 @@ export default class Player {
 
     motionSprite.gotoAndPlay(0);
     motionSprite.onComplete = () => {
-      this.container.removeChild(motionSprite);
-      this.container.addChild(this.normalSprite);
+      if (!this.isOver) {
+        this.container.removeChild(motionSprite);
+        this.container.addChild(this.normalSprite);
+      }
     };
   }
 
@@ -251,5 +277,25 @@ export default class Player {
 
   playBeHitMotion() {
     this.playMotion(this.beHitMotionSprite);
+  }
+
+  win() {
+    this.isOver = true;
+
+    this.winSprite.x = this.x;
+    this.winSprite.y = this.y;
+
+    this.container.removeChildren();
+    this.container.addChild(this.winSprite);
+  }
+
+  defeat() {
+    this.isOver = true;
+
+    this.defeatSprite.x = this.x;
+    this.defeatSprite.y = this.y;
+
+    this.container.removeChildren();
+    this.container.addChild(this.defeatSprite);
   }
 }

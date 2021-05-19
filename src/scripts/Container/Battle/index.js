@@ -252,22 +252,20 @@ export default class Battle {
     this.opponent = new Player(this.opponentOption);
   }
 
-  createWinModal() {
-    this.resultModal = new ResultModal(
-      this.winModalOption,
-      true,
-      this.returnToMainMenu.bind(this)
-    );
-    this.resultModal.zIndex = this.resultModalZIndex;
-  }
-
-  createDefeatModal() {
-    this.resultModal = new ResultModal(
-      this.defeatModalOption,
-      false,
-      this.returnToMainMenu.bind(this)
-    );
-    this.resultModal.zIndex = this.resultModalZIndex;
+  createResultModal(isWin) {
+    if (isWin) {
+      this.resultModal = new ResultModal(
+        this.winModalOption,
+        true,
+        this.returnToMainMenu.bind(this)
+      );
+    } else {
+      this.resultModal = new ResultModal(
+        this.defeatModalOption,
+        false,
+        this.returnToMainMenu.bind(this)
+      );
+    }
   }
 
   render() {
@@ -490,29 +488,26 @@ export default class Battle {
     const opponentHp = this.opponentStatusBar.hpBar.hpPercentage;
 
     if (playerHp <= 0 || opponentHp <= 0) {
-      this.terminateGame();
-
-      if (playerHp > 0) {
-        this.handleWin();
-      } else {
-        this.handleDefeated();
-      }
+      this.terminateGame(playerHp > 0);
     }
   }
 
-  terminateGame() {
+  terminateGame(isWin) {
     this.isPlaying = false;
     this.drawer.terminateDrawing();
-  }
 
-  handleWin() {
-    this.createWinModal();
+    this.createResultModal(isWin);
     this.container.addChild(this.resultModal.container);
-  }
 
-  handleDefeated() {
-    this.createDefeatModal();
-    this.container.addChild(this.resultModal.container);
+    if (isWin) {
+      this.opponentStatusBar.portrait.defeat();
+      this.player.win();
+      this.opponent.defeat();
+    } else {
+      this.playerStatusBar.portrait.defeat();
+      this.opponent.win();
+      this.player.defeat();
+    }
   }
 
   returnToMainMenu() {
