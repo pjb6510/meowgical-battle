@@ -1,10 +1,10 @@
 import * as PIXI from "pixi.js";
 import Tween from "@tweenjs/tween.js";
-import Skill from "../";
+import Magic from "../";
 import globalStore from "../../../../globalStore";
 import { canvasSize } from "../../../../config";
 
-export default class Fireball extends Skill {
+export default class Fireball extends Magic {
   constructor(option) {
     super(option);
 

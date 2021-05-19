@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
 
-export default class Skill {
+export default class Magic {
   constructor({
     x,
     y,
@@ -30,10 +30,10 @@ export default class Skill {
 
     this.handleHit = null;
 
-    this.skillZindexOffset = 0.5;
+    this.zIndexOffset = 0.5;
 
     this.container = new PIXI.Container();
-    this.container.zIndex = this.rowIndex + this.skillZindexOffset;
+    this.container.zIndex = this.rowIndex + this.zIndexOffset;
   }
 
   setSpriteProperties(sprite) {

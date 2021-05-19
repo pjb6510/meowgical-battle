@@ -17,8 +17,8 @@ export default class Player {
     yMovingDistance,
     actionCallback = null,
     beHitCallback,
-    skillStartCallback,
-    skillTerminationCallback,
+    magicStartCallback,
+    magicTerminationCallback,
   }) {
     this.x = x;
     this.y = y;
@@ -32,8 +32,8 @@ export default class Player {
     this.yMovingDistance = yMovingDistance;
     this.actionCallback = actionCallback;
     this.beHitCallback = beHitCallback;
-    this.skillStartCallback = skillStartCallback;
-    this.skillTerminationCallback = skillTerminationCallback;
+    this.magicStartCallback = magicStartCallback;
+    this.magicTerminationCallback = magicTerminationCallback;
 
     this.playerTextures = null;
     this.loadPlayerTexture();
@@ -324,8 +324,8 @@ export default class Player {
       rowIndex: this.rowIndex,
       xOffset: this.xMovingDistance * this.columnRange,
       isHeadingToRight: this.isHeadingToRight,
-      startCallback: this.skillStartCallback,
-      terminationCallback: this.skillTerminationCallback,
+      startCallback: this.magicStartCallback,
+      terminationCallback: this.magicTerminationCallback,
     });
 
     fireball.start();

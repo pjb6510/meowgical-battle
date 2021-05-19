@@ -182,8 +182,8 @@ export default class Battle {
       yMovingDistance: this.tileSize.height + this.tileGap,
       actionCallback: this.sendPlayerAction.bind(this),
       beHitCallback: this.collideMagicWithPlayer.bind(this),
-      skillStartCallback: this.addPlayerSkill.bind(this),
-      skillTerminationCallback: this.removePlayerSkill.bind(this),
+      magicStartCallback: this.addPlayerMagic.bind(this),
+      magicTerminationCallback: this.removePlayerMagic.bind(this),
     };
     this.opponentOption = {
       isHost: !this.isHost,
@@ -197,8 +197,8 @@ export default class Battle {
       xMovingDistance: this.tileSize.width + this.tileGap,
       yMovingDistance: this.tileSize.height + this.tileGap,
       beHitCallback: this.collideMagicWithOpponent.bind(this),
-      skillStartCallback: this.addOpponentSkill.bind(this),
-      skillTerminationCallback: this.removeOpponentSkill.bind(this),
+      magicStartCallback: this.addOpponentMagic.bind(this),
+      magicTerminationCallback: this.removeOpponentMagic.bind(this),
     };
   }
 
@@ -294,28 +294,44 @@ export default class Battle {
     );
   }
 
-  addPlayerSkill(magic) {
+  addPlayerMagic(magic) {
     this.container.addChild(magic.container);
     magic.magicIndex = this.nextPlayerMagicIndex;
     this.playerMagics[this.nextPlayerMagicIndex] = magic;
     this.nextPlayerMagicIndex += 1;
   }
 
-  addOpponentSkill(magic) {
+  addOpponentMagic(magic) {
     this.container.addChild(magic.container);
     magic.magicIndex = this.nextOpponentMagicIndex;
     this.opponentMagics[this.nextOpponentMagicIndex] = magic;
     this.nextOpponentMagicIndex += 1;
   }
 
-  removePlayerSkill(magic) {
+  removePlayerMagic(magic) {
     this.container.removeChild(magic.container);
     delete this.playerMagics[magic.magicIndex];
   }
 
-  removeOpponentSkill(magic) {
+  removeOpponentMagic(magic) {
     this.container.removeChild(magic.container);
     delete this.opponentMagics[magic.magicIndex];
+  }
+
+  collideMagicWithPlayer(hittingMagic) {
+    if (hittingMagic.handleHit) {
+      hittingMagic.handleHit();
+    }
+
+    this.playerStatusBar.beHit(hittingMagic.damage);
+  }
+
+  collideMagicWithOpponent(hittingMagic) {
+    if (hittingMagic.handleHit) {
+      hittingMagic.handleHit();
+    }
+
+    this.opponentStatusBar.beHit(hittingMagic.damage);
   }
 
   setSkillCommands() {
@@ -373,22 +389,6 @@ export default class Battle {
     });
   }
 
-  collideMagicWithPlayer(hittingMagic) {
-    if (hittingMagic.handleHit) {
-      hittingMagic.handleHit();
-    }
-
-    this.playerStatusBar.beHit(hittingMagic.damage);
-  }
-
-  collideMagicWithOpponent(hittingMagic) {
-    if (hittingMagic.handleHit) {
-      hittingMagic.handleHit();
-    }
-
-    this.opponentStatusBar.beHit(hittingMagic.damage);
-  }
-
   sendPlayerAction(data) {
     this.peer.send(
       JSON.stringify(data)
@@ -402,13 +402,13 @@ export default class Battle {
 
   checkIsPlayerHit() {
     for (const magicIndex in this.opponentMagics) {
-      const skill = this.opponentMagics[magicIndex];
+      const magic = this.opponentMagics[magicIndex];
 
-      if (skill.checkIsHit && skill.isAbleToHit) {
-        const isHit = skill.checkIsHit(this.player);
+      if (magic.checkIsHit && magic.isAbleToHit) {
+        const isHit = magic.checkIsHit(this.player);
 
         if (isHit) {
-          this.player.beHit(skill);
+          this.player.beHit(magic);
         }
       }
     }
