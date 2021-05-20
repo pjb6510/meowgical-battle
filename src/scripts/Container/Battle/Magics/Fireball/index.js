@@ -104,30 +104,33 @@ export default class Fireball extends Magic {
     }
   }
 
-  checkIsHit({ rowIndex: objectRowIndex, xHitAreaRange: objectXHitArea }) {
-    const objectWidth = objectXHitArea.max - objectXHitArea.min;
+  checkIsHit({
+    rowIndex: toBeHitObjectRowIndex,
+    xHitAreaRange: toBeHitObjectXHitArea,
+  }) {
+    const toBeHitObjectWidth = toBeHitObjectXHitArea.max - toBeHitObjectXHitArea.min;
 
-    const isSameRowIndex = objectRowIndex === this.rowIndex;
+    const isSameRowIndex = toBeHitObjectRowIndex === this.rowIndex;
     if (!isSameRowIndex) {
       return false;
     }
 
     let isXOverlap = false;
-    if (this.xHitAreaWidth <= objectWidth) {
+    if (this.xHitAreaWidth <= toBeHitObjectWidth) {
       const ifObjectIsInLeft =
-        (this.xHitAreaRange.min <= objectXHitArea.max) &&
-          (this.xHitAreaRange.min >= objectXHitArea.min);
+        (this.xHitAreaRange.min <= toBeHitObjectXHitArea.max) &&
+          (this.xHitAreaRange.min >= toBeHitObjectXHitArea.min);
       const ifObjectIsInRight =
-        (this.xHitAreaRange.max >= objectXHitArea.min) &&
-          (this.xHitAreaRange.max <= objectXHitArea.max);
+        (this.xHitAreaRange.max >= toBeHitObjectXHitArea.min) &&
+          (this.xHitAreaRange.max <= toBeHitObjectXHitArea.max);
       isXOverlap = ifObjectIsInLeft || ifObjectIsInRight;
     } else {
       const ifObjectIsInLeft =
-        (objectXHitArea.max >= this.xHitAreaRange.min) &&
-          (objectXHitArea.max <= this.xHitAreaRange.max);
+        (toBeHitObjectXHitArea.max >= this.xHitAreaRange.min) &&
+          (toBeHitObjectXHitArea.max <= this.xHitAreaRange.max);
       const ifObjectIsInRight =
-        (objectXHitArea.min <= this.xHitAreaRange.max) &&
-          (objectXHitArea.min >= this.xHitAreaRange.min);
+        (toBeHitObjectXHitArea.min <= this.xHitAreaRange.max) &&
+          (toBeHitObjectXHitArea.min >= this.xHitAreaRange.min);
       isXOverlap = ifObjectIsInLeft || ifObjectIsInRight;
     }
 
