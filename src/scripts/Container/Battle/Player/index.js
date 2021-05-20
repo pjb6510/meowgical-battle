@@ -3,6 +3,7 @@ import Tween from "@tweenjs/tween.js";
 import globalStore from "../../../globalStore";
 import Fireball from "../Magics/Fireball";
 import Lightning from "../Magics/Lightning";
+import Mine from "../Magics/Mine";
 
 export default class Player {
   constructor({
@@ -226,18 +227,18 @@ export default class Player {
       })
       .onComplete((player) => {
         player.texture = this.playerTextures.normal;
+
+        if (axis === "x") {
+          this.columnIndex += positionIncrease;
+        } else {
+          this.rowIndex += positionIncrease;
+        }
+
+        this.container.zIndex = this.rowIndex;
       })
       .start();
 
     this[axis] = nextPosition;
-
-    if (axis === "x") {
-      this.columnIndex += positionIncrease;
-    } else {
-      this.rowIndex += positionIncrease;
-    }
-
-    this.container.zIndex = this.rowIndex;
   }
 
   moveLeft() {
@@ -352,6 +353,27 @@ export default class Player {
     });
 
     lightning.start();
+  }
+
+  castMine() {
+    if (this.actionCallback) {
+      this.actionCallback({ action: "mine" });
+    }
+
+    this.playAttackMotion();
+
+    const mine = new Mine({
+      x: this.x,
+      y: this.y,
+      rowIndex: this.rowIndex,
+      columnIndex: this.columnIndex,
+      xOffset: this.xMovingDistance * this.columnRange,
+      isHeadingToRight: this.isHeadingToRight,
+      startCallback: this.magicStartCallback,
+      terminationCallback: this.magicTerminationCallback,
+    });
+
+    mine.start();
   }
 
   playBeHitMotion() {
