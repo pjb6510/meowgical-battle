@@ -34,6 +34,10 @@ const loaderConfig = {
 
   lightning1: "assets/images/effects/lightning/lightning1.json",
   lightning2: "assets/images/effects/lightning/lightning2.json",
+
+  mine: "assets/images/effects/mine/mine.png",
+  mineExplosion1: "assets/images/effects/mine/mineExplosion1.json",
+  mineExplosion2: "assets/images/effects/mine/mineExplosion2.json",
 };
 
 export default loaderConfig;
