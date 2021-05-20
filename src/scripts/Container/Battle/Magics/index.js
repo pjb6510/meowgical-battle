@@ -55,7 +55,9 @@ export default class Magic {
       this.anchor.y
     );
 
-    sprite.animationSpeed = this.animationSpeed;
+    if (sprite instanceof PIXI.AnimatedSprite) {
+      sprite.animationSpeed = this.animationSpeed;
+    }
   }
 
   terminate() {
