@@ -17,7 +17,7 @@ export default class Lightning extends Magic {
     ];
 
     this.x += this.xOffset;
-    this.damage = 40;
+    this.damage = 45;
     this.anchor = {
       x: 0.5,
       y: 0.96,
