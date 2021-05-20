@@ -181,7 +181,7 @@ export default class Battle {
       xMovingDistance: this.tileSize.width + this.tileGap,
       yMovingDistance: this.tileSize.height + this.tileGap,
       actionCallback: this.sendPlayerAction.bind(this),
-      beHitCallback: this.collideMagicWithPlayer.bind(this),
+      beHitCallback: this.updatePlayerStatusBar.bind(this),
       magicStartCallback: this.addPlayerMagic.bind(this),
       magicTerminationCallback: this.removePlayerMagic.bind(this),
     };
@@ -196,7 +196,7 @@ export default class Battle {
       rowRange: this.tileGroupSize.row,
       xMovingDistance: this.tileSize.width + this.tileGap,
       yMovingDistance: this.tileSize.height + this.tileGap,
-      beHitCallback: this.collideMagicWithOpponent.bind(this),
+      beHitCallback: this.updateOpponentStatusBar.bind(this),
       magicStartCallback: this.addOpponentMagic.bind(this),
       magicTerminationCallback: this.removeOpponentMagic.bind(this),
     };
@@ -318,20 +318,20 @@ export default class Battle {
     delete this.opponentMagics[magic.magicIndex];
   }
 
-  collideMagicWithPlayer(hittingMagic) {
-    if (hittingMagic.handleHit) {
-      hittingMagic.handleHit();
-    }
-
+  updatePlayerStatusBar(hittingMagic) {
     this.playerStatusBar.beHit(hittingMagic.damage);
   }
 
-  collideMagicWithOpponent(hittingMagic) {
+  updateOpponentStatusBar(hittingMagic) {
+    this.opponentStatusBar.beHit(hittingMagic.damage);
+  }
+
+  collideMagicWithPlayer(hitPlayer, hittingMagic) {
     if (hittingMagic.handleHit) {
       hittingMagic.handleHit();
     }
 
-    this.opponentStatusBar.beHit(hittingMagic.damage);
+    hitPlayer.beHit(hittingMagic);
   }
 
   setSkillCommands() {
@@ -380,7 +380,8 @@ export default class Battle {
           this.opponent.moveDown();
           break;
         case "beHit":
-          this.opponent.beHit(
+          this.collideMagicWithPlayer(
+            this.opponent,
             this.playerMagics[opponentAction.magicIndex]
           );
           break;
@@ -415,7 +416,7 @@ export default class Battle {
         const isHit = magic.checkIsHit(this.player);
 
         if (isHit) {
-          this.player.beHit(magic);
+          this.collideMagicWithPlayer(this.player, magic);
         }
       }
     }
