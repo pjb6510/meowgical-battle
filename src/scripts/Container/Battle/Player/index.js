@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import Tween from "@tweenjs/tween.js";
 import globalStore from "../../../globalStore";
-import Fireball from "../Skills/Fireball";
+import Fireball from "../Magics/Fireball";
 import Lightning from "../Magics/Lightning";
 
 export default class Player {
