@@ -3,8 +3,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 1440px;
-  height: 810px;
+  width: 1600px;
+  height: 900px;
 }
 
 @media screen and (max-width: 480px) {
