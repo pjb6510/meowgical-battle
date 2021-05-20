@@ -33,13 +33,15 @@ export default class Mine extends Magic {
     this.initZIndex();
 
     this.animationSpeed = 0.4;
-    this.fadeInDuration = 500;
+    this.fadeInOutDuration = 500;
     this.explosionZIndexOffset = 0.5;
 
     this.sprite = null;
     this.explosionSprite = null;
     this.createSprite();
     this.createExplosionSprite();
+
+    this.durationTime = 5000;
 
     this.handleHit = this.explode;
 
@@ -81,8 +83,25 @@ export default class Mine extends Magic {
     tween
       .to(
         { alpha: 1 },
-        this.fadeInDuration
+        this.fadeInOutDuration
       );
+
+    tween.start();
+  }
+
+  fadeOut() {
+    this.isAbleToHit = false;
+
+    const tween = new Tween.Tween(this.sprite);
+
+    tween
+      .to(
+        { alpha: 0 },
+        this.fadeInOutDuration
+      )
+      .onComplete(() => {
+        this.terminate();
+      });
 
     tween.start();
   }
@@ -100,6 +119,8 @@ export default class Mine extends Magic {
   }
 
   explode() {
+    clearTimeout(this.timerId);
+
     this.container.zIndex = this.rowIndex + this.explosionZIndexOffset;
 
     this.explosionSprite.x = this.x;
@@ -121,5 +142,9 @@ export default class Mine extends Magic {
 
     this.container.addChild(this.sprite);
     this.fadeIn();
+
+    this.timerId = setTimeout(() => {
+      this.fadeOut();
+    }, this.durationTime);
   }
 }
