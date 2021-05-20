@@ -121,7 +121,7 @@ export default class InvitationCodeInput {
         align: "center",
         fill: 0xffffff,
       },
-      this.handleConnectButtonClick.bind(this)
+      this.submitCode.bind(this)
     );
   }
 
@@ -156,14 +156,40 @@ export default class InvitationCodeInput {
     this.unmountCallback(this);
   }
 
+  handleEnterKeyDown(e) {
+    if (e.key === "Enter") {
+      this.submitCode();
+    }
+  }
+
+  addEnterKeyDownListener() {
+    this.enterKeyDownHandler = this.handleEnterKeyDown.bind(this);
+
+    document.addEventListener(
+      "keydown",
+      this.enterKeyDownHandler
+    );
+  }
+
+  removeEnterKeyDownListener() {
+    document.removeEventListener(
+      "keydown",
+      this.enterKeyDownHandler
+    );
+  }
+
   containerDidMount() {
     socket.subscribeJoinResult(
       this.handleJoinResultListen.bind(this)
     );
+
+    this.addEnterKeyDownListener();
   }
 
   containerWillUnmount() {
     socket.unsubscribeJoinResult();
+
+    this.removeEnterKeyDownListener();
   }
 
   handleBackButtonClick() {
@@ -174,7 +200,7 @@ export default class InvitationCodeInput {
     this.message.text = message;
   }
 
-  handleConnectButtonClick() {
+  submitCode() {
     this.inputedCode = this.InputText.text;
 
     if (!this.invitationCodeFormat.test(this.inputedCode)) {
