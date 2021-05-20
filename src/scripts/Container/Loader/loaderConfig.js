@@ -38,6 +38,8 @@ const loaderConfig = {
   mine: "assets/images/effects/mine/mine.png",
   mineExplosion1: "assets/images/effects/mine/mineExplosion1.json",
   mineExplosion2: "assets/images/effects/mine/mineExplosion2.json",
+
+  turret: "assets/images/effects/turret/turret.png",
 };
 
 export default loaderConfig;
