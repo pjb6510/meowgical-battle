@@ -18,7 +18,7 @@ export default class Fireball extends Magic {
     this.fireballTextures = Object.values(
       fireball.textures
     );
-    this.explosionFireballTextures = [
+    this.fireballExplosionTextures = [
       ...Object.values(fireballExplosion1.textures),
       ...Object.values(fireballExplosion2.textures),
       ...Object.values(fireballExplosion3.textures),
@@ -55,7 +55,7 @@ export default class Fireball extends Magic {
 
   createExplosionSprite() {
     this.explosionSprite = new PIXI.AnimatedSprite(
-      this.explosionFireballTextures
+      this.fireballExplosionTextures
     );
 
     this.setSpriteProperties(this.explosionSprite);
