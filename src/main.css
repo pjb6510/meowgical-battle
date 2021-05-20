@@ -7,6 +7,13 @@
   height: 900px;
 }
 
+@media screen and (min-height: 1080px) {
+  .container > canvas {
+    width: 1920px;
+    height: 1080px;
+  }
+}
+
 @media screen and (max-width: 480px) {
   .container > canvas {
     width: 320px;
