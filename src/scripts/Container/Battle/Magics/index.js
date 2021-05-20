@@ -39,6 +39,10 @@ export default class Magic {
     this.container.zIndex = this.rowIndex + this.zIndexOffset;
   }
 
+  setMagicIndex(index) {
+    this.magicIndex = index;
+  }
+
   setSpriteProperties(sprite) {
     if (!this.isHeadingToRight) {
       sprite.scale.x *= -1;
