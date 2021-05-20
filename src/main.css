@@ -3,8 +3,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 960px;
-  height: 540px;
+  width: 1440px;
+  height: 810px;
 }
 
 @media screen and (max-width: 480px) {
@@ -18,5 +18,12 @@
   .container > canvas {
     width: 560px;
     height: 315px;
+  }
+}
+
+@media screen and (min-width: 800px) and (max-width:1300px) {
+  .container > canvas {
+    width: 960px;
+    height: 540px;
   }
 }
