@@ -1,8 +1,8 @@
 import * as PIXI from "pixi.js";
 import Menu from "./Menu";
-import HostWindow from "../HostWindow";
-import GuestWindow from "../GuestWindow";
-import InvitationCodeInput from "../InvitationCodeInput";
+import HostWindow from "./HostWindow";
+import GuestWindow from "./GuestWindow";
+import InvitationCodeInput from "./InvitationCodeInput";
 import globalStore from "../../globalStore";
 
 export default class MainMenu {

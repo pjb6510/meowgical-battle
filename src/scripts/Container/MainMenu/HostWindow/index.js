@@ -1,13 +1,13 @@
 import * as PIXI from "pixi.js";
-import PlayerBox from "../shared/PlayerBox";
+import PlayerBox from "../../shared/PlayerBox";
 import InvitationCodeBox from "./InvitationCodeBox";
-import Battle from "../Battle";
-import createButton from "../../pixiUtils/createButton";
-import { canvasSize } from "../../config";
-import socket from "../../socket";
-import { actionsInRoom } from "../../constants";
+import Battle from "../../Battle";
+import createButton from "../../../pixiUtils/createButton";
+import { canvasSize } from "../../../config";
+import socket from "../../../socket";
+import { actionsInRoom } from "../../../constants";
 import Peer from "simple-peer";
-import globalStore from "../../globalStore";
+import globalStore from "../../../globalStore";
 
 export default class HostWindow {
   constructor(playerId, unmountCallback) {

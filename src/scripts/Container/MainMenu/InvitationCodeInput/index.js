@@ -1,9 +1,9 @@
 import * as PIXI from "pixi.js";
 import PixiTextInput from "pixi-text-input";
-import createBox from "../../pixiUtils/createBox";
-import createButton from "../../pixiUtils/createButton";
-import { canvasSize } from "../../config";
-import socket from "../../socket";
+import createBox from "../../../pixiUtils/createBox";
+import createButton from "../../../pixiUtils/createButton";
+import { canvasSize } from "../../../config";
+import socket from "../../../socket";
 
 export default class InvitationCodeInput {
   constructor(playerId, unmountCallback, connectCallback) {
