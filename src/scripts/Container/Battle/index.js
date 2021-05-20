@@ -348,7 +348,19 @@ export default class Battle {
       })
       .addSkillCommand({
         command: ["right", "down", "right", "up", "right"],
-        skill: this.player.castMine.bind(this.player),
+        skill: this.player.layMine.bind(this.player),
+      })
+      .addSkillCommand({
+        command: [
+          "right",
+          "up",
+          "right",
+          "down",
+          "left",
+          "down",
+          "right",
+        ],
+        skill: this.player.buildTurret.bind(this.player),
       });
   }
 
@@ -381,8 +393,11 @@ export default class Battle {
         case actionsInGame.CAST_LIGHTNING:
           this.opponent.castLightning();
           break;
-        case actionsInGame.CAST_MINE:
-          this.opponent.castMine();
+        case actionsInGame.LAY_MINE:
+          this.opponent.layMine();
+          break;
+        case actionsInGame.BUILD_TURRET:
+          this.opponent.buildTurret();
           break;
         default:
           break;
@@ -391,9 +406,11 @@ export default class Battle {
   }
 
   sendPlayerAction(data) {
-    this.peer.send(
-      JSON.stringify(data)
-    );
+    if (this.isPlaying) {
+      this.peer.send(
+        JSON.stringify(data)
+      );
+    }
   }
 
   update() {

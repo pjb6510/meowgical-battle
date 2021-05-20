@@ -4,6 +4,8 @@ import globalStore from "../../../globalStore";
 import Fireball from "../Magics/Fireball";
 import Lightning from "../Magics/Lightning";
 import Mine from "../Magics/Mine";
+import Turret from "../Magics/Turret";
+import TurretFireball from "../Magics/Turret/TurretFireball";
 import { actionsInGame } from "../../../constants";
 
 export default class Player {
@@ -60,6 +62,8 @@ export default class Player {
     this.isOver = false;
     this.magics = {};
     this.nextMagicIndex = 0;
+    this.turret = null;
+    this.turretNumberLimit = 1;
 
     this.normalSprite = null;
     this.winSprite = null;
@@ -330,16 +334,18 @@ export default class Player {
 
     this.playAttackMotion();
 
-    const magic = new Magic({
-      x: this.x,
-      y: this.y,
-      rowIndex: this.rowIndex,
-      columnIndex: this.columnIndex,
-      xOffset: this.xMovingDistance * this.columnRange,
-      isHeadingToRight: this.isHeadingToRight,
-      startCallback: this.magicStartCallback,
-      terminationCallback: this.magicTerminationCallback,
-    });
+    const magic = new Magic(
+      {
+        x: this.x,
+        y: this.y,
+        rowIndex: this.rowIndex,
+        columnIndex: this.columnIndex,
+        xOffset: this.xMovingDistance * this.columnRange,
+        isHeadingToRight: this.isHeadingToRight,
+        startCallback: this.magicStartCallback,
+        terminationCallback: this.magicTerminationCallback,
+      }
+    );
 
     magic.setMagicIndex(this.nextMagicIndex);
     this.magics[this.nextMagicIndex] = magic;
@@ -356,8 +362,63 @@ export default class Player {
     this.castMagic(Lightning, actionsInGame.CAST_LIGHTNING);
   }
 
-  castMine() {
-    this.castMagic(Mine, actionsInGame.CAST_MINE);
+  layMine() {
+    this.castMagic(Mine, actionsInGame.LAY_MINE);
+  }
+
+  buildTurret() {
+    const hasTurret = this.turret !== null &&
+      !this.turret.isTerminated;
+
+    if (hasTurret) {
+      return;
+    }
+
+    if (this.actionCallback) {
+      this.actionCallback(
+        { action: actionsInGame.BUILD_TURRET }
+      );
+    }
+
+    this.playAttackMotion();
+
+    const turret = new Turret(
+      {
+        x: this.x,
+        y: this.y,
+        rowIndex: this.rowIndex,
+        columnIndex: this.columnIndex,
+        xOffset: this.xMovingDistance * this.columnRange,
+        isHeadingToRight: this.isHeadingToRight,
+        startCallback: this.magicStartCallback,
+        terminationCallback: this.magicTerminationCallback,
+      },
+      this.castFireballWithTurret.bind(this)
+    );
+
+    this.turret = turret;
+
+    turret.setMagicIndex(this.nextMagicIndex);
+    this.magics[this.nextMagicIndex] = turret;
+    this.nextMagicIndex += 1;
+
+    turret.start();
+  }
+
+  castFireballWithTurret(turretOption) {
+    if (this.actionCallback) {
+      this.actionCallback(
+        { action: actionsInGame.CAST_MAGIC_WITH_TURRET }
+      );
+    }
+
+    const turretFireball = new TurretFireball(turretOption);
+
+    turretFireball.setMagicIndex(this.nextMagicIndex);
+    this.magics[this.nextMagicIndex] = turretFireball;
+    this.nextMagicIndex += 1;
+
+    turretFireball.start();
   }
 
   playBeHitMotion() {
