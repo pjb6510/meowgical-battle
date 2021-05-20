@@ -183,6 +183,9 @@
 			"h": 1626
 		},
 		"scale": "1",
+		"related_multi_packs": [
+			"turretFireballExplosion2.json"
+		],
 		"smartupdate": "$TexturePacker:SmartUpdate:b8119a3af67622e25d6297d7cb842924:56e7998c3fe4265fcf5fc466eb124233:d8d25c3a6ab8654e636b6f0cdae4a5b6$"
 	}
 }
