@@ -55,10 +55,14 @@ export default class Lightning extends Magic {
     }
 
     this.container.addChild(this.sprite);
+
     this.sprite.onFrameChange = (frameNumber) => {
       if (frameNumber === 9) {
         this.isAbleToHit = false;
       }
+    };
+    this.sprite.onComplete = () => {
+      this.terminate();
     };
 
     this.sprite.play();
