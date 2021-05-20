@@ -41,7 +41,7 @@ export default class Mine extends Magic {
     this.createSprite();
     this.createExplosionSprite();
 
-    this.durationTime = 5000;
+    this.durationTime = 8000;
 
     this.handleHit = this.explode;
 
