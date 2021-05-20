@@ -33,7 +33,7 @@ export default class Drawer {
     this.arrowPosition = { ...this.arrowInitialPosition };
 
     this.pointerStartPos = { x: 0, y: 0 };
-    this.strokeRecognitionDistance = 16;
+    this.strokeRecognitionDistance = 20;
     this.strokeDirections = [];
     this.directionsLengthLimit = 18;
 
