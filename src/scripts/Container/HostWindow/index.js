@@ -5,7 +5,7 @@ import Battle from "../Battle";
 import createButton from "../../pixiUtils/createButton";
 import { canvasSize } from "../../config";
 import socket from "../../socket";
-import { broadcastedActions } from "../../constants";
+import { actionsInRoom } from "../../constants";
 import Peer from "simple-peer";
 import globalStore from "../../globalStore";
 
@@ -134,12 +134,12 @@ export default class HostWindow {
     const { action, payload } = data;
 
     switch (action) {
-      case broadcastedActions.ENTER:
+      case actionsInRoom.ENTER:
         this.isConnected = payload;
         this.rerenderOpponentBox();
         this.rerenderGameStartButton();
         break;
-      case broadcastedActions.SEND_PEER:
+      case actionsInRoom.SEND_PEER:
         this.receivePeerSignal(payload);
         break;
       default:
@@ -176,7 +176,7 @@ export default class HostWindow {
       }
 
       socket.broadcastAction({
-        action: broadcastedActions.SEND_PEER,
+        action: actionsInRoom.SEND_PEER,
         payload: hostSignal,
         from: this.playerId,
       });
@@ -193,7 +193,7 @@ export default class HostWindow {
 
   startGame() {
     socket.broadcastAction({
-      action: broadcastedActions.START_GAME,
+      action: actionsInRoom.START_GAME,
       from: this.playerId,
     });
 
