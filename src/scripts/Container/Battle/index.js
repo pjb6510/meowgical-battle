@@ -351,15 +351,7 @@ export default class Battle {
         skill: this.player.layMine.bind(this.player),
       })
       .addSkillCommand({
-        command: [
-          "right",
-          "up",
-          "right",
-          "down",
-          "left",
-          "down",
-          "right",
-        ],
+        command: ["right", "up", "right", "down", "right"],
         skill: this.player.buildTurret.bind(this.player),
       });
   }
