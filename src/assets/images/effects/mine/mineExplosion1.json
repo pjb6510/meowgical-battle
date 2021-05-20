@@ -1,6 +1,6 @@
 {
 	"frames": {
-		"ground_explosion_0001.png": {
+		"mineExplosion_0001.png": {
 			"frame": {
 				"x": 1,
 				"y": 873,
@@ -20,7 +20,7 @@
 				"h": 315
 			}
 		},
-		"ground_explosion_0002.png": {
+		"mineExplosion_0002.png": {
 			"frame": {
 				"x": 627,
 				"y": 559,
@@ -40,7 +40,7 @@
 				"h": 315
 			}
 		},
-		"ground_explosion_0003.png": {
+		"mineExplosion_0003.png": {
 			"frame": {
 				"x": 348,
 				"y": 294,
@@ -60,7 +60,7 @@
 				"h": 315
 			}
 		},
-		"ground_explosion_0004.png": {
+		"mineExplosion_0004.png": {
 			"frame": {
 				"x": 322,
 				"y": 586,
@@ -80,7 +80,7 @@
 				"h": 315
 			}
 		},
-		"ground_explosion_0005.png": {
+		"mineExplosion_0005.png": {
 			"frame": {
 				"x": 687,
 				"y": 1,
@@ -100,7 +100,7 @@
 				"h": 315
 			}
 		},
-		"ground_explosion_0006.png": {
+		"mineExplosion_0006.png": {
 			"frame": {
 				"x": 1,
 				"y": 586,
@@ -120,7 +120,7 @@
 				"h": 315
 			}
 		},
-		"ground_explosion_0007.png": {
+		"mineExplosion_0007.png": {
 			"frame": {
 				"x": 351,
 				"y": 1,
@@ -140,7 +140,7 @@
 				"h": 315
 			}
 		},
-		"ground_explosion_0008.png": {
+		"mineExplosion_0008.png": {
 			"frame": {
 				"x": 1,
 				"y": 294,
@@ -160,7 +160,7 @@
 				"h": 315
 			}
 		},
-		"ground_explosion_0009.png": {
+		"mineExplosion_0009.png": {
 			"frame": {
 				"x": 1,
 				"y": 1,
@@ -180,7 +180,7 @@
 				"h": 315
 			}
 		},
-		"ground_explosion_0010.png": {
+		"mineExplosion_0010.png": {
 			"frame": {
 				"x": 627,
 				"y": 310,
@@ -200,7 +200,7 @@
 				"h": 315
 			}
 		},
-		"ground_explosion_0011.png": {
+		"mineExplosion_0011.png": {
 			"frame": {
 				"x": 617,
 				"y": 805,
@@ -222,24 +222,24 @@
 		}
 	},
 	"animations": {
-		"ground_explosion": [
-			"ground_explosion_0001.png",
-			"ground_explosion_0002.png",
-			"ground_explosion_0003.png",
-			"ground_explosion_0004.png",
-			"ground_explosion_0005.png",
-			"ground_explosion_0006.png",
-			"ground_explosion_0007.png",
-			"ground_explosion_0008.png",
-			"ground_explosion_0009.png",
-			"ground_explosion_0010.png",
-			"ground_explosion_0011.png"
+		"mineExplosion": [
+			"mineExplosion_0001.png",
+			"mineExplosion_0002.png",
+			"mineExplosion_0003.png",
+			"mineExplosion_0004.png",
+			"mineExplosion_0005.png",
+			"mineExplosion_0006.png",
+			"mineExplosion_0007.png",
+			"mineExplosion_0008.png",
+			"mineExplosion_0009.png",
+			"mineExplosion_0010.png",
+			"mineExplosion_0011.png"
 		]
 	},
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "1.0",
-		"image": "mine-1.png",
+		"image": "mineExplosion1.png",
 		"format": "RGBA8888",
 		"size": {
 			"w": 973,
