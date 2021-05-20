@@ -6,9 +6,10 @@ import StatusBar from "./StatusBar";
 import TileGroup from "./TileGroup";
 import Player from "./Player";
 import ResultModal from "./ResultModal";
-import { canvasSize } from "../../config";
 import globalStore from "../../globalStore";
 import generateRandomString from "../../utils/generateRandomString";
+import { canvasSize } from "../../config";
+import { actionsInGame } from "../../constants";
 
 export default class Battle {
   constructor(isHost, peer) {
@@ -61,11 +62,6 @@ export default class Battle {
     this.createOpponentTileGroup();
     this.createPlayer();
     this.createOpponent();
-
-    this.playerMagics = {};
-    this.nextPlayerMagicIndex = 0;
-    this.opponentMagics = {};
-    this.nextOpponentMagicIndex = 0;
 
     this.listenOpponentAction();
     this.setSkillCommands();
@@ -182,7 +178,7 @@ export default class Battle {
       yMovingDistance: this.tileSize.height + this.tileGap,
       actionCallback: this.sendPlayerAction.bind(this),
       beHitCallback: this.updatePlayerStatusBar.bind(this),
-      magicStartCallback: this.addPlayerMagic.bind(this),
+      magicStartCallback: this.renderMagic.bind(this),
       magicTerminationCallback: this.removePlayerMagic.bind(this),
     };
     this.opponentOption = {
@@ -197,7 +193,7 @@ export default class Battle {
       xMovingDistance: this.tileSize.width + this.tileGap,
       yMovingDistance: this.tileSize.height + this.tileGap,
       beHitCallback: this.updateOpponentStatusBar.bind(this),
-      magicStartCallback: this.addOpponentMagic.bind(this),
+      magicStartCallback: this.renderMagic.bind(this),
       magicTerminationCallback: this.removeOpponentMagic.bind(this),
     };
   }
@@ -294,28 +290,18 @@ export default class Battle {
     );
   }
 
-  addPlayerMagic(magic) {
+  renderMagic(magic) {
     this.container.addChild(magic.container);
-    magic.magicIndex = this.nextPlayerMagicIndex;
-    this.playerMagics[this.nextPlayerMagicIndex] = magic;
-    this.nextPlayerMagicIndex += 1;
-  }
-
-  addOpponentMagic(magic) {
-    this.container.addChild(magic.container);
-    magic.magicIndex = this.nextOpponentMagicIndex;
-    this.opponentMagics[this.nextOpponentMagicIndex] = magic;
-    this.nextOpponentMagicIndex += 1;
   }
 
   removePlayerMagic(magic) {
     this.container.removeChild(magic.container);
-    delete this.playerMagics[magic.magicIndex];
+    delete this.player.magics[magic.magicIndex];
   }
 
   removeOpponentMagic(magic) {
     this.container.removeChild(magic.container);
-    delete this.opponentMagics[magic.magicIndex];
+    delete this.opponent.magics[magic.magicIndex];
   }
 
   updatePlayerStatusBar(hittingMagic) {
@@ -371,31 +357,31 @@ export default class Battle {
       const opponentAction = JSON.parse(data);
 
       switch (opponentAction.action) {
-        case "moveFront":
+        case actionsInGame.MOVE_FRONT :
           this.opponent.moveLeft();
           break;
-        case "moveBack":
+        case actionsInGame.MOVE_BACK:
           this.opponent.moveRight();
           break;
-        case "moveUp":
+        case actionsInGame.MOVE_UP:
           this.opponent.moveUp();
           break;
-        case "moveDown":
+        case actionsInGame.MOVE_DOWN:
           this.opponent.moveDown();
           break;
-        case "beHit":
+        case actionsInGame.BE_HIT:
           this.collideMagicWithPlayer(
             this.opponent,
-            this.playerMagics[opponentAction.magicIndex]
+            this.player.magics[opponentAction.magicIndex]
           );
           break;
-        case "fireball":
+        case actionsInGame.CAST_FIREBALL:
           this.opponent.castFireball();
           break;
-        case "lightning":
+        case actionsInGame.CAST_LIGHTNING:
           this.opponent.castLightning();
           break;
-        case "mine":
+        case actionsInGame.CAST_MINE:
           this.opponent.castMine();
           break;
         default:
@@ -416,8 +402,8 @@ export default class Battle {
   }
 
   checkIsPlayerHit() {
-    for (const magicIndex in this.opponentMagics) {
-      const magic = this.opponentMagics[magicIndex];
+    for (const magicIndex in this.opponent.magics) {
+      const magic = this.opponent.magics[magicIndex];
 
       if (magic.checkIsHit && magic.isAbleToHit) {
         const isHit = magic.checkIsHit(this.player);

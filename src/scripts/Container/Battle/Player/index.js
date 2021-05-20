@@ -4,6 +4,7 @@ import globalStore from "../../../globalStore";
 import Fireball from "../Magics/Fireball";
 import Lightning from "../Magics/Lightning";
 import Mine from "../Magics/Mine";
+import { actionsInGame } from "../../../constants";
 
 export default class Player {
   constructor({
@@ -57,6 +58,8 @@ export default class Player {
 
     this.hp = 100;
     this.isOver = false;
+    this.magics = {};
+    this.nextMagicIndex = 0;
 
     this.normalSprite = null;
     this.winSprite = null;
@@ -183,23 +186,30 @@ export default class Player {
     if (this.actionCallback) {
       let action = "";
 
+      const {
+        MOVE_FRONT,
+        MOVE_BACK,
+        MOVE_UP,
+        MOVE_DOWN,
+      } = actionsInGame;
+
       if (axis === "x" && positionIncrease === 1) {
         if (this.isHeadingToRight) {
-          action = "moveFront";
+          action = MOVE_FRONT;
         } else {
-          action = "moveBack";
+          action = MOVE_BACK;
         }
       } else if (axis === "x" && positionIncrease === -1) {
         if (this.isHeadingToRight) {
-          action = "moveBack";
+          action = MOVE_BACK;
         } else {
-          action = "moveFront";
+          action = MOVE_FRONT;
         }
       } else {
         if (axis === "y" && positionIncrease === 1) {
-          action = "moveDown";
+          action = MOVE_DOWN;
         } else {
-          action = "moveUp";
+          action = MOVE_UP;
         }
       }
 
@@ -313,14 +323,14 @@ export default class Player {
     this.playMotion(this.attackMotionSprite);
   }
 
-  castFireball() {
+  castMagic(Magic, action) {
     if (this.actionCallback) {
-      this.actionCallback({ action: "fireball" });
+      this.actionCallback({ action });
     }
 
     this.playAttackMotion();
 
-    const fireball = new Fireball({
+    const magic = new Magic({
       x: this.x,
       y: this.y,
       rowIndex: this.rowIndex,
@@ -331,49 +341,23 @@ export default class Player {
       terminationCallback: this.magicTerminationCallback,
     });
 
-    fireball.start();
+    magic.setMagicIndex(this.nextMagicIndex);
+    this.magics[this.nextMagicIndex] = magic;
+    this.nextMagicIndex += 1;
+
+    magic.start();
+  }
+
+  castFireball() {
+    this.castMagic(Fireball, actionsInGame.CAST_FIREBALL);
   }
 
   castLightning() {
-    if (this.actionCallback) {
-      this.actionCallback({ action: "lightning" });
-    }
-
-    this.playAttackMotion();
-
-    const lightning = new Lightning({
-      x: this.x,
-      y: this.y,
-      rowIndex: this.rowIndex,
-      columnIndex: this.columnIndex,
-      xOffset: this.xMovingDistance * this.columnRange,
-      isHeadingToRight: this.isHeadingToRight,
-      startCallback: this.magicStartCallback,
-      terminationCallback: this.magicTerminationCallback,
-    });
-
-    lightning.start();
+    this.castMagic(Lightning, actionsInGame.CAST_LIGHTNING);
   }
 
   castMine() {
-    if (this.actionCallback) {
-      this.actionCallback({ action: "mine" });
-    }
-
-    this.playAttackMotion();
-
-    const mine = new Mine({
-      x: this.x,
-      y: this.y,
-      rowIndex: this.rowIndex,
-      columnIndex: this.columnIndex,
-      xOffset: this.xMovingDistance * this.columnRange,
-      isHeadingToRight: this.isHeadingToRight,
-      startCallback: this.magicStartCallback,
-      terminationCallback: this.magicTerminationCallback,
-    });
-
-    mine.start();
+    this.castMagic(Mine, actionsInGame.CAST_MINE);
   }
 
   playBeHitMotion() {
@@ -383,7 +367,7 @@ export default class Player {
   beHit(hittingMagic) {
     if (this.actionCallback) {
       this.actionCallback({
-        action: "beHit",
+        action: actionsInGame.BE_HIT,
         magicIndex: hittingMagic.magicIndex,
       });
     }
