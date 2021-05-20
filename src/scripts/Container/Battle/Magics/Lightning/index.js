@@ -17,7 +17,6 @@ export default class Lightning extends Magic {
     ];
 
     this.x += this.xOffset;
-
     this.damage = 40;
     this.anchor = {
       x: 0.5,
@@ -25,6 +24,7 @@ export default class Lightning extends Magic {
     };
     this.animationSpeed = 0.5;
 
+    this.sprite = null;
     this.createSprite();
   }
 
