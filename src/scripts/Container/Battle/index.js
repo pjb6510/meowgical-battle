@@ -341,9 +341,19 @@ export default class Battle {
 
   handleStrokeAdded(direction) {
     this.playerArrowIconDisplayer.createArrowIcon(direction);
+
+    let toBeInputedArrowDirection = "";
+    if (direction === "left") {
+      toBeInputedArrowDirection = "right";
+    } else if (direction === "right") {
+      toBeInputedArrowDirection = "left";
+    } else {
+      toBeInputedArrowDirection = direction;
+    }
+
     this.sendPlayerAction({
       action: actionsInGame.DRAW_STROKE,
-      payload: direction,
+      payload: toBeInputedArrowDirection,
     });
   }
 
