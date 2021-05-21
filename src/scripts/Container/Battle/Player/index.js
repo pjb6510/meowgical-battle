@@ -406,12 +406,6 @@ export default class Player {
   }
 
   castFireballWithTurret(turretOption) {
-    if (this.actionCallback) {
-      this.actionCallback(
-        { action: actionsInGame.CAST_MAGIC_WITH_TURRET }
-      );
-    }
-
     const turretFireball = new TurretFireball(turretOption);
 
     turretFireball.setMagicIndex(this.nextMagicIndex);
@@ -429,7 +423,7 @@ export default class Player {
     if (this.actionCallback) {
       this.actionCallback({
         action: actionsInGame.BE_HIT,
-        magicIndex: hittingMagic.magicIndex,
+        payload: hittingMagic.magicIndex,
       });
     }
 
