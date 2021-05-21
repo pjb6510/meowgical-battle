@@ -3,8 +3,9 @@ import { canvasSize } from "../../../config";
 import globalStore from "../../../globalStore";
 
 export default class Drawer {
-  constructor(drawingCallback) {
-    this.drawingCallback = drawingCallback;
+  constructor(pointerUpCallback, addStrokeCallback) {
+    this.pointerUpCallback = pointerUpCallback;
+    this.addStrokeCallback = addStrokeCallback;
 
     this.container = new PIXI.Container();
     this.container.sortableChildren = true;
@@ -16,16 +17,16 @@ export default class Drawer {
     };
 
     const {
-      leftArrow,
-      rightArrow,
-      upArrow,
-      downArrow,
+      blueLeftArrow,
+      blueRightArrow,
+      blueUpArrow,
+      blueDownArrow,
     } = globalStore.getItem("resources");
 
-    this.leftArrowTexture = leftArrow.texture;
-    this.rightArrowTexture = rightArrow.texture;
-    this.upArrowTexture = upArrow.texture;
-    this.downArrowTexture = downArrow.texture;
+    this.leftArrowTexture = blueLeftArrow.texture;
+    this.rightArrowTexture = blueRightArrow.texture;
+    this.upArrowTexture = blueUpArrow.texture;
+    this.downArrowTexture = blueDownArrow.texture;
 
     this.arrows = [];
     this.arrowInitialPosition = { x: 50, y: 250 };
@@ -120,10 +121,9 @@ export default class Drawer {
   handlePointerUp() {
     this.isPointerDown = false;
     this.canvas.clear();
-    this.clearArrows();
 
-    if (this.drawingCallback) {
-      this.drawingCallback(this.strokeDirections);
+    if (this.pointerUpCallback) {
+      this.pointerUpCallback(this.strokeDirections);
     }
 
     this.strokeDirections = [];
@@ -149,56 +149,14 @@ export default class Drawer {
 
     if (shouldAddDirection) {
       this.strokeDirections.push(direction);
-      this.createArrowIcon(direction);
+
+      this.addStrokeCallback(direction);
     }
   }
 
   drawLine(startX, startY, endX, endY) {
     this.canvas.moveTo(startX, startY);
     this.canvas.lineTo(endX, endY);
-  }
-
-  createArrowIcon(direction) {
-    let arrow = null;
-    const {
-      x: arrowXPos,
-      y: arrowYPos,
-    } = this.arrowPosition;
-
-    switch (direction) {
-      case "left":
-        arrow = new PIXI.Sprite(this.leftArrowTexture);
-        break;
-      case "right":
-        arrow = new PIXI.Sprite(this.rightArrowTexture);
-        break;
-      case "up":
-        arrow = new PIXI.Sprite(this.upArrowTexture);
-        break;
-      case "down":
-        arrow = new PIXI.Sprite(this.downArrowTexture);
-        break;
-      default:
-        break;
-    }
-
-    arrow.x = arrowXPos;
-    arrow.y = arrowYPos;
-    arrow.width = this.arrowSize.width;
-    arrow.height = this.arrowSize.height;
-
-    this.arrowPosition.x += arrow.width;
-
-    this.arrows.push(arrow);
-    this.container.addChild(arrow);
-  }
-
-  clearArrows() {
-    for (let i = 0; i < this.arrows.length; i += 1) {
-      this.container.removeChild(this.arrows[i]);
-    }
-
-    this.arrowPosition = { ...this.arrowInitialPosition };
   }
 
   terminateDrawing() {

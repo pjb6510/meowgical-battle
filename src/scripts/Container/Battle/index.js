@@ -1,11 +1,12 @@
 import * as PIXI from "pixi.js";
 import Drawer from "./Drawer";
 import SkillCommandListener from "./SkillCommandListener";
-import MainMenu from "../MainMenu";
+import ArrowIconDisplayer from "./ArrowIconDisplayer";
 import StatusBar from "./StatusBar";
 import TileGroup from "./TileGroup";
 import Player from "./Player";
 import ResultModal from "./ResultModal";
+import MainMenu from "../MainMenu";
 import globalStore from "../../globalStore";
 import generateRandomString from "../../utils/generateRandomString";
 import { canvasSize } from "../../config";
@@ -23,6 +24,10 @@ export default class Battle {
       .getItem("resources")
       .battleBackground
       .texture;
+
+    this.playerArrowIconDisplayerOption = null;
+    this.opponentArrowIconDisplayerOption = null;
+    this.setArrowIconDisplayerOption();
 
     this.playerStatusBarOption = null;
     this.opponentStatusBarOption = null;
@@ -45,8 +50,14 @@ export default class Battle {
 
     this.skillCommandListener = null;
     this.createSkillCommandListener();
+
     this.drawer = null;
     this.createDrawer();
+
+    this.playerArrowIconDisplayer = null;
+    this.createPlayerArrowIconDisplayer();
+    this.opponentArrowIconDisplayer = null;
+    this.createOpponentArrowIconDisplayer();
 
     this.background = null;
     this.playerStatusBar = null;
@@ -69,6 +80,20 @@ export default class Battle {
     this.isPlaying = true;
 
     this.render();
+  }
+
+  setArrowIconDisplayerOption() {
+    this.playerArrowIconDisplayerOption = {
+      color: "blue",
+      size: { width: 100, height: 100 },
+      position: { x: 50, y: 250 },
+    };
+
+    this.opponentArrowIconDisplayerOption = {
+      color: "orange",
+      size: { width: 30, height: 30 },
+      position: { x: canvasSize.width - 550, y: 200 },
+    };
   }
 
   setStatusBarOptions() {
@@ -223,11 +248,25 @@ export default class Battle {
 
   createDrawer() {
     this.drawer = new Drawer(
-      this.skillCommandListener.handleCommandListen.bind(
-        this.skillCommandListener
-      )
+      this.handleDrawerPointerUp.bind(this),
+      this.handleStrokeAdded.bind(this)
     );
+
     this.drawer.container.zIndex = this.drawerZIndex;
+  }
+
+  createPlayerArrowIconDisplayer() {
+    this.playerArrowIconDisplayer =
+      new ArrowIconDisplayer(
+        this.playerArrowIconDisplayerOption
+      );
+  }
+
+  createOpponentArrowIconDisplayer() {
+    this.opponentArrowIconDisplayer =
+      new ArrowIconDisplayer(
+        this.opponentArrowIconDisplayerOption
+      );
   }
 
   createBackground() {
@@ -280,6 +319,8 @@ export default class Battle {
   render() {
     this.container.addChild(
       this.drawer.container,
+      this.playerArrowIconDisplayer.container,
+      this.opponentArrowIconDisplayer.container,
       this.background,
       this.playerStatusBar.container,
       this.opponentStatusBar.container,
@@ -288,6 +329,22 @@ export default class Battle {
       this.player.container,
       this.opponent.container
     );
+  }
+
+  handleDrawerPointerUp(directions) {
+    this.skillCommandListener.handleCommandListen(directions);
+    this.playerArrowIconDisplayer.clearArrowIcons();
+    this.sendPlayerAction({
+      action: actionsInGame.CLEAR_STROKES,
+    });
+  }
+
+  handleStrokeAdded(direction) {
+    this.playerArrowIconDisplayer.createArrowIcon(direction);
+    this.sendPlayerAction({
+      action: actionsInGame.DRAW_STROKE,
+      payload: direction,
+    });
   }
 
   renderMagic(magic) {
@@ -358,9 +415,9 @@ export default class Battle {
 
   listenOpponentAction() {
     this.peer.on("data", (data) => {
-      const opponentAction = JSON.parse(data);
+      const { action, payload } = JSON.parse(data);
 
-      switch (opponentAction.action) {
+      switch (action) {
         case actionsInGame.MOVE_FRONT :
           this.opponent.moveLeft();
           break;
@@ -376,7 +433,7 @@ export default class Battle {
         case actionsInGame.BE_HIT:
           this.collideMagicWithPlayer(
             this.opponent,
-            this.player.magics[opponentAction.magicIndex]
+            this.player.magics[payload]
           );
           break;
         case actionsInGame.CAST_FIREBALL:
@@ -391,6 +448,14 @@ export default class Battle {
         case actionsInGame.BUILD_TURRET:
           this.opponent.buildTurret();
           break;
+        case actionsInGame.DRAW_STROKE:
+          this.opponentArrowIconDisplayer
+            .createArrowIcon(payload);
+          break;
+        case actionsInGame.CLEAR_STROKES:
+          this.opponentArrowIconDisplayer
+            .clearArrowIcons(payload);
+          break;
         default:
           break;
       }
@@ -403,6 +468,22 @@ export default class Battle {
         JSON.stringify(data)
       );
     }
+  }
+
+  sendStrokeDirection(direction) {
+    const data = {};
+
+    if (direction === "left") {
+      data.action = actionsInGame.DRAW_LEFT_STROKE;
+    } else if (direction === "right") {
+      data.action = actionsInGame.DRAW_RIGHT_STROKE;
+    } else if (direction === "up") {
+      data.action = actionsInGame.DRAW_UP_STROKE;
+    } else if (direction === "down") {
+      data.action = actionsInGame.DRAW_DOWN_STROKE;
+    }
+
+    this.sendPlayerAction(data);
   }
 
   update() {

@@ -22,10 +22,15 @@ const loaderConfig = {
   guestPlayerPortrait: "assets/images/players/guest/portrait/normal.png",
   guestPlayerBeHitPortrait: "assets/images/players/guest/portrait/beHit.png",
 
-  upArrow: "assets/images/arrowIcons/upArrow.png",
-  downArrow: "assets/images/arrowIcons/downArrow.png",
-  leftArrow: "assets/images/arrowIcons/leftArrow.png",
-  rightArrow: "assets/images/arrowIcons/rightArrow.png",
+  blueUpArrow: "assets/images/arrowIcons/blue/upArrow.png",
+  blueDownArrow: "assets/images/arrowIcons/blue/downArrow.png",
+  blueLeftArrow: "assets/images/arrowIcons/blue/leftArrow.png",
+  blueRightArrow: "assets/images/arrowIcons/blue/rightArrow.png",
+
+  orangeUpArrow: "assets/images/arrowIcons/orange/upArrow.png",
+  orangeDownArrow: "assets/images/arrowIcons/orange/downArrow.png",
+  orangeLeftArrow: "assets/images/arrowIcons/orange/leftArrow.png",
+  orangeRightArrow: "assets/images/arrowIcons/orange/rightArrow.png",
 
   fireball: "assets/images/effects/fireball/fireball.json",
   fireballExplosion1: "assets/images/effects/fireball/fireballExplosion1.json",
