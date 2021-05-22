@@ -94,6 +94,8 @@ export default class Battle {
       size: { width: 30, height: 30 },
       position: { x: canvasSize.width - 550, y: 200 },
     };
+
+    this.arrowIconDisplayerZIndex = 10;
   }
 
   setStatusBarOptions() {
@@ -260,6 +262,9 @@ export default class Battle {
       new ArrowIconDisplayer(
         this.playerArrowIconDisplayerOption
       );
+
+    this.playerArrowIconDisplayer.container.zIndex =
+      this.arrowIconDisplayerZIndex;
   }
 
   createOpponentArrowIconDisplayer() {
@@ -267,6 +272,9 @@ export default class Battle {
       new ArrowIconDisplayer(
         this.opponentArrowIconDisplayerOption
       );
+
+    this.opponentArrowIconDisplayer.container.zIndex =
+      this.arrowIconDisplayerZIndex;
   }
 
   createBackground() {
