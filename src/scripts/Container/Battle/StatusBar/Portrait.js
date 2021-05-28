@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
-import globalStore from "../../../globalStore";
 import { DropShadowFilter } from "@pixi/filter-drop-shadow";
+import globalStore from "../../../globalStore";
 
 export default class Portrait {
   constructor({ x, y, isHost }) {

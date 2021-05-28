@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
+import Modal from "../../shared/Modal";
 import { canvasSize } from "../../../config";
 import createButton from "../../../pixiUtils/createButton";
-import Modal from "../../shared/Modal";
 
 export default class ResultModal extends Modal {
   constructor(boxOption, isWin, handleButtonClick) {

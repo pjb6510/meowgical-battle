@@ -1,12 +1,12 @@
 import * as PIXI from "pixi.js";
+import Peer from "simple-peer";
 import PlayerBox from "../../shared/PlayerBox";
 import Battle from "../../Battle";
-import createButton from "../../../pixiUtils/createButton";
-import { canvasSize } from "../../../config";
-import socket from "../../../socket";
-import { actionsInRoom } from "../../../constants";
-import Peer from "simple-peer";
 import globalStore from "../../../globalStore";
+import socket from "../../../socket";
+import { canvasSize } from "../../../config";
+import { actionsInRoom } from "../../../constants";
+import createButton from "../../../pixiUtils/createButton";
 
 export default class GuestWindow {
   constructor(roomCode, playerId, unmountCallback) {

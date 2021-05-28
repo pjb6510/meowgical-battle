@@ -1,8 +1,8 @@
 import * as PIXI from "pixi.js";
+import globalStore from "../../globalStore";
 import loaderConfig from "./loaderConfig";
 import { canvasSize } from "../../config";
 import createBox from "../../pixiUtils/createBox";
-import globalStore from "../../globalStore";
 
 export default class Loader {
   constructor(loader) {

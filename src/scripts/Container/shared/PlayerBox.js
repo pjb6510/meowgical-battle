@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
-import createBox from "../../pixiUtils/createBox";
-import { canvasSize } from "../../config";
 import globalStore from "../../globalStore";
+import { canvasSize } from "../../config";
+import createBox from "../../pixiUtils/createBox";
 
 export default class PlayerBox {
   constructor(isHost, titleText) {

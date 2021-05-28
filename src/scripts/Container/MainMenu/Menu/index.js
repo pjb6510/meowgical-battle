@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
-import createButton from "../../../pixiUtils/createButton";
 import { canvasSize } from "../../../config";
+import createButton from "../../../pixiUtils/createButton";
 
 export default class Menu {
   constructor({ offsetX, offsetY }, ...buttonInfos) {

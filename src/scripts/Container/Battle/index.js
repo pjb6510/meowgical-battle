@@ -8,9 +8,9 @@ import Player from "./Player";
 import ResultModal from "./ResultModal";
 import MainMenu from "../MainMenu";
 import globalStore from "../../globalStore";
-import generateRandomString from "../../utils/generateRandomString";
 import { canvasSize } from "../../config";
 import { actionsInGame } from "../../constants";
+import generateRandomString from "../../utils/generateRandomString";
 
 export default class Battle {
   constructor(isHost, peer) {

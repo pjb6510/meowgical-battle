@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
-import createBox from "../../../pixiUtils/createBox";
 import { canvasSize } from "../../../config";
 import createButton from "../../../pixiUtils/createButton";
+import createBox from "../../../pixiUtils/createBox";
 import copyToClipboard from "../../../utils/copyToClipboard";
 
 export default class InvitationCodeBox {

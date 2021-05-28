@@ -1,11 +1,11 @@
 import * as PIXI from "pixi.js";
 import Tween from "@tweenjs/tween.js";
-import globalStore from "../../../globalStore";
 import Fireball from "../Magics/Fireball";
 import Lightning from "../Magics/Lightning";
 import Mine from "../Magics/Mine";
 import Turret from "../Magics/Turret";
 import TurretFireball from "../Magics/Turret/TurretFireball";
+import globalStore from "../../../globalStore";
 import { actionsInGame } from "../../../constants";
 
 export default class Player {
