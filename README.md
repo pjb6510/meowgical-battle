@@ -4,6 +4,8 @@
 
 마법쏠고양은 마우스 제스처로 즐기는 1:1 PVP 슈팅게임입니다. 고양이 마법사가 되어, 지팡이를 휘둘러 마법을 쏘고, 상대를 제압하세요!
 
+**[프로젝트 발표 및 게임 시연](https://youtu.be/F8OHnevCS30?t=10277)**
+
 ---
 
 ## 프로젝트 동기 및 기획 의도
@@ -200,7 +202,7 @@
 
 구조 문제와 더불어 여러 문제를 맞닥뜨리며 느낀 점은, 문제를 가시화하는 것과는 별개로 그 문제를 어떤 패턴으로 어떻게 해결할지에 대해서 정말 아무것도 모르는구나 하는 무력함이었습니다. 결국 저는 제 코드에 매몰되어서 제 코드와 제 생각으로만 문제를 해결해야 하는 우물 안의 개구리였고 새로운 해결 방법을 도입하고, 더 나은 코드를 작성하기 위해서, 이제는 코딩에 대한 직접적인 경험을 쌓는 것 이상으로 다른 분들의 코드를 많이 읽어야겠다고 절실히 실감했습니다.
 
-계획했던 것보다 간소화하거나 생략한 부분도 많고, 코드도 여러 부분에서 부족하지만, 기대한 만큼의 게임이 나와주어 나름 만족스럽습니다. 바쁘게 일하는 와중에도, 게임 그래픽 디자인을 도맡아 해준 동생 향기, 힘들어할 때마다 격려와 칭찬으로 밀어주고 끌어주던 동기분들, 그리고 예비 개발자들의 성장을 위해 지원을 아끼지 않으셨던 켄님과 멘토님들, 리뷰어님들께 감사드립니다. 아직 여러모로 미숙한 코린이지만 장차 좋은 개발자, 함께 일하고 싶은 개발자가 될 수 있도록 분발하겠습니다.
+계획했던 것보다 간소화하거나 생략한 부분도 많고, 코드도 여러 부분에서 부족하지만, 기대한 만큼의 게임이 나와주어 나름 만족스럽습니다. 바쁘게 일하는 와중에도, 게임 그래픽 디자인을 도맡아 해준 동생 향기, 힘들어할 때마다 격려와 칭찬으로 밀어주고 끌어주던 동기분들, 그리고 예비 개발자들의 성장을 위해 지원을 아끼지 않으셨던 켄님과 멘토님들, 리뷰어님들께 감사드립니다. 아직 여러모로 미숙하지만 장차 좋은 개발자, 함께 일하고 싶은 개발자가 될 수 있도록 분발하겠습니다.
 
 ---
 
@@ -219,41 +221,41 @@
 
 ### 디자인 시안들
 
-![attackMotionFirstSample](readmeAssets/attackMotionFirstSample.gif)
+<img src="readmeAssets/attackMotionFirstSample.gif" width="300" />
 
 1. 동생이 보내온 공격모션 최초 시안
 
-![attackMotionDescription](readmeAssets/attackMotionDescription.jpg)
+<img src="readmeAssets/attackMotionDescription.jpg" width="300" />
 
 2. (...)열심히 모션 설명 중...
 
-![attackMotionSecondSample](readmeAssets/attackMotionSecondSample.gif)
+<img src="readmeAssets/attackMotionSecondSample.gif" width="300" />
 
 3. 협의 이후 공격모션 러프
 
-![attackMotion](readmeAssets/attackMotion.gif)
+<img src="readmeAssets/attackMotion.gif" width="300" />
 
 4. 여차여차해서 최종 채택된 공격 모션
 
 #### 그 외 탈락한 디자인들.
 
-![defeatSample](readmeAssets/defeat.jpg)
+<img src="readmeAssets/defeat.jpg" width="300" />
 
 패배 모션 최초 시안
 
-![portraitSample](readmeAssets/portraitSample.jpg)
+<img src="readmeAssets/portraitSample.jpg" width="300" />
 
 HP바 옆 초상화 시안.
 
-![mainMenuSample1](readmeAssets/mainMenuSample1.png)
+<img src="readmeAssets/mainMenuSample1.png" width="300" />
 
 메인 메뉴 시안1
 
-![mainMenuSample2](readmeAssets/mainMenuSample2.jpg)
+<img src="readmeAssets/mainMenuSample2.jpg" width="300" />
 
 메인 메뉴 시안2
 
-![turretSample](readmeAssets/turretSample.png)
+<img src="readmeAssets/turretSample.png" width="300" />
 
 포탑.
 높이가 너무 높아서, 높이를 맞추면 투사체가 윗줄에서 나가는 것처럼 보여 중간에 탈락.
