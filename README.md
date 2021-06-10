@@ -48,7 +48,6 @@
 ---
 
 ![invitationCodeInput](readmeAssets/invitationCodeInput.png)
-
 - 게임 참가 버튼을 누르면 초대코드 입력 창이 나옵니다.
 - 다른 사람의 초대코드를 받아, 입력하면 게임에 참가할 수 있습니다.
 
