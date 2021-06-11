@@ -171,10 +171,6 @@ export default class HostWindow {
     });
 
     this.peer.on("signal", (hostSignal) => {
-      if (process.env.NODE_ENV !== "production") {
-        console.log("host signal", hostSignal);
-      }
-
       socket.broadcastAction({
         action: actionsInRoom.SEND_PEER,
         payload: hostSignal,
@@ -184,10 +180,6 @@ export default class HostWindow {
   }
 
   receivePeerSignal(receivedSignal) {
-    if (process.env.NODE_ENV !== "production") {
-      console.log("host receive", receivedSignal);
-    }
-
     this.peer.signal(receivedSignal);
   }
 

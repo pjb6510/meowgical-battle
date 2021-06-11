@@ -5,16 +5,7 @@ export default class GlobalStores {
   }
 
   setStore(key, value) {
-    if (process.env.NODE_ENV !== "production") {
-      console.log("prev store", this._store);
-    }
-
     this._store[key] = value;
-
-    if (process.env.NODE_ENV !== "production") {
-      console.log("new store", this._store);
-    }
-
     this.handleStoreChange();
   }
 
